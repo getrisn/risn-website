@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Company Intel — Risn</title>
+  <meta name="description" content="Get a deep AI briefing on any company before your interview. Walk in knowing more than every other candidate." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0a0a0a;
+      --purple: #7C3AFF;
+      --purple-pale: #F5F0FF;
+      --purple-mid: #9061F9;
+      --white: #ffffff;
+      --gray: #f7f7f7;
+      --muted: #888;
+      --border: #e8e8e8;
+      --dark-border: #222;
+      --success: #10B981;
+      --amber: #F59E0B;
+      --amber-pale: #FFFBEB;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--gray); color: var(--black); min-height: 100vh; }
+
+    nav {
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 56px;
+      border-bottom: 0.5px solid var(--dark-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo { text-decoration: none; display: flex; flex-direction: column; }
+    .nav-wordmark { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--white); letter-spacing: 2px; line-height: 1; }
+    .nav-underbar { height: 2px; background: var(--purple); border-radius: 1px; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-tool-name { font-size: 13px; color: var(--muted); }
+    .nav-back { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .nav-back:hover { color: var(--white); }
+
+    .main { max-width: 780px; margin: 0 auto; padding: 2rem; }
+
+    .card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 0.5px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 1rem;
+    }
+    .card-step { font-size: 11px; color: var(--purple); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 6px; }
+    .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; color: var(--black); margin-bottom: 6px; }
+    .card-sub { font-size: 14px; color: var(--muted); margin-bottom: 1.5rem; }
+
+    .field-group { margin-bottom: 1.25rem; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    label { display: block; font-size: 13px; font-weight: 500; color: var(--black); margin-bottom: 6px; }
+    .label-optional { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 4px; }
+    input[type="text"], textarea, select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--black);
+      background: var(--white);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--purple); }
+    textarea { resize: vertical; line-height: 1.6; }
+    .field-hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    .btn-generate {
+      width: 100%;
+      padding: 14px;
+      background: var(--purple);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-top: 0.5rem;
+    }
+    .btn-generate:hover { opacity: 0.85; }
+
+    .generating-card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 0.5px solid var(--border);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--purple-pale);
+      border-top-color: var(--purple);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .generating-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; color: var(--black); margin-bottom: 8px; }
+    .generating-sub { font-size: 14px; color: var(--muted); }
+    .generating-steps { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 8px; }
+    .gen-step { font-size: 13px; color: var(--muted); opacity: 0; animation: fadeIn 0.5s forwards; }
+    .gen-step.s1 { animation-delay: 0.5s; }
+    .gen-step.s2 { animation-delay: 2s; }
+    .gen-step.s3 { animation-delay: 4s; }
+    .gen-step.s4 { animation-delay: 6s; }
+    .gen-step.s5 { animation-delay: 8s; }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    /* DOSSIER */
+    .dossier-header {
+      background: var(--black);
+      border-radius: 16px 16px 0 0;
+      padding: 1.5rem 2rem;
+    }
+    .dossier-label { font-size: 11px; color: #555; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+    .dossier-company { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--white); letter-spacing: 2px; margin-bottom: 4px; }
+    .dossier-role { font-size: 14px; color: var(--purple-mid); }
+    .dossier-toolbar {
+      background: #111;
+      padding: 10px 2rem;
+      display: flex;
+      gap: 8px;
+      border-bottom: 0.5px solid var(--dark-border);
+      flex-wrap: wrap;
+    }
+    .dl-btn {
+      padding: 7px 16px;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid #333;
+      background: transparent;
+      color: var(--white);
+      transition: background 0.2s;
+    }
+    .dl-btn:hover { background: #1a1a1a; }
+    .dl-btn.purple { background: var(--purple); border-color: var(--purple); }
+    .dl-btn.purple:hover { opacity: 0.85; }
+
+    .dossier-body {
+      background: var(--white);
+      border-radius: 0 0 16px 16px;
+      border: 0.5px solid var(--border);
+      border-top: none;
+      overflow: hidden;
+    }
+
+    .intel-section {
+      padding: 1.5rem 2rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .intel-section:last-child { border-bottom: none; }
+
+    .intel-section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+    .intel-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .intel-section-title { font-size: 14px; font-weight: 700; color: var(--black); }
+    .intel-content { font-size: 14px; color: #333; line-height: 1.7; white-space: pre-wrap; }
+
+    .questions-list { list-style: none; }
+    .questions-list li {
+      font-size: 14px;
+      color: #333;
+      padding: 8px 0;
+      border-bottom: 0.5px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      line-height: 1.5;
+    }
+    .questions-list li:last-child { border-bottom: none; }
+    .q-bullet { color: var(--purple); font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .redflags-list { list-style: none; }
+    .redflags-list li {
+      font-size: 14px;
+      color: #333;
+      padding: 8px 0;
+      border-bottom: 0.5px solid #FEF3C7;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      line-height: 1.5;
+    }
+    .redflags-list li:last-child { border-bottom: none; }
+
+    .salary-range {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .salary-card {
+      background: var(--purple-pale);
+      border-radius: 8px;
+      padding: 10px 16px;
+      flex: 1;
+      min-width: 120px;
+    }
+    .salary-label { font-size: 11px; color: var(--purple-mid); font-weight: 500; margin-bottom: 4px; }
+    .salary-value { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--purple); letter-spacing: 1px; }
+
+    .research-again {
+      padding: 1.5rem 2rem;
+      border-top: 0.5px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .research-again p { font-size: 13px; color: var(--muted); }
+    .btn-again {
+      padding: 9px 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--white);
+      color: var(--black);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-again:hover { background: var(--gray); }
+
+    .error-box {
+      background: #FCEBEB;
+      border: 1px solid #F09595;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-size: 14px;
+      color: #791F1F;
+      margin-top: 1rem;
+    }
+    .hidden { display: none !important; }
+
+    @media (max-width: 600px) {
+      .field-row { grid-template-columns: 1fr; }
+      .main { padding: 1rem; }
+      .intel-section { padding: 1.25rem; }
+      .dossier-header { padding: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="nav-wordmark">RISN</span>
+    <span class="nav-underbar"></span>
+  </a>
+  <div class="nav-right">
+    <span class="nav-tool-name">Company Intel</span>
+    <a href="/" class="nav-back">← Home</a>
+  </div>
+</nav>
+
+<div class="main">
+
+  <!-- FORM -->
+  <div id="formCard" class="card">
+    <p class="card-step">Company Intel</p>
+    <h1 class="card-title">Know More Than Anyone Else in That Room</h1>
+    <p class="card-sub">Enter the company and role you're interviewing for. Risn AI builds you a complete intelligence briefing so you walk in completely prepared.</p>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label for="companyName">Company name</label>
+        <input type="text" id="companyName" placeholder="e.g. Tesla, Deloitte, local startup" />
+      </div>
+      <div class="field-group">
+        <label for="jobTitle">Role you're interviewing for</label>
+        <input type="text" id="jobTitle" placeholder="e.g. Software Engineer" />
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label for="industry">Industry <span class="label-optional">(optional — helps if company is less known)</span></label>
+      <input type="text" id="industry" placeholder="e.g. Fintech, Healthcare, E-commerce, Consulting" />
+    </div>
+
+    <div class="field-group">
+      <label for="extraContext">Anything specific you want to know? <span class="label-optional">(optional)</span></label>
+      <textarea id="extraContext" style="min-height:80px;" placeholder="e.g. 'I want to understand their engineering culture', 'I heard they recently had layoffs', 'I want salary negotiation tips for this company specifically'"></textarea>
+    </div>
+
+    <button class="btn-generate" onclick="generateIntel()">Generate My Company Briefing ✦</button>
+    <div id="errorBox" class="error-box hidden"></div>
+  </div>
+
+  <!-- GENERATING -->
+  <div id="generating" class="generating-card hidden">
+    <div class="spinner"></div>
+    <h2 class="generating-title">Building Your Briefing</h2>
+    <p class="generating-sub">Risn AI is researching the company in depth...</p>
+    <div class="generating-steps">
+      <p class="gen-step s1">✦ Analyzing company background and mission...</p>
+      <p class="gen-step s2">✦ Researching culture and values...</p>
+      <p class="gen-step s3">✦ Identifying what interviewers care about...</p>
+      <p class="gen-step s4">✦ Generating smart questions to ask...</p>
+      <p class="gen-step s5">✦ Compiling salary intelligence...</p>
+    </div>
+  </div>
+
+  <!-- DOSSIER -->
+  <div id="dossier" class="hidden">
+    <div class="dossier-header">
+      <p class="dossier-label">Intelligence Briefing</p>
+      <p class="dossier-company" id="dossierCompany"></p>
+      <p class="dossier-role" id="dossierRole"></p>
+    </div>
+    <div class="dossier-toolbar">
+      <button class="dl-btn" onclick="copyBriefing()">Copy briefing</button>
+      <button class="dl-btn purple" onclick="downloadBriefing()">Download .txt</button>
+    </div>
+    <div class="dossier-body" id="dossierBody"></div>
+    <div class="research-again">
+      <p>Research a different company?</p>
+      <button class="btn-again" onclick="resetForm()">Start over ↺</button>
+    </div>
+  </div>
+
+  <div id="backLink" class="hidden" style="margin-top:1rem;text-align:center;">
+    <p style="font-size:13px;color:var(--muted);">Try another tool — <a href="/" style="color:var(--purple);">back to home →</a></p>
+  </div>
+
+</div>
+
+<script>
+  let briefingText = '';
+  let briefingData = null;
+
+  function buildPrompt() {
+    const company = document.getElementById('companyName').value;
+    const role = document.getElementById('jobTitle').value;
+    const industry = document.getElementById('industry').value;
+    const extra = document.getElementById('extraContext').value;
+
+    return `You are an expert career researcher and interview strategist. Create a comprehensive company intelligence briefing for a job candidate.
+
+COMPANY: ${company}
+ROLE: ${role}
+${industry ? 'INDUSTRY: ' + industry : ''}
+${extra ? 'SPECIFIC FOCUS: ' + extra : ''}
+
+Return a JSON object with exactly these keys:
+{
+  "overview": "3-4 sentences covering what the company does, their mission, size, and market position",
+  "culture": "3-4 sentences on company culture, work environment, team dynamics, and what employees say about working there",
+  "recentNews": "2-3 sentences on recent notable developments, launches, news, or changes at the company",
+  "whatTheyLookFor": "3-4 sentences on what this company specifically values in candidates for this role — what traits, skills, and experiences tend to impress them",
+  "interviewProcess": "2-3 sentences describing the typical interview process at this company for this type of role",
+  "smartQuestions": ["Question 1 to ask the interviewer", "Question 2", "Question 3", "Question 4", "Question 5"],
+  "redFlags": ["Potential concern 1 to be aware of", "Potential concern 2", "Potential concern 3"],
+  "salaryMin": "e.g. $85,000",
+  "salaryMid": "e.g. $105,000",
+  "salaryMax": "e.g. $130,000",
+  "salaryNote": "1-2 sentences on salary negotiation context for this specific company and role",
+  "insiderTip": "One powerful insider insight that most candidates wouldn't know — something specific that will make them stand out"
+}
+
+Be specific to this company and role — not generic. Use your knowledge of this company's actual culture, reputation, and hiring practices. Return only valid JSON, no markdown, no code blocks.`;
+  }
+
+  async function generateIntel() {
+    const company = document.getElementById('companyName').value.trim();
+    const role = document.getElementById('jobTitle').value.trim();
+
+    if (!company || !role) {
+      const eb = document.getElementById('errorBox');
+      eb.classList.remove('hidden');
+      eb.textContent = 'Please enter both the company name and the role you are interviewing for.';
+      return;
+    }
+
+    document.getElementById('errorBox').classList.add('hidden');
+    document.getElementById('formCard').classList.add('hidden');
+    document.getElementById('generating').classList.remove('hidden');
+    document.getElementById('dossier').classList.add('hidden');
+    document.getElementById('backLink').classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1500,
+          messages: [{ role: 'user', content: buildPrompt() }]
+        })
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error.message);
+
+      let text = data.content[0].text.trim();
+      text = text.replace(/```json|```/g, '').trim();
+      briefingData = JSON.parse(text);
+
+      document.getElementById('generating').classList.add('hidden');
+      renderDossier(company, role);
+
+    } catch (err) {
+      document.getElementById('generating').classList.add('hidden');
+      document.getElementById('formCard').classList.remove('hidden');
+      const eb = document.getElementById('errorBox');
+      eb.classList.remove('hidden');
+      eb.textContent = 'Something went wrong generating your briefing. Please try again or contact risewithrisn@gmail.com';
+    }
+  }
+
+  function renderDossier(company, role) {
+    document.getElementById('dossierCompany').textContent = company.toUpperCase();
+    document.getElementById('dossierRole').textContent = role + ' — Intelligence Briefing';
+
+    const d = briefingData;
+    const body = document.getElementById('dossierBody');
+
+    const smartQs = (d.smartQuestions || []).map(q =>
+      `<li><span class="q-bullet">→</span>${q}</li>`
+    ).join('');
+
+    const redFlags = (d.redFlags || []).map(f =>
+      `<li><span class="q-bullet" style="color:var(--amber);">⚠</span>${f}</li>`
+    ).join('');
+
+    body.innerHTML = `
+      <div class="intel-section">
+        <div class="intel-section-header">
+          <div class="intel-icon" style="background:#F5F0FF;">🏢</div>
+          <p class="intel-section-title">Company overview</p>
+        </div>
+        <p class="intel-content">${d.overview || ''}</p>
+      </div>
+
+      <div class="intel-section">
+        <div class="intel-section-header">
+          <div class="intel-icon" style="background:#F0FDF4;">🌱</div>
+          <p class="intel-section-title">Culture and work environment</p>
+        </div>
+        <p class="intel-content">${d.culture || ''}</p>
+      </div>
+
+      <div class="intel-section">
+        <div class="intel-section-header">
+          <div class="intel-icon" style="background:#EFF6FF;">📰</div>
+          <p class="intel-section-title">Recent news and developments</p>
+        </div>
+        <p class="intel-content">${d.recentNews || ''}</p>
+      </div>
+
+      <div class="intel-section">
+        <div class="intel-section-header">
+          <div class="intel-icon" style="background:#FFF7ED;">🎯</div>
+          <p class="intel-section-title">What they look for in candidates</p>
+        </div>
+        <p class="intel-content">${d.whatTheyLookFor || ''}</p>
+      </div>
+
+      <div class="intel-section">
+        <div class="intel-section-header">
+          <div class="intel-icon" style="background:#F5F0FF;">🗺</div>
+          <p class="intel-section-title">Typical interview process</p>
+        </div>
+        <p class="intel-content">${d.interviewProcess || ''}</p>
+      </div>
+
+      <div class="intel-section">
+        <div class="intel-section-header">
+          <div class="intel-icon" style="background:#F0FDF4;">💬</div>
+          <p class="intel-section-title">Smart questions to ask the interviewer</p>
+        </div>
+        <ul class="questions-list">${smartQs}</ul>
+      </div>
+
+      <div class="intel-section" style="background:var(--amber-pale);">
+        <div class="intel-section-header">
+          <div class="intel-icon" style="background:#FEF3C7;">⚠️</div>
+          <p class="intel-section-title">Things to be aware of</p>
+        </div>
+        <ul class="redflags-list">${redFlags}</ul>
+      </div>
+
+      <div class="intel-section">
+        <div class="intel-section-header">
+          <div class="intel-icon" style="background:#F5F0FF;">💰</div>
+          <p class="intel-section-title">Salary intelligence for ${document.getElementById('jobTitle').value}</p>
+        </div>
+        <div class="salary-range">
+          <div class="salary-card">
+            <p class="salary-label">Entry range</p>
+            <p class="salary-value">${d.salaryMin || 'Varies'}</p>
+          </div>
+          <div class="salary-card" style="background:#EDE9FE;">
+            <p class="salary-label" style="color:var(--purple);">Midpoint</p>
+            <p class="salary-value">${d.salaryMid || 'Varies'}</p>
+          </div>
+          <div class="salary-card">
+            <p class="salary-label">Senior range</p>
+            <p class="salary-value">${d.salaryMax || 'Varies'}</p>
+          </div>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-top:12px;">${d.salaryNote || ''}</p>
+      </div>
+
+      <div class="intel-section" style="background:var(--black);border-radius:0 0 16px 16px;">
+        <div class="intel-section-header">
+          <div class="intel-icon" style="background:#1a1a1a;font-size:18px;">✦</div>
+          <p class="intel-section-title" style="color:var(--white);">Insider tip</p>
+        </div>
+        <p class="intel-content" style="color:#aaa;">${d.insiderTip || ''}</p>
+      </div>`;
+
+    briefingText = `COMPANY INTEL BRIEFING: ${company} — ${role}\n\n` +
+      `OVERVIEW\n${d.overview}\n\n` +
+      `CULTURE\n${d.culture}\n\n` +
+      `RECENT NEWS\n${d.recentNews}\n\n` +
+      `WHAT THEY LOOK FOR\n${d.whatTheyLookFor}\n\n` +
+      `INTERVIEW PROCESS\n${d.interviewProcess}\n\n` +
+      `SMART QUESTIONS TO ASK\n${(d.smartQuestions || []).map((q, i) => `${i + 1}. ${q}`).join('\n')}\n\n` +
+      `THINGS TO BE AWARE OF\n${(d.redFlags || []).map((f, i) => `${i + 1}. ${f}`).join('\n')}\n\n` +
+      `SALARY RANGE\nEntry: ${d.salaryMin} | Mid: ${d.salaryMid} | Senior: ${d.salaryMax}\n${d.salaryNote}\n\n` +
+      `INSIDER TIP\n${d.insiderTip}`;
+
+    document.getElementById('dossier').classList.remove('hidden');
+    document.getElementById('backLink').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function copyBriefing() {
+    navigator.clipboard.writeText(briefingText).then(() => {
+      const btn = event.target;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy briefing', 2000);
+    });
+  }
+
+  function downloadBriefing() {
+    const company = document.getElementById('companyName').value.replace(/\s+/g, '_');
+    const blob = new Blob([briefingText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Risn_Intel_${company}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function resetForm() {
+    document.getElementById('dossier').classList.add('hidden');
+    document.getElementById('backLink').classList.add('hidden');
+    document.getElementById('formCard').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
