@@ -653,14 +653,51 @@
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <button class="copy-btn" onclick="copyResume()">Copy text</button>
-          <button class="dl-btn" onclick="downloadWord()">Download .docx</button>
-          <button class="dl-btn purple" onclick="downloadPDF()">Download PDF</button>
+          <button class="dl-btn" onclick="copyResume()">Copy text</button>
+          <button class="dl-btn" onclick="downloadWord()" title="Best for job portals — auto-populates form fields">⬇ Word (.docx)</button>
+          <button class="dl-btn purple" onclick="downloadPDF()" title="Best for emailing directly to humans">⬇ PDF</button>
         </div>
       </div>
       <div class="resume-preview" id="resumeOutput"></div>
       <div class="regen-row">
         <p class="regen-note">Not happy with the result? Regenerate for a fresh version.</p>
         <button class="regen-btn" onclick="generateResume()">Regenerate ↺</button>
+      </div>
+      <div style="padding:1.5rem 2rem;background:#fafafa;border-top:0.5px solid var(--border);">
+        <p style="font-size:11px;color:var(--purple);letter-spacing:0.1em;text-transform:uppercase;font-weight:500;margin-bottom:12px;">Download guide — which format to use</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem;">
+          <div style="background:white;border:0.5px solid var(--border);border-radius:10px;padding:1rem;">
+            <p style="font-size:13px;font-weight:700;color:var(--black);margin-bottom:4px;">⬇ Word (.docx) — use for job portals</p>
+            <p style="font-size:12px;color:#555;line-height:1.6;">When uploading to LinkedIn, Indeed, Workday, Greenhouse, or any online application portal — use the Word doc. Most portals auto-populate their form fields from .docx files so you don't have to retype everything manually.</p>
+          </div>
+          <div style="background:white;border:0.5px solid var(--border);border-radius:10px;padding:1rem;">
+            <p style="font-size:13px;font-weight:700;color:var(--black);margin-bottom:4px;">⬇ PDF — use for direct emails</p>
+            <p style="font-size:12px;color:#555;line-height:1.6;">When emailing your resume directly to a recruiter or hiring manager — use the PDF. It preserves formatting perfectly on any device and looks exactly as intended.</p>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--purple);letter-spacing:0.1em;text-transform:uppercase;font-weight:500;margin-bottom:12px;">ATS insider tips — what recruiters don't tell you</p>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:white;border:0.5px solid var(--border);border-radius:8px;">
+            <span style="color:#10B981;font-size:14px;flex-shrink:0;">✓</span>
+            <p style="font-size:13px;color:#333;line-height:1.5;">Your resume has been optimized with keywords from the job description — ATS systems do exact string matching, so mirroring the job posting language is critical to passing the filter.</p>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:white;border:0.5px solid var(--border);border-radius:8px;">
+            <span style="color:#10B981;font-size:14px;flex-shrink:0;">✓</span>
+            <p style="font-size:13px;color:#333;line-height:1.5;">Studies show over 75% of resumes are rejected by ATS before a human ever sees them. RISN formats your resume to pass these filters automatically.</p>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:#FFFBEB;border:0.5px solid #FDE68A;border-radius:8px;">
+            <span style="color:#F59E0B;font-size:14px;flex-shrink:0;">⚠</span>
+            <p style="font-size:13px;color:#333;line-height:1.5;"><strong>Avoid the word "junior"</strong> in your title or anywhere in your resume — many ATS systems use it as an automatic disqualification trigger, even for entry-level roles.</p>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:#FFFBEB;border:0.5px solid #FDE68A;border-radius:8px;">
+            <span style="color:#F59E0B;font-size:14px;flex-shrink:0;">⚠</span>
+            <p style="font-size:13px;color:#333;line-height:1.5;"><strong>Many ATS tools cannot read PDFs reliably</strong> — especially scanned or image-based PDFs. Always submit a Word doc to online portals to ensure your keywords are actually being read.</p>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:#FFFBEB;border:0.5px solid #FDE68A;border-radius:8px;">
+            <span style="color:#F59E0B;font-size:14px;flex-shrink:0;">⚠</span>
+            <p style="font-size:13px;color:#333;line-height:1.5;"><strong>Recruiters use "must have" keyword filters</strong> — if the job description says "Salesforce experience required" and your resume doesn't include the word "Salesforce", you're automatically filtered out regardless of your actual skills.</p>
+          </div>
+        </div>
       </div>
     </div>
     <div style="margin-top:1rem; text-align:center;">
