@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume Builder — Risn</title>
+  <meta name="description" content="Build an AI-powered resume that beats ATS filters and impresses humans." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0a0a0a;
+      --purple: #7C3AFF;
+      --purple-light: #A855F7;
+      --purple-pale: #F5F0FF;
+      --white: #ffffff;
+      --gray: #f7f7f7;
+      --muted: #888;
+      --border: #e8e8e8;
+      --dark-border: #222;
+      --success: #10B981;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--gray); color: var(--black); min-height: 100vh; }
+
+    /* NAV */
+    nav {
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 56px;
+      border-bottom: 0.5px solid var(--dark-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo { text-decoration: none; display: flex; flex-direction: column; }
+    .nav-wordmark { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--white); letter-spacing: 2px; line-height: 1; }
+    .nav-underbar { height: 2px; background: var(--purple); border-radius: 1px; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-tool-name { font-size: 13px; color: var(--muted); }
+    .nav-back { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .nav-back:hover { color: var(--white); }
+
+    /* PROGRESS BAR */
+    .progress-wrap {
+      background: var(--white);
+      border-bottom: 0.5px solid var(--border);
+      padding: 1rem 2rem;
+    }
+    .progress-steps {
+      display: flex;
+      align-items: center;
+      max-width: 680px;
+      margin: 0 auto;
+      gap: 0;
+    }
+    .step-item {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      gap: 8px;
+    }
+    .step-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      background: var(--white);
+      flex-shrink: 0;
+      transition: all 0.3s;
+    }
+    .step-circle.active { border-color: var(--purple); color: var(--purple); }
+    .step-circle.done { border-color: var(--success); background: var(--success); color: var(--white); }
+    .step-label { font-size: 12px; color: var(--muted); font-weight: 500; transition: color 0.3s; white-space: nowrap; }
+    .step-label.active { color: var(--purple); }
+    .step-label.done { color: var(--success); }
+    .step-line { flex: 1; height: 1px; background: var(--border); margin: 0 8px; }
+    .step-line.done { background: var(--success); }
+
+    /* MAIN LAYOUT */
+    .main { max-width: 780px; margin: 0 auto; padding: 2rem; }
+
+    /* CARD */
+    .card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 0.5px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 1rem;
+    }
+    .card-header { margin-bottom: 1.5rem; }
+    .card-step { font-size: 11px; color: var(--purple); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 6px; }
+    .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; color: var(--black); margin-bottom: 6px; }
+    .card-sub { font-size: 14px; color: var(--muted); }
+
+    /* FORM ELEMENTS */
+    .field-group { margin-bottom: 1.25rem; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+    label { display: block; font-size: 13px; font-weight: 500; color: var(--black); margin-bottom: 6px; }
+    .label-optional { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 4px; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="url"], select, textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--black);
+      background: var(--white);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--purple); }
+    textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+    .field-hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* EXPERIENCE BLOCKS */
+    .exp-block {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    .exp-block-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .exp-block-title { font-size: 14px; font-weight: 700; color: var(--black); }
+    .remove-btn {
+      font-size: 12px;
+      color: #E24B4A;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .remove-btn:hover { background: #FCEBEB; }
+    .add-btn {
+      width: 100%;
+      padding: 10px;
+      border: 1px dashed var(--purple);
+      border-radius: 8px;
+      background: var(--purple-pale);
+      color: var(--purple);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+    .add-btn:hover { background: #EDE9FE; }
+
+    /* SKILLS TAGS */
+    .skills-input-wrap { display: flex; gap: 8px; margin-bottom: 10px; }
+    .skills-input-wrap input { flex: 1; }
+    .tag-add-btn {
+      padding: 10px 16px;
+      background: var(--purple);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .tags-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--purple-pale);
+      color: #6D28D9;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+    .tag-remove { cursor: pointer; font-size: 15px; line-height: 1; color: #9061F9; }
+    .tag-remove:hover { color: #6D28D9; }
+
+    /* NAVIGATION BUTTONS */
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.5rem;
+      gap: 1rem;
+    }
+    .btn-prev {
+      padding: 12px 24px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--white);
+      color: var(--black);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-prev:hover { background: var(--gray); }
+    .btn-next {
+      padding: 12px 32px;
+      background: var(--purple);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-left: auto;
+    }
+    .btn-next:hover { opacity: 0.85; }
+    .btn-next:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* GENERATING STATE */
+    .generating-card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 0.5px solid var(--border);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--purple-pale);
+      border-top-color: var(--purple);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .generating-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; color: var(--black); margin-bottom: 8px; }
+    .generating-sub { font-size: 14px; color: var(--muted); }
+    .generating-steps { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 8px; }
+    .gen-step { font-size: 13px; color: var(--muted); opacity: 0; animation: fadeIn 0.5s forwards; }
+    .gen-step.s1 { animation-delay: 0.5s; }
+    .gen-step.s2 { animation-delay: 2s; }
+    .gen-step.s3 { animation-delay: 4s; }
+    .gen-step.s4 { animation-delay: 6s; }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    /* RESULT */
+    .result-card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 0.5px solid var(--border);
+      overflow: hidden;
+    }
+    .result-toolbar {
+      background: var(--black);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .result-toolbar-left { font-size: 13px; color: var(--muted); }
+    .result-toolbar-left span { color: var(--success); font-weight: 500; }
+    .download-btns { display: flex; gap: 8px; }
+    .dl-btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid #333;
+      background: transparent;
+      color: var(--white);
+      transition: background 0.2s;
+    }
+    .dl-btn:hover { background: #1a1a1a; }
+    .dl-btn.purple { background: var(--purple); border-color: var(--purple); }
+    .dl-btn.purple:hover { opacity: 0.85; }
+    .copy-btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1px solid #333;
+      background: transparent;
+      color: var(--white);
+      transition: background 0.2s;
+    }
+    .copy-btn:hover { background: #1a1a1a; }
+
+    /* RESUME PREVIEW */
+    .resume-preview {
+      padding: 2.5rem;
+      font-family: 'DM Sans', sans-serif;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      font-size: 14px;
+      color: #222;
+      min-height: 400px;
+    }
+
+    /* REGENERATE */
+    .regen-row {
+      padding: 1rem 1.5rem;
+      border-top: 0.5px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .regen-note { font-size: 12px; color: var(--muted); }
+    .regen-btn {
+      padding: 8px 20px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--white);
+      color: var(--black);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .regen-btn:hover { background: var(--gray); }
+
+    /* SUCCESS BADGE */
+    .success-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #D1FAE5;
+      color: #065F46;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 1rem;
+    }
+
+    /* HIDDEN */
+    .hidden { display: none !important; }
+
+    /* ERROR */
+    .error-box {
+      background: #FCEBEB;
+      border: 1px solid #F09595;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-size: 14px;
+      color: #791F1F;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .field-row, .field-row-3 { grid-template-columns: 1fr; }
+      .main { padding: 1rem; }
+      .card { padding: 1.25rem; }
+      .progress-steps { gap: 4px; }
+      .step-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="nav-wordmark">RISN</span>
+    <span class="nav-underbar"></span>
+  </a>
+  <div class="nav-right">
+    <span class="nav-tool-name">Resume Builder</span>
+    <a href="/" class="nav-back">← Home</a>
+  </div>
+</nav>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-steps" id="progressSteps">
+    <div class="step-item">
+      <div class="step-circle active" id="sc1">1</div>
+      <span class="step-label active" id="sl1">You</span>
+    </div>
+    <div class="step-line" id="line1"></div>
+    <div class="step-item">
+      <div class="step-circle" id="sc2">2</div>
+      <span class="step-label" id="sl2">Experience</span>
+    </div>
+    <div class="step-line" id="line2"></div>
+    <div class="step-item">
+      <div class="step-circle" id="sc3">3</div>
+      <span class="step-label" id="sl3">Education</span>
+    </div>
+    <div class="step-line" id="line3"></div>
+    <div class="step-item">
+      <div class="step-circle" id="sc4">4</div>
+      <span class="step-label" id="sl4">Skills</span>
+    </div>
+    <div class="step-line" id="line4"></div>
+    <div class="step-item">
+      <div class="step-circle" id="sc5">5</div>
+      <span class="step-label" id="sl5">Target Job</span>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- STEP 1: PERSONAL INFO -->
+  <div id="step1" class="card">
+    <div class="card-header">
+      <p class="card-step">Step 1 of 5</p>
+      <h2 class="card-title">About You</h2>
+      <p class="card-sub">Your basic contact information — this goes at the top of your resume.</p>
+    </div>
+    <div class="field-row">
+      <div class="field-group">
+        <label for="firstName">First name</label>
+        <input type="text" id="firstName" placeholder="Jordan" />
+      </div>
+      <div class="field-group">
+        <label for="lastName">Last name</label>
+        <input type="text" id="lastName" placeholder="Mitchell" />
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field-group">
+        <label for="email">Email address</label>
+        <input type="email" id="email" placeholder="jordan@email.com" />
+      </div>
+      <div class="field-group">
+        <label for="phone">Phone number</label>
+        <input type="tel" id="phone" placeholder="(555) 123-4567" />
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field-group">
+        <label for="city">City</label>
+        <input type="text" id="city" placeholder="Austin" />
+      </div>
+      <div class="field-group">
+        <label for="state">State</label>
+        <input type="text" id="state" placeholder="TX" />
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field-group">
+        <label for="linkedin">LinkedIn URL <span class="label-optional">(optional)</span></label>
+        <input type="url" id="linkedin" placeholder="linkedin.com/in/jordanmitchell" />
+      </div>
+      <div class="field-group">
+        <label for="portfolio">Portfolio / Website <span class="label-optional">(optional)</span></label>
+        <input type="url" id="portfolio" placeholder="jordanmitchell.com" />
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-next" onclick="goToStep(2)">Next: Work Experience →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: EXPERIENCE -->
+  <div id="step2" class="card hidden">
+    <div class="card-header">
+      <p class="card-step">Step 2 of 5</p>
+      <h2 class="card-title">Work Experience</h2>
+      <p class="card-sub">Add your jobs starting with the most recent. Don't worry about perfect wording — the AI will polish everything.</p>
+    </div>
+    <div id="expBlocks">
+      <div class="exp-block" id="exp0">
+        <div class="exp-block-header">
+          <span class="exp-block-title">Position 1</span>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>Job title</label>
+            <input type="text" class="exp-title" placeholder="e.g. Marketing Coordinator" />
+          </div>
+          <div class="field-group">
+            <label>Company name</label>
+            <input type="text" class="exp-company" placeholder="e.g. Acme Corp" />
+          </div>
+        </div>
+        <div class="field-row-3">
+          <div class="field-group">
+            <label>Start date</label>
+            <input type="text" class="exp-start" placeholder="Jan 2022" />
+          </div>
+          <div class="field-group">
+            <label>End date</label>
+            <input type="text" class="exp-end" placeholder="Present" />
+          </div>
+          <div class="field-group">
+            <label>Location <span class="label-optional">(optional)</span></label>
+            <input type="text" class="exp-location" placeholder="Austin, TX" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label>What did you do? Key responsibilities and achievements</label>
+          <textarea class="exp-desc" placeholder="Describe what you did, managed, built, or achieved. Include numbers where you can — e.g. 'grew social media by 40%', 'managed a team of 5', 'reduced costs by $20k'. The AI will turn these notes into polished bullet points."></textarea>
+          <p class="field-hint">Tip: Raw notes are fine. More detail = better resume.</p>
+        </div>
+      </div>
+    </div>
+    <button class="add-btn" onclick="addExpBlock()">+ Add another position</button>
+    <div class="btn-row">
+      <button class="btn-prev" onclick="goToStep(1)">← Back</button>
+      <button class="btn-next" onclick="goToStep(3)">Next: Education →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: EDUCATION -->
+  <div id="step3" class="card hidden">
+    <div class="card-header">
+      <p class="card-step">Step 3 of 5</p>
+      <h2 class="card-title">Education</h2>
+      <p class="card-sub">Add your highest degree first. If you have no degree, you can skip this step.</p>
+    </div>
+    <div id="eduBlocks">
+      <div class="exp-block" id="edu0">
+        <div class="exp-block-header">
+          <span class="exp-block-title">Degree 1</span>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>Degree / Certification</label>
+            <input type="text" class="edu-degree" placeholder="e.g. B.S. Business Administration" />
+          </div>
+          <div class="field-group">
+            <label>School / Institution</label>
+            <input type="text" class="edu-school" placeholder="e.g. University of Texas at Austin" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label>Graduation year</label>
+            <input type="text" class="edu-year" placeholder="e.g. 2021" />
+          </div>
+          <div class="field-group">
+            <label>GPA <span class="label-optional">(optional — only include if 3.5+)</span></label>
+            <input type="text" class="edu-gpa" placeholder="e.g. 3.8" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Relevant coursework, honors, or activities <span class="label-optional">(optional)</span></label>
+          <textarea class="edu-extras" style="min-height:70px;" placeholder="e.g. Dean's List, relevant coursework in data analysis, president of marketing club"></textarea>
+        </div>
+      </div>
+    </div>
+    <button class="add-btn" onclick="addEduBlock()">+ Add another degree or certification</button>
+    <div class="btn-row">
+      <button class="btn-prev" onclick="goToStep(2)">← Back</button>
+      <button class="btn-next" onclick="goToStep(4)">Next: Skills →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: SKILLS -->
+  <div id="step4" class="card hidden">
+    <div class="card-header">
+      <p class="card-step">Step 4 of 5</p>
+      <h2 class="card-title">Your Skills</h2>
+      <p class="card-sub">Add your key skills. The AI will organize them strategically based on your target role.</p>
+    </div>
+    <div class="field-group">
+      <label>Add a skill</label>
+      <div class="skills-input-wrap">
+        <input type="text" id="skillInput" placeholder="e.g. Python, Project Management, Figma..." onkeydown="if(event.key==='Enter'){addSkill();}" />
+        <button class="tag-add-btn" onclick="addSkill()">Add</button>
+      </div>
+      <div class="tags-wrap" id="skillTags"></div>
+      <p class="field-hint">Type a skill and click Add or press Enter. Add as many as you like.</p>
+    </div>
+    <div class="field-group" style="margin-top:1.5rem;">
+      <label>Languages <span class="label-optional">(optional)</span></label>
+      <input type="text" id="languages" placeholder="e.g. English (native), Spanish (conversational)" />
+    </div>
+    <div class="field-group">
+      <label>Certifications <span class="label-optional">(optional)</span></label>
+      <input type="text" id="certifications" placeholder="e.g. Google Analytics Certified, PMP, AWS Solutions Architect" />
+    </div>
+    <div class="btn-row">
+      <button class="btn-prev" onclick="goToStep(3)">← Back</button>
+      <button class="btn-next" onclick="goToStep(5)">Next: Target Job →</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: TARGET JOB -->
+  <div id="step5" class="card hidden">
+    <div class="card-header">
+      <p class="card-step">Step 5 of 5</p>
+      <h2 class="card-title">Target Job</h2>
+      <p class="card-sub">Tell us what you're applying for. The AI uses this to tailor your entire resume to beat ATS filters for this specific role.</p>
+    </div>
+    <div class="field-row">
+      <div class="field-group">
+        <label for="targetTitle">Target job title</label>
+        <input type="text" id="targetTitle" placeholder="e.g. Product Manager, Software Engineer" />
+      </div>
+      <div class="field-group">
+        <label for="targetCompany">Target company <span class="label-optional">(optional)</span></label>
+        <input type="text" id="targetCompany" placeholder="e.g. Google, Salesforce, local startup" />
+      </div>
+    </div>
+    <div class="field-group">
+      <label for="jobDescription">Paste the job description <span class="label-optional">(optional but powerful)</span></label>
+      <textarea id="jobDescription" style="min-height:160px;" placeholder="Paste the full job posting here. Risn reads every word and tailors your resume to match exactly what this employer is looking for — increasing your chances of passing their ATS filters significantly."></textarea>
+      <p class="field-hint">The more of the job description you paste, the better your resume will perform.</p>
+    </div>
+    <div class="field-group">
+      <label for="extraNotes">Anything else you want to highlight? <span class="label-optional">(optional)</span></label>
+      <textarea id="extraNotes" style="min-height:80px;" placeholder="e.g. 'Emphasize my leadership experience', 'I'm making a career change from teaching to tech', 'Focus on my startup experience'"></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn-prev" onclick="goToStep(4)">← Back</button>
+      <button class="btn-next" id="generateBtn" onclick="generateResume()">Generate My Resume ✦</button>
+    </div>
+  </div>
+
+  <!-- GENERATING STATE -->
+  <div id="generating" class="generating-card hidden">
+    <div class="spinner"></div>
+    <h2 class="generating-title">Building Your Resume</h2>
+    <p class="generating-sub">Risn AI is crafting your personalized resume...</p>
+    <div class="generating-steps">
+      <p class="gen-step s1">✦ Analyzing your experience and skills...</p>
+      <p class="gen-step s2">✦ Matching keywords to your target role...</p>
+      <p class="gen-step s3">✦ Optimizing for ATS compatibility...</p>
+      <p class="gen-step s4">✦ Polishing language and formatting...</p>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="hidden">
+    <div class="result-card">
+      <div class="result-toolbar">
+        <div class="result-toolbar-left">
+          <span>Resume ready</span> — review and download below
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="copy-btn" onclick="copyResume()">Copy text</button>
+          <button class="dl-btn" onclick="downloadWord()">Download .docx</button>
+          <button class="dl-btn purple" onclick="downloadPDF()">Download PDF</button>
+        </div>
+      </div>
+      <div class="resume-preview" id="resumeOutput"></div>
+      <div class="regen-row">
+        <p class="regen-note">Not happy with the result? Regenerate for a fresh version.</p>
+        <button class="regen-btn" onclick="generateResume()">Regenerate ↺</button>
+      </div>
+    </div>
+    <div style="margin-top:1rem; text-align:center;">
+      <p style="font-size:13px; color:var(--muted);">Want to try another tool? <a href="/" style="color:var(--purple);">Go back to home →</a></p>
+    </div>
+  </div>
+
+  <div id="errorBox" class="error-box hidden"></div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js"></script>
+<script>
+  let currentStep = 1;
+  let skills = [];
+  let expCount = 1;
+  let eduCount = 1;
+  let generatedResume = '';
+
+  function goToStep(step) {
+    document.getElementById('step' + currentStep).classList.add('hidden');
+    document.getElementById('step' + step).classList.remove('hidden');
+    document.getElementById('generating').classList.add('hidden');
+    document.getElementById('result').classList.add('hidden');
+
+    const prev = currentStep;
+    currentStep = step;
+
+    for (let i = 1; i <= 5; i++) {
+      const circle = document.getElementById('sc' + i);
+      const label = document.getElementById('sl' + i);
+      if (i < step) {
+        circle.classList.remove('active');
+        circle.classList.add('done');
+        circle.innerHTML = '✓';
+        label.classList.remove('active');
+        label.classList.add('done');
+      } else if (i === step) {
+        circle.classList.add('active');
+        circle.classList.remove('done');
+        circle.innerHTML = i;
+        label.classList.add('active');
+        label.classList.remove('done');
+      } else {
+        circle.classList.remove('active', 'done');
+        circle.innerHTML = i;
+        label.classList.remove('active', 'done');
+      }
+      if (i < 5) {
+        const line = document.getElementById('line' + i);
+        if (i < step) { line.classList.add('done'); }
+        else { line.classList.remove('done'); }
+      }
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function addExpBlock() {
+    const wrap = document.getElementById('expBlocks');
+    const div = document.createElement('div');
+    div.className = 'exp-block';
+    div.id = 'exp' + expCount;
+    div.innerHTML = `
+      <div class="exp-block-header">
+        <span class="exp-block-title">Position ${expCount + 1}</span>
+        <button class="remove-btn" onclick="this.closest('.exp-block').remove()">Remove</button>
+      </div>
+      <div class="field-row">
+        <div class="field-group"><label>Job title</label><input type="text" class="exp-title" placeholder="e.g. Senior Analyst" /></div>
+        <div class="field-group"><label>Company name</label><input type="text" class="exp-company" placeholder="e.g. Tech Corp" /></div>
+      </div>
+      <div class="field-row-3">
+        <div class="field-group"><label>Start date</label><input type="text" class="exp-start" placeholder="Jan 2020" /></div>
+        <div class="field-group"><label>End date</label><input type="text" class="exp-end" placeholder="Dec 2021" /></div>
+        <div class="field-group"><label>Location</label><input type="text" class="exp-location" placeholder="Remote" /></div>
+      </div>
+      <div class="field-group">
+        <label>What did you do?</label>
+        <textarea class="exp-desc" placeholder="Key responsibilities and achievements..."></textarea>
+      </div>`;
+    wrap.appendChild(div);
+    expCount++;
+  }
+
+  function addEduBlock() {
+    const wrap = document.getElementById('eduBlocks');
+    const div = document.createElement('div');
+    div.className = 'exp-block';
+    div.id = 'edu' + eduCount;
+    div.innerHTML = `
+      <div class="exp-block-header">
+        <span class="exp-block-title">Degree ${eduCount + 1}</span>
+        <button class="remove-btn" onclick="this.closest('.exp-block').remove()">Remove</button>
+      </div>
+      <div class="field-row">
+        <div class="field-group"><label>Degree / Certification</label><input type="text" class="edu-degree" placeholder="e.g. M.S. Computer Science" /></div>
+        <div class="field-group"><label>School</label><input type="text" class="edu-school" placeholder="e.g. Stanford University" /></div>
+      </div>
+      <div class="field-row">
+        <div class="field-group"><label>Graduation year</label><input type="text" class="edu-year" placeholder="2023" /></div>
+        <div class="field-group"><label>GPA (optional)</label><input type="text" class="edu-gpa" placeholder="3.9" /></div>
+      </div>
+      <div class="field-group"><label>Extras (optional)</label><textarea class="edu-extras" style="min-height:70px;" placeholder="Honors, activities..."></textarea></div>`;
+    wrap.appendChild(div);
+    eduCount++;
+  }
+
+  function addSkill() {
+    const input = document.getElementById('skillInput');
+    const val = input.value.trim();
+    if (!val) return;
+    skills.push(val);
+    renderSkills();
+    input.value = '';
+    input.focus();
+  }
+
+  function removeSkill(i) {
+    skills.splice(i, 1);
+    renderSkills();
+  }
+
+  function renderSkills() {
+    const wrap = document.getElementById('skillTags');
+    wrap.innerHTML = skills.map((s, i) =>
+      `<span class="tag">${s}<span class="tag-remove" onclick="removeSkill(${i})">×</span></span>`
+    ).join('');
+  }
+
+  function collectData() {
+    const experiences = [];
+    document.querySelectorAll('.exp-block').forEach(block => {
+      const title = block.querySelector('.exp-title')?.value || '';
+      const company = block.querySelector('.exp-company')?.value || '';
+      if (title || company) {
+        experiences.push({
+          title,
+          company,
+          start: block.querySelector('.exp-start')?.value || '',
+          end: block.querySelector('.exp-end')?.value || '',
+          location: block.querySelector('.exp-location')?.value || '',
+          description: block.querySelector('.exp-desc')?.value || ''
+        });
+      }
+    });
+
+    const education = [];
+    document.querySelectorAll('[id^="edu"]').forEach(block => {
+      if (!block.classList.contains('exp-block')) return;
+      const degree = block.querySelector('.edu-degree')?.value || '';
+      const school = block.querySelector('.edu-school')?.value || '';
+      if (degree || school) {
+        education.push({
+          degree,
+          school,
+          year: block.querySelector('.edu-year')?.value || '',
+          gpa: block.querySelector('.edu-gpa')?.value || '',
+          extras: block.querySelector('.edu-extras')?.value || ''
+        });
+      }
+    });
+
+    return {
+      firstName: document.getElementById('firstName').value,
+      lastName: document.getElementById('lastName').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+      city: document.getElementById('city').value,
+      state: document.getElementById('state').value,
+      linkedin: document.getElementById('linkedin').value,
+      portfolio: document.getElementById('portfolio').value,
+      experiences,
+      education,
+      skills,
+      languages: document.getElementById('languages').value,
+      certifications: document.getElementById('certifications').value,
+      targetTitle: document.getElementById('targetTitle').value,
+      targetCompany: document.getElementById('targetCompany').value,
+      jobDescription: document.getElementById('jobDescription').value,
+      extraNotes: document.getElementById('extraNotes').value
+    };
+  }
+
+  function buildPrompt(data) {
+    let prompt = `You are an expert resume writer. Create a professional, ATS-optimized resume for the following person. Format it cleanly in plain text with clear sections. Use strong action verbs and quantify achievements where possible. Tailor everything to the target role.
+
+PERSONAL INFORMATION:
+Name: ${data.firstName} ${data.lastName}
+Email: ${data.email}
+Phone: ${data.phone}
+Location: ${data.city}, ${data.state}
+${data.linkedin ? 'LinkedIn: ' + data.linkedin : ''}
+${data.portfolio ? 'Portfolio: ' + data.portfolio : ''}
+
+TARGET ROLE: ${data.targetTitle}
+${data.targetCompany ? 'Target Company: ' + data.targetCompany : ''}
+
+WORK EXPERIENCE:
+${data.experiences.map(e => `
+Job Title: ${e.title}
+Company: ${e.company}
+Dates: ${e.start} - ${e.end}
+Location: ${e.location}
+Details: ${e.description}
+`).join('\n')}
+
+EDUCATION:
+${data.education.map(e => `
+Degree: ${e.degree}
+School: ${e.school}
+Year: ${e.year}
+${e.gpa ? 'GPA: ' + e.gpa : ''}
+${e.extras ? 'Extras: ' + e.extras : ''}
+`).join('\n')}
+
+SKILLS: ${data.skills.join(', ')}
+${data.languages ? 'Languages: ' + data.languages : ''}
+${data.certifications ? 'Certifications: ' + data.certifications : ''}
+
+${data.jobDescription ? 'JOB DESCRIPTION TO OPTIMIZE FOR:\n' + data.jobDescription : ''}
+${data.extraNotes ? 'SPECIAL INSTRUCTIONS: ' + data.extraNotes : ''}
+
+Write a complete, professional resume. Use this structure:
+- Full name and contact info at top
+- Professional Summary (2-3 sentences tailored to the target role)
+- Work Experience (reverse chronological, 3-5 bullet points per role using strong action verbs)
+- Education
+- Skills (organized by category if possible)
+- Certifications/Languages if provided
+
+Make it ATS-friendly by naturally incorporating keywords from the job description. Output only the resume text, no commentary.`;
+    return prompt;
+  }
+
+  async function generateResume() {
+    const data = collectData();
+
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById('step' + i).classList.add('hidden');
+    }
+    document.getElementById('result').classList.add('hidden');
+    document.getElementById('generating').classList.remove('hidden');
+    document.getElementById('errorBox').classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    const prompt = buildPrompt(data);
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1500,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.error) throw new Error(result.error.message);
+
+      generatedResume = result.content[0].text;
+
+      document.getElementById('generating').classList.add('hidden');
+      document.getElementById('result').classList.remove('hidden');
+      document.getElementById('resumeOutput').textContent = generatedResume;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    } catch (err) {
+      document.getElementById('generating').classList.add('hidden');
+      document.getElementById('step5').classList.remove('hidden');
+      currentStep = 5;
+      const errorBox = document.getElementById('errorBox');
+      errorBox.classList.remove('hidden');
+      errorBox.textContent = 'Something went wrong generating your resume. Please try again. If the problem persists, contact us at risewithrisn@gmail.com';
+    }
+  }
+
+  function copyResume() {
+    navigator.clipboard.writeText(generatedResume).then(() => {
+      const btn = event.target;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy text', 2000);
+    });
+  }
+
+  function downloadPDF() {
+    const win = window.open('', '_blank');
+    const data = collectData();
+    win.document.write(`
+      <!DOCTYPE html><html><head>
+      <title>${data.firstName} ${data.lastName} — Resume</title>
+      <style>
+        body { font-family: Arial, sans-serif; font-size: 12px; line-height: 1.5; margin: 40px; color: #111; }
+        pre { white-space: pre-wrap; font-family: Arial, sans-serif; font-size: 12px; }
+      </style>
+      </head><body>
+      <pre>${generatedResume}</pre>
+      <script>window.onload = function(){ window.print(); }<\/script>
+      </body></html>`);
+    win.document.close();
+  }
+
+  function downloadWord() {
+    const data = collectData();
+    const name = `${data.firstName}_${data.lastName}_Resume.docx`;
+    const lines = generatedResume.split('\n');
+
+    if (typeof docx === 'undefined') {
+      alert('Word download is loading — please try again in a moment.');
+      return;
+    }
+
+    const { Document, Packer, Paragraph, TextRun } = docx;
+
+    const paragraphs = lines.map(line => {
+      const isHeading = line.trim().length > 0 && line === line.toUpperCase() && line.length < 40;
+      return new Paragraph({
+        children: [new TextRun({
+          text: line,
+          bold: isHeading,
+          size: isHeading ? 24 : 20,
+          font: 'Calibri'
+        })],
+        spacing: { after: isHeading ? 100 : 60 }
+      });
+    });
+
+    const doc = new Document({ sections: [{ children: paragraphs }] });
+
+    Packer.toBlob(doc).then(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  }
+</script>
+
+</body>
+</html>
