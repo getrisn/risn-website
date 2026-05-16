@@ -446,15 +446,10 @@
         <input type="tel" id="phone" placeholder="(555) 123-4567" />
       </div>
     </div>
-    <div class="field-row">
-      <div class="field-group">
-        <label for="city">City</label>
-        <input type="text" id="city" placeholder="Austin" />
-      </div>
-      <div class="field-group">
-        <label for="state">State</label>
-        <input type="text" id="state" placeholder="TX" />
-      </div>
+    <div class="field-group">
+      <label for="city">Location</label>
+      <input type="text" id="city" placeholder="e.g. Austin, TX · London, UK · Toronto, ON · Remote" />
+      <p class="field-hint">City and region, or country — or just &quot;Remote&quot; if you work remotely.</p>
     </div>
     <div class="field-row">
       <div class="field-group">
@@ -504,7 +499,7 @@
           </div>
           <div class="field-group">
             <label>Location <span class="label-optional">(optional)</span></label>
-            <input type="text" class="exp-location" placeholder="Austin, TX" />
+            <input type="text" class="exp-location" placeholder="e.g. Austin, TX · London, UK · Remote" />
           </div>
         </div>
         <div class="field-group">
@@ -826,7 +821,6 @@
       email: document.getElementById('email').value,
       phone: document.getElementById('phone').value,
       city: document.getElementById('city').value,
-      state: document.getElementById('state').value,
       linkedin: document.getElementById('linkedin').value,
       portfolio: document.getElementById('portfolio').value,
       experiences,
@@ -848,7 +842,7 @@ PERSONAL INFORMATION:
 Name: ${data.firstName} ${data.lastName}
 Email: ${data.email}
 Phone: ${data.phone}
-Location: ${data.city}, ${data.state}
+Location: ${data.city}
 ${data.linkedin ? 'LinkedIn: ' + data.linkedin : ''}
 ${data.portfolio ? 'Portfolio: ' + data.portfolio : ''}
 
