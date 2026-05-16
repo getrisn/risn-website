@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Risn — Rise. Don't just apply.</title>
+  <meta name="description" content="AI-powered resumes, cover letters, interview coaching, and company research. Everything you need to land the job, in one place." />
+  <meta name="keywords" content="AI resume builder, cover letter generator, interview coach, job search, career tools, AI career platform" />
+  <meta property="og:title" content="Risn — Rise. Don't just apply." />
+  <meta property="og:description" content="AI-powered career tools built for the next generation of job seekers." />
+  <meta property="og:url" content="https://getrisn.com" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@risewithrisn" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --purple: #7C3AFF;
+      --purple-light: #A855F7;
+      --purple-pale: #F5F0FF;
+      --white: #ffffff;
+      --gray: #f7f7f7;
+      --muted: #888;
+      --border: #e8e8e8;
+      --dark-border: #222;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--black);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 60px;
+      border-bottom: 0.5px solid var(--dark-border);
+    }
+
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      text-decoration: none;
+    }
+
+    .nav-wordmark {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      color: var(--white);
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+
+    .nav-underbar {
+      height: 2px;
+      background: var(--purple);
+      border-radius: 1px;
+      width: 100%;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--purple);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 9px 22px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      text-decoration: none;
+    }
+
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* HERO */
+    .hero {
+      background: var(--black);
+      padding: 6rem 2.5rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(124,58,255,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #1a1a1a;
+      border: 0.5px solid #333;
+      border-radius: 20px;
+      padding: 6px 16px;
+      margin-bottom: 2rem;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--purple);
+      border-radius: 50%;
+    }
+
+    .badge-text {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(72px, 12vw, 120px);
+      color: var(--white);
+      line-height: 0.95;
+      letter-spacing: 3px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 span { color: var(--purple); }
+
+    .hero-sub {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--purple);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 32px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary:hover { opacity: 0.85; }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 14px 32px;
+      border-radius: 8px;
+      border: 0.5px solid #333;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-ghost:hover { border-color: #555; }
+
+    .hero-social {
+      font-size: 13px;
+      color: #444;
+    }
+
+    .hero-social a {
+      color: var(--purple);
+      text-decoration: none;
+    }
+
+    /* SECTION SHARED */
+    .section {
+      padding: 5rem 2.5rem;
+    }
+
+    .section-gray { background: var(--gray); }
+
+    .section-label {
+      font-size: 11px;
+      color: var(--purple);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 6vw, 52px);
+      color: var(--black);
+      text-align: center;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .section-sub {
+      font-size: 15px;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    /* TOOLS */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .tool-card {
+      background: var(--white);
+      border: 0.5px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+      text-decoration: none;
+      display: block;
+    }
+
+    .tool-card:hover {
+      border-color: var(--purple);
+      transform: translateY(-2px);
+    }
+
+    .tool-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--purple-pale);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 20px;
+    }
+
+    .tool-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 6px;
+    }
+
+    .tool-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .tool-link {
+      font-size: 13px;
+      color: var(--purple);
+      font-weight: 500;
+    }
+
+    /* PRICING */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .price-card {
+      background: var(--white);
+      border: 0.5px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+    }
+
+    .price-card.featured {
+      border: 2px solid var(--purple);
+    }
+
+    .price-badge {
+      display: inline-block;
+      background: var(--purple-pale);
+      color: #6D28D9;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .price-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 6px;
+    }
+
+    .price-amount {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      color: var(--black);
+      letter-spacing: 1px;
+      line-height: 1;
+    }
+
+    .price-period {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .price-features {
+      list-style: none;
+      margin-bottom: 1.5rem;
+    }
+
+    .price-features li {
+      font-size: 14px;
+      color: #555;
+      padding: 5px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .check { color: var(--purple); font-size: 15px; }
+
+    .price-btn {
+      width: 100%;
+      padding: 11px;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 0.5px solid var(--border);
+      background: var(--white);
+      color: var(--black);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .price-btn:hover { background: var(--gray); }
+
+    .price-btn.purple {
+      background: var(--purple);
+      color: var(--white);
+      border: none;
+    }
+
+    .price-btn.purple:hover { opacity: 0.85; }
+
+    /* TESTIMONIALS */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .tcard {
+      background: var(--white);
+      border: 0.5px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+
+    .tquote {
+      font-size: 14px;
+      color: #333;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .tauthor-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .tauthor-role {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* HOW IT WORKS */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .step {
+      text-align: center;
+      padding: 1.5rem 1rem;
+    }
+
+    .step-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      color: var(--purple-pale);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .step-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 6px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* CTA BAND */
+    .cta-band {
+      background: var(--purple);
+      padding: 4rem 2.5rem;
+      text-align: center;
+    }
+
+    .cta-band h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 6vw, 56px);
+      color: var(--white);
+      letter-spacing: 2px;
+      margin-bottom: 1rem;
+    }
+
+    .cta-band p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 2rem;
+    }
+
+    .btn-white {
+      background: var(--white);
+      color: var(--purple);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 36px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: opacity 0.2s;
+    }
+
+    .btn-white:hover { opacity: 0.9; }
+
+    /* FOOTER */
+    footer {
+      background: var(--black);
+      padding: 3rem 2.5rem 2rem;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .footer-brand p {
+      font-size: 13px;
+      color: #444;
+      margin-top: 6px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: #555;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-bottom {
+      border-top: 0.5px solid #1e1e1e;
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-copy {
+      font-size: 12px;
+      color: #444;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-social a {
+      font-size: 12px;
+      color: #444;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-social a:hover { color: var(--purple); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-badge { animation: fadeUp 0.5s ease forwards; }
+    .hero h1 { animation: fadeUp 0.6s 0.1s ease both; }
+    .hero-sub { animation: fadeUp 0.6s 0.2s ease both; }
+    .hero-actions { animation: fadeUp 0.6s 0.3s ease both; }
+    .hero-social { animation: fadeUp 0.6s 0.4s ease both; }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      nav { padding: 0 1.25rem; }
+      .nav-links { display: none; }
+      .hero { padding: 4rem 1.25rem 3rem; }
+      .section { padding: 3.5rem 1.25rem; }
+      .cta-band { padding: 3rem 1.25rem; }
+      footer { padding: 2.5rem 1.25rem 1.5rem; }
+      .footer-top { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-logo" aria-label="Risn home">
+      <span class="nav-wordmark">RISN</span>
+      <span class="nav-underbar"></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#how-it-works">How it works</a></li>
+      <li><a href="#tools">Tools</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+    </ul>
+    <a href="#pricing" class="nav-cta">Get started</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      <span class="badge-text">AI-powered career tools — built for what's next</span>
+    </div>
+    <h1>Rise.<br><span>Don't just<br>apply.</span></h1>
+    <p class="hero-sub">AI-powered resumes, cover letters, interview coaching, and company research — everything you need to land the job, in one place.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="btn-primary">Start for $3.99</a>
+      <a href="#how-it-works" class="btn-ghost">See how it works</a>
+    </div>
+    <p class="hero-social">Follow us <a href="https://tiktok.com/@risewithrisn" target="_blank">@risewithrisn</a></p>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section section-gray" id="how-it-works">
+    <p class="section-label">How it works</p>
+    <h2 class="section-title">Three steps to your next job</h2>
+    <p class="section-sub">No fluff. No filler. Just results.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <p class="step-title">Pick your tool</p>
+        <p class="step-desc">Resume, cover letter, interview coach, or company research — choose what you need right now.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <p class="step-title">Give Risn your info</p>
+        <p class="step-desc">Fill in a simple form. Paste a job description. The AI does the heavy lifting from there.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <p class="step-title">Walk in ready</p>
+        <p class="step-desc">Download your resume, send your cover letter, practice your answers. You're prepared. Go get it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="section" id="tools">
+    <p class="section-label">The tools</p>
+    <h2 class="section-title">Everything you need to get hired</h2>
+    <p class="section-sub">Four AI tools. One platform. Zero excuses.</p>
+    <div class="tools-grid">
+      <a href="#pricing" class="tool-card">
+        <div class="tool-icon">📄</div>
+        <p class="tool-name">Resume builder</p>
+        <p class="tool-desc">AI crafts a tailored, ATS-beating resume from your experience in minutes — not hours.</p>
+        <p class="tool-link">Build my resume →</p>
+      </a>
+      <a href="#pricing" class="tool-card">
+        <div class="tool-icon">✉️</div>
+        <p class="tool-name">Cover letter generator</p>
+        <p class="tool-desc">Personalized cover letters written in your voice, tailored to every job description.</p>
+        <p class="tool-link">Write my letter →</p>
+      </a>
+      <a href="#pricing" class="tool-card">
+        <div class="tool-icon">🎤</div>
+        <p class="tool-name">Interview coach</p>
+        <p class="tool-desc">Practice with AI, get real feedback, and walk into any interview completely prepared.</p>
+        <p class="tool-link">Start practicing →</p>
+      </a>
+      <a href="#pricing" class="tool-card">
+        <div class="tool-icon">🏢</div>
+        <p class="tool-name">Company intel</p>
+        <p class="tool-desc">Deep AI research on any company so you walk in knowing more than every other candidate.</p>
+        <p class="tool-link">Research a company →</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section section-gray" id="pricing">
+    <p class="section-label">Pricing</p>
+    <h2 class="section-title">Pay for what you need</h2>
+    <p class="section-sub">No subscriptions required. Start with a single use.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <p class="price-name">Single use</p>
+        <p class="price-amount">$3.99</p>
+        <p class="price-period">one time</p>
+        <ul class="price-features">
+          <li><span class="check">✓</span> 1 AI tool session</li>
+          <li><span class="check">✓</span> Resume, letter, or coaching</li>
+          <li><span class="check">✓</span> Download your results</li>
+        </ul>
+        <button class="price-btn">Get started</button>
+      </div>
+      <div class="price-card featured">
+        <span class="price-badge">Most popular</span>
+        <p class="price-name">Starter pack</p>
+        <p class="price-amount">$7.99</p>
+        <p class="price-period">one time · 3 sessions</p>
+        <ul class="price-features">
+          <li><span class="check">✓</span> 3 AI tool sessions</li>
+          <li><span class="check">✓</span> Mix and match any tools</li>
+          <li><span class="check">✓</span> Download your results</li>
+        </ul>
+        <button class="price-btn purple">Get started</button>
+      </div>
+      <div class="price-card">
+        <p class="price-name">Unlimited</p>
+        <p class="price-amount">$14.99</p>
+        <p class="price-period">per month · cancel anytime</p>
+        <ul class="price-features">
+          <li><span class="check">✓</span> Unlimited sessions</li>
+          <li><span class="check">✓</span> All 4 tools included</li>
+          <li><span class="check">✓</span> Priority support</li>
+        </ul>
+        <button class="price-btn">Get started</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section">
+    <p class="section-label">Social proof</p>
+    <h2 class="section-title">They Risn. You're next.</h2>
+    <p class="section-sub">Real people. Real jobs. Real results.</p>
+    <div class="testimonials-grid">
+      <div class="tcard">
+        <p class="tquote">"I had 3 interviews in a week after using the resume builder. Nothing else changed — just my resume."</p>
+        <p class="tauthor-name">Marcus T.</p>
+        <p class="tauthor-role">Landed a role at Google</p>
+      </div>
+      <div class="tcard">
+        <p class="tquote">"The company intel tool blew my interviewer away. They said I was the most prepared candidate they'd seen."</p>
+        <p class="tauthor-name">Priya S.</p>
+        <p class="tauthor-role">Switched from teaching to tech</p>
+      </div>
+      <div class="tcard">
+        <p class="tquote">"Worth every penny. I used the interview coach 3 nights before my final round and got the offer."</p>
+        <p class="tauthor-name">Jordan K.</p>
+        <p class="tauthor-role">Recent grad, first job secured</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <section class="cta-band">
+    <h2>Ready to Risn?</h2>
+    <p>Join thousands of job seekers who are done just applying — and starting to rise.</p>
+    <a href="#pricing" class="btn-white">Start for $3.99</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span style="font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: white; letter-spacing: 2px;">RISN</span>
+        <p>Rise. Don't just apply.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#how-it-works">How it works</a>
+        <a href="#tools">Tools</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#">Privacy policy</a>
+        <a href="#">Terms of service</a>
+        <a href="mailto:hello@getrisn.com">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2025 Risn · getrisn.com · All rights reserved</p>
+      <div class="footer-social">
+        <a href="https://tiktok.com/@risewithrisn" target="_blank">TikTok</a>
+        <a href="https://instagram.com/risewithrisn" target="_blank">Instagram</a>
+        <a href="https://x.com/risewithrisn" target="_blank">X</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
