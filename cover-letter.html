@@ -391,7 +391,7 @@ Keep it to one page (around 300-400 words). Make it feel genuinely human and spe
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch('/api/claude', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
