@@ -171,7 +171,7 @@
     .footer-social a { font-size: 12px; color: #444; text-decoration: none; transition: color 0.2s; }
     .footer-social a:hover { color: var(--purple); }
 
-    .sticky-cta { position: fixed; bottom: 0; left: 0; right: 0; background: var(--black); border-top: 0.5px solid var(--dark-border); padding: 12px 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; z-index: 99; transform: translateY(100%); transition: transform 0.3s ease; }
+    .sticky-cta { position: fixed; bottom: 0; left: 0; right: 0; background: var(--black); border-top: 0.5px solid var(--dark-border); padding: 12px 1.5rem; padding-bottom: max(12px, env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: space-between; gap: 1rem; z-index: 9999; transform: translateY(100%); transition: transform 0.3s ease; width: 100%; box-sizing: border-box; }
     .sticky-cta.visible { transform: translateY(0); }
     .sticky-cta-text { font-size: 13px; color: var(--muted); }
     .sticky-cta-text strong { color: var(--white); }
@@ -261,7 +261,7 @@
       <a href="/resume-builder.html" class="tool-card">
         <div class="tool-icon">📄</div>
         <p class="tool-name">Resume builder</p>
-        <p class="tool-desc">AI crafts a tailored, ATS-beating resume from your experience in minutes — not hours.</p>
+        <p class="tool-desc">AI crafts a tailored, keyword-optimized resume from your experience in minutes — not hours.</p>
         <p class="tool-link">Build my resume →</p>
       </a>
       <a href="/cover-letter.html" class="tool-card">
@@ -296,7 +296,7 @@
         <p style="font-size:13px;font-weight:700;color:#E24B4A;margin-bottom:1rem;">Using ChatGPT or Claude directly</p>
         <div style="display:flex;flex-direction:column;gap:10px;">
           <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#E24B4A;flex-shrink:0;">✗</span><p style="font-size:13px;color:#555;line-height:1.5;">You get a wall of text — then spend hours reformatting it yourself</p></div>
-          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#E24B4A;flex-shrink:0;">✗</span><p style="font-size:13px;color:#555;line-height:1.5;">No ATS optimization — most AI resumes fail keyword filters before a human reads them</p></div>
+          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#E24B4A;flex-shrink:0;">✗</span><p style="font-size:13px;color:#555;line-height:1.5;">No ATS guidance — raw AI output with no keyword optimization or formatting best practices applied</p></div>
           <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#E24B4A;flex-shrink:0;">✗</span><p style="font-size:13px;color:#555;line-height:1.5;">No Word doc download — job portals can't auto-populate fields from ChatGPT output</p></div>
           <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#E24B4A;flex-shrink:0;">✗</span><p style="font-size:13px;color:#555;line-height:1.5;">No interview coaching, company research, or cover letters — you're still on your own</p></div>
           <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#E24B4A;flex-shrink:0;">✗</span><p style="font-size:13px;color:#555;line-height:1.5;">No recruiter insights — you won't know about "junior" disqualifications or keyword string matching</p></div>
@@ -308,10 +308,10 @@
         <p style="font-size:13px;font-weight:700;color:var(--purple);margin-bottom:1rem;">Using RISN</p>
         <div style="display:flex;flex-direction:column;gap:10px;">
           <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#10B981;flex-shrink:0;">✓</span><p style="font-size:13px;color:#555;line-height:1.5;">Ready-to-use resume in under 5 minutes — formatted, polished, download-ready</p></div>
-          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#10B981;flex-shrink:0;">✓</span><p style="font-size:13px;color:#555;line-height:1.5;">Built-in ATS optimization — keywords mirrored from the job description automatically</p></div>
+          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#10B981;flex-shrink:0;">✓</span><p style="font-size:13px;color:#555;line-height:1.5;">Keyword optimization built in — mirrors job description language using industry-standard best practices</p></div>
           <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#10B981;flex-shrink:0;">✓</span><p style="font-size:13px;color:#555;line-height:1.5;">Download as Word OR PDF — Word docs auto-populate job portal form fields so you never retype</p></div>
           <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#10B981;flex-shrink:0;">✓</span><p style="font-size:13px;color:#555;line-height:1.5;">Four tools in one — resume, cover letter, interview coach, and company intel all included</p></div>
-          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#10B981;flex-shrink:0;">✓</span><p style="font-size:13px;color:#555;line-height:1.5;">Recruiter-informed AI — knows what kills applications before they reach human eyes</p></div>
+          <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#10B981;flex-shrink:0;">✓</span><p style="font-size:13px;color:#555;line-height:1.5;">Recruiter-informed AI — built on widely documented industry insights about what screening systems look for</p></div>
           <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#10B981;flex-shrink:0;">✓</span><p style="font-size:13px;color:#555;line-height:1.5;">Hyper-tailored to each job — paste the description and RISN rewrites everything to match</p></div>
         </div>
       </div>
