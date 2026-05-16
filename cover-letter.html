@@ -329,6 +329,66 @@
     </div>
   </div>
 
+  <!-- LINKEDIN BONUS -->
+  <div id="linkedinBonus" class="hidden" style="margin-top:1rem;">
+    <div style="background:white;border-radius:16px;border:0.5px solid var(--border);overflow:hidden;">
+      <div style="background:#0A66C2;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+        <div>
+          <p style="font-size:11px;color:rgba(255,255,255,0.6);letter-spacing:0.1em;text-transform:uppercase;font-weight:500;margin-bottom:2px;">✦ Free Bonus</p>
+          <p style="font-size:15px;font-weight:700;color:white;">LinkedIn Post Generator</p>
+        </div>
+        <p style="font-size:12px;color:rgba(255,255,255,0.6);">Included with your session</p>
+      </div>
+      <div id="linkedinFormSection" style="padding:1.5rem;">
+        <p style="font-size:14px;color:#555;margin-bottom:1.25rem;line-height:1.6;">You're already applying — let your network know too. Generate a LinkedIn post to go with this application in one click.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+          <div>
+            <label style="display:block;font-size:13px;font-weight:500;color:var(--black);margin-bottom:6px;">Your name</label>
+            <input type="text" id="liName" placeholder="e.g. Jordan Mitchell" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;" />
+          </div>
+          <div>
+            <label style="display:block;font-size:13px;font-weight:500;color:var(--black);margin-bottom:6px;">Post type</label>
+            <select id="liPostType" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;">
+              <option value="open-to-work">Open to Work — Announcing my search</option>
+              <option value="applied">Just Applied — Excited about this role</option>
+              <option value="new-role">New Role — Starting a new position</option>
+              <option value="networking">Networking — Expanding my connections</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-bottom:1rem;">
+          <label style="display:block;font-size:13px;font-weight:500;color:var(--black);margin-bottom:6px;">Tone</label>
+          <div style="display:flex;gap:8px;">
+            <button onclick="setLiTone(this,'professional')" class="li-tone-btn li-tone-selected" style="flex:1;padding:8px;border:1px solid #0A66C2;border-radius:6px;background:#EEF3FB;color:#0A66C2;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;">Professional</button>
+            <button onclick="setLiTone(this,'warm')" class="li-tone-btn" style="flex:1;padding:8px;border:1px solid var(--border);border-radius:6px;background:white;color:var(--black);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;">Warm</button>
+            <button onclick="setLiTone(this,'bold')" class="li-tone-btn" style="flex:1;padding:8px;border:1px solid var(--border);border-radius:6px;background:white;color:var(--black);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;">Bold</button>
+          </div>
+        </div>
+        <button onclick="generateLinkedIn()" style="width:100%;padding:12px;background:#0A66C2;color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Generate My LinkedIn Post ✦</button>
+      </div>
+      <div id="linkedinGenerating" class="hidden" style="padding:2rem;text-align:center;">
+        <div style="width:36px;height:36px;border:3px solid #EEF3FB;border-top-color:#0A66C2;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1rem;"></div>
+        <p style="font-size:14px;color:var(--muted);">Writing your LinkedIn post...</p>
+      </div>
+      <div id="linkedinResult" class="hidden" style="padding:1.5rem;">
+        <div style="border:0.5px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1rem;">
+          <div style="padding:1rem;display:flex;align-items:center;gap:10px;border-bottom:0.5px solid var(--border);">
+            <div id="liAvatar" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7C3AFF,#A855F7);display:flex;align-items:center;justify-content:center;color:white;font-size:14px;font-weight:700;flex-shrink:0;">R</div>
+            <div>
+              <p id="liPreviewName" style="font-size:13px;font-weight:700;color:var(--black);">Your Name</p>
+              <p style="font-size:11px;color:var(--muted);">Just now · 🌐</p>
+            </div>
+          </div>
+          <div id="liPostOutput" style="padding:1rem;font-size:14px;color:#333;line-height:1.7;white-space:pre-wrap;"></div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button onclick="copyLinkedIn()" id="liCopyBtn" style="flex:1;padding:10px;background:#0A66C2;color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Copy post</button>
+          <button onclick="regenLinkedIn()" style="padding:10px 16px;border:1px solid var(--border);border-radius:8px;background:white;color:var(--black);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;">Regenerate ↺</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="backLink" class="hidden" style="margin-top:1rem; text-align:center;">
     <p style="font-size:13px; color:var(--muted);">Try another tool — <a href="/" style="color:var(--purple);">back to home →</a></p>
   </div>
@@ -417,6 +477,7 @@ Keep it to one page (around 300-400 words). Make it feel genuinely human and spe
       document.getElementById('result').classList.remove('hidden');
       document.getElementById('letterOutput').textContent = generatedLetter;
       document.getElementById('backLink').classList.remove('hidden');
+      document.getElementById('linkedinBonus').classList.remove('hidden');
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
     } catch (err) {
@@ -430,6 +491,7 @@ Keep it to one page (around 300-400 words). Make it feel genuinely human and spe
 
   function regenerate() {
     document.getElementById('result').classList.add('hidden');
+    document.getElementById('linkedinBonus').classList.add('hidden');
     document.getElementById('formCard').classList.remove('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -452,6 +514,86 @@ Keep it to one page (around 300-400 words). Make it feel genuinely human and spe
     a.download = `${name.replace(' ', '_')}_${company}_Cover_Letter.txt`;
     a.click();
     URL.revokeObjectURL(url);
+  }
+
+  // LINKEDIN BONUS
+  let liTone = 'professional';
+  let liPost = '';
+
+  function setLiTone(btn, tone) {
+    document.querySelectorAll('.li-tone-btn').forEach(b => {
+      b.style.background = 'white';
+      b.style.color = 'var(--black)';
+      b.style.borderColor = 'var(--border)';
+    });
+    btn.style.background = '#EEF3FB';
+    btn.style.color = '#0A66C2';
+    btn.style.borderColor = '#0A66C2';
+    liTone = tone;
+  }
+
+  async function generateLinkedIn() {
+    const name = document.getElementById('liName').value;
+    const postType = document.getElementById('liPostType').value;
+    const jobTitle = document.getElementById('jobTitle').value;
+    const company = document.getElementById('companyName').value;
+
+    const typeMap = {
+      'open-to-work': 'announcing they are actively looking for new opportunities',
+      'applied': `sharing excitement about applying for a ${jobTitle} role at ${company}`,
+      'new-role': `announcing they are starting a new position as ${jobTitle} at ${company}`,
+      'networking': 'reaching out to expand their professional network'
+    };
+
+    document.getElementById('linkedinFormSection').classList.add('hidden');
+    document.getElementById('linkedinGenerating').classList.remove('hidden');
+    document.getElementById('linkedinResult').classList.add('hidden');
+
+    try {
+      const response = await fetch('/api/claude', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 500,
+          messages: [{
+            role: 'user',
+            content: `Write a LinkedIn post for ${name || 'a professional'} who is ${typeMap[postType]}. Tone: ${liTone}. Keep it 150-250 words, short paragraphs, 3-4 hashtags at the end. Do NOT use "excited to announce", "thrilled", "humbled", or "new chapter". Make it feel genuinely human. Output only the post text.`
+          }]
+        })
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error.message);
+
+      liPost = data.content[0].text.trim();
+      document.getElementById('linkedinGenerating').classList.add('hidden');
+      document.getElementById('linkedinResult').classList.remove('hidden');
+      document.getElementById('liPostOutput').textContent = liPost;
+
+      if (name) {
+        document.getElementById('liPreviewName').textContent = name;
+        document.getElementById('liAvatar').textContent = name.charAt(0).toUpperCase();
+      }
+
+    } catch(err) {
+      document.getElementById('linkedinGenerating').classList.add('hidden');
+      document.getElementById('linkedinFormSection').classList.remove('hidden');
+      alert('Something went wrong generating your LinkedIn post. Please try again.');
+    }
+  }
+
+  function copyLinkedIn() {
+    navigator.clipboard.writeText(liPost).then(() => {
+      const btn = document.getElementById('liCopyBtn');
+      btn.textContent = 'Copied! ✓';
+      setTimeout(() => btn.textContent = 'Copy post', 2500);
+    });
+  }
+
+  function regenLinkedIn() {
+    document.getElementById('linkedinResult').classList.add('hidden');
+    document.getElementById('linkedinFormSection').classList.remove('hidden');
   }
 </script>
 
