@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cover Letter Generator — Risn</title>
+  <meta name="description" content="Generate a personalized, professional cover letter in seconds with Risn AI." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0a0a0a;
+      --purple: #7C3AFF;
+      --purple-pale: #F5F0FF;
+      --white: #ffffff;
+      --gray: #f7f7f7;
+      --muted: #888;
+      --border: #e8e8e8;
+      --dark-border: #222;
+      --success: #10B981;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--gray); color: var(--black); min-height: 100vh; }
+
+    nav {
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 56px;
+      border-bottom: 0.5px solid var(--dark-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo { text-decoration: none; display: flex; flex-direction: column; }
+    .nav-wordmark { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--white); letter-spacing: 2px; line-height: 1; }
+    .nav-underbar { height: 2px; background: var(--purple); border-radius: 1px; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-tool-name { font-size: 13px; color: var(--muted); }
+    .nav-back { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .nav-back:hover { color: var(--white); }
+
+    .main { max-width: 780px; margin: 0 auto; padding: 2rem; }
+
+    .card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 0.5px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 1rem;
+    }
+    .card-step { font-size: 11px; color: var(--purple); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 6px; }
+    .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; color: var(--black); margin-bottom: 6px; }
+    .card-sub { font-size: 14px; color: var(--muted); margin-bottom: 1.5rem; }
+
+    .field-group { margin-bottom: 1.25rem; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    label { display: block; font-size: 13px; font-weight: 500; color: var(--black); margin-bottom: 6px; }
+    .label-optional { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 4px; }
+    input[type="text"], input[type="email"], textarea, select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--black);
+      background: var(--white);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    input:focus, textarea:focus { border-color: var(--purple); }
+    textarea { resize: vertical; line-height: 1.6; }
+    .field-hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    .tone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 6px; }
+    .tone-option { border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; cursor: pointer; text-align: center; transition: all 0.2s; }
+    .tone-option:hover { border-color: var(--purple); background: var(--purple-pale); }
+    .tone-option.selected { border-color: var(--purple); background: var(--purple-pale); }
+    .tone-option input { display: none; }
+    .tone-name { font-size: 13px; font-weight: 500; color: var(--black); }
+    .tone-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .btn-generate {
+      width: 100%;
+      padding: 14px;
+      background: var(--purple);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-top: 0.5rem;
+    }
+    .btn-generate:hover { opacity: 0.85; }
+
+    .generating-card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 0.5px solid var(--border);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--purple-pale);
+      border-top-color: var(--purple);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .generating-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; color: var(--black); margin-bottom: 8px; }
+    .generating-sub { font-size: 14px; color: var(--muted); }
+    .generating-steps { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 8px; }
+    .gen-step { font-size: 13px; color: var(--muted); opacity: 0; animation: fadeIn 0.5s forwards; }
+    .gen-step.s1 { animation-delay: 0.5s; }
+    .gen-step.s2 { animation-delay: 2s; }
+    .gen-step.s3 { animation-delay: 4s; }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    .result-card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 0.5px solid var(--border);
+      overflow: hidden;
+    }
+    .result-toolbar {
+      background: var(--black);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .result-toolbar-left { font-size: 13px; color: var(--muted); }
+    .result-toolbar-left span { color: var(--success); font-weight: 500; }
+    .dl-btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid #333;
+      background: transparent;
+      color: var(--white);
+      transition: background 0.2s;
+    }
+    .dl-btn:hover { background: #1a1a1a; }
+    .dl-btn.purple { background: var(--purple); border-color: var(--purple); }
+    .dl-btn.purple:hover { opacity: 0.85; }
+
+    .letter-preview {
+      padding: 2.5rem;
+      font-size: 14px;
+      color: #222;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      min-height: 400px;
+    }
+    .regen-row {
+      padding: 1rem 1.5rem;
+      border-top: 0.5px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .regen-note { font-size: 12px; color: var(--muted); }
+    .regen-btn {
+      padding: 8px 20px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--white);
+      color: var(--black);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .regen-btn:hover { background: var(--gray); }
+
+    .error-box {
+      background: #FCEBEB;
+      border: 1px solid #F09595;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-size: 14px;
+      color: #791F1F;
+      margin-top: 1rem;
+    }
+    .hidden { display: none !important; }
+
+    @media (max-width: 600px) {
+      .field-row { grid-template-columns: 1fr; }
+      .tone-grid { grid-template-columns: 1fr 1fr; }
+      .main { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="nav-wordmark">RISN</span>
+    <span class="nav-underbar"></span>
+  </a>
+  <div class="nav-right">
+    <span class="nav-tool-name">Cover Letter Generator</span>
+    <a href="/" class="nav-back">← Home</a>
+  </div>
+</nav>
+
+<div class="main">
+
+  <!-- INPUT FORM -->
+  <div id="formCard" class="card">
+    <p class="card-step">Cover Letter Generator</p>
+    <h1 class="card-title">Write My Cover Letter</h1>
+    <p class="card-sub">Fill in the details below and Risn AI will write a personalized cover letter in your voice — tailored to the exact job you want.</p>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label for="yourName">Your full name</label>
+        <input type="text" id="yourName" placeholder="Jordan Mitchell" />
+      </div>
+      <div class="field-group">
+        <label for="yourEmail">Your email</label>
+        <input type="email" id="yourEmail" placeholder="jordan@email.com" />
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label for="jobTitle">Job title you're applying for</label>
+        <input type="text" id="jobTitle" placeholder="e.g. Product Manager" />
+      </div>
+      <div class="field-group">
+        <label for="companyName">Company name</label>
+        <input type="text" id="companyName" placeholder="e.g. Google" />
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label for="hiringManager">Hiring manager's name <span class="label-optional">(optional — leave blank if unknown)</span></label>
+      <input type="text" id="hiringManager" placeholder="e.g. Sarah Johnson" />
+      <p class="field-hint">If you know the hiring manager's name, we'll address the letter directly to them.</p>
+    </div>
+
+    <div class="field-group">
+      <label for="yourBackground">Your background — tell us about yourself</label>
+      <textarea id="yourBackground" style="min-height:120px;" placeholder="Briefly describe your experience, key skills, and what makes you a strong candidate. Don't worry about perfect wording — the AI will polish it.&#10;&#10;e.g. 'I have 4 years in marketing, specializing in social media and email campaigns. I grew my last company's Instagram by 60%. I'm passionate about data-driven marketing and love building brand voice.'"></textarea>
+    </div>
+
+    <div class="field-group">
+      <label for="whyCompany">Why do you want to work at this company? <span class="label-optional">(optional but powerful)</span></label>
+      <textarea id="whyCompany" style="min-height:90px;" placeholder="e.g. 'I've followed their work in sustainable tech for years and love their mission. Their recent product launch really inspired me...'"></textarea>
+      <p class="field-hint">Specific reasons make cover letters stand out. Generic ones get ignored.</p>
+    </div>
+
+    <div class="field-group">
+      <label for="jobDesc">Job description <span class="label-optional">(optional but recommended)</span></label>
+      <textarea id="jobDesc" style="min-height:120px;" placeholder="Paste the job posting here. Risn will mirror the language and requirements from the posting in your cover letter — making it feel like it was written specifically for this role."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>Tone of voice</label>
+      <div class="tone-grid">
+        <div class="tone-option selected" onclick="selectTone(this, 'professional')">
+          <p class="tone-name">Professional</p>
+          <p class="tone-desc">Polished and formal</p>
+        </div>
+        <div class="tone-option" onclick="selectTone(this, 'confident')">
+          <p class="tone-name">Confident</p>
+          <p class="tone-desc">Bold and direct</p>
+        </div>
+        <div class="tone-option" onclick="selectTone(this, 'conversational')">
+          <p class="tone-name">Conversational</p>
+          <p class="tone-desc">Warm and human</p>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-generate" onclick="generateLetter()">Generate My Cover Letter ✦</button>
+    <div id="errorBox" class="error-box hidden"></div>
+  </div>
+
+  <!-- GENERATING -->
+  <div id="generating" class="generating-card hidden">
+    <div class="spinner"></div>
+    <h2 class="generating-title">Writing Your Cover Letter</h2>
+    <p class="generating-sub">Risn AI is crafting your personalized letter...</p>
+    <div class="generating-steps">
+      <p class="gen-step s1">✦ Reading the job requirements...</p>
+      <p class="gen-step s2">✦ Matching your background to the role...</p>
+      <p class="gen-step s3">✦ Writing in your voice...</p>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="result-card hidden">
+    <div class="result-toolbar">
+      <div class="result-toolbar-left"><span>Cover letter ready</span> — review and send</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="dl-btn" onclick="copyLetter()">Copy text</button>
+        <button class="dl-btn purple" onclick="downloadLetter()">Download .txt</button>
+      </div>
+    </div>
+    <div class="letter-preview" id="letterOutput"></div>
+    <div class="regen-row">
+      <p class="regen-note">Want a different version? Regenerate for a fresh take.</p>
+      <button class="regen-btn" onclick="regenerate()">Regenerate ↺</button>
+    </div>
+  </div>
+
+  <div id="backLink" class="hidden" style="margin-top:1rem; text-align:center;">
+    <p style="font-size:13px; color:var(--muted);">Try another tool — <a href="/" style="color:var(--purple);">back to home →</a></p>
+  </div>
+
+</div>
+
+<script>
+  let selectedTone = 'professional';
+  let generatedLetter = '';
+
+  function selectTone(el, tone) {
+    document.querySelectorAll('.tone-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedTone = tone;
+  }
+
+  function buildPrompt() {
+    const name = document.getElementById('yourName').value;
+    const email = document.getElementById('yourEmail').value;
+    const jobTitle = document.getElementById('jobTitle').value;
+    const company = document.getElementById('companyName').value;
+    const manager = document.getElementById('hiringManager').value;
+    const background = document.getElementById('yourBackground').value;
+    const whyCompany = document.getElementById('whyCompany').value;
+    const jobDesc = document.getElementById('jobDesc').value;
+
+    return `You are an expert cover letter writer. Write a compelling, personalized cover letter for the following person. The tone should be ${selectedTone}.
+
+APPLICANT: ${name}
+EMAIL: ${email}
+APPLYING FOR: ${jobTitle} at ${company}
+${manager ? 'HIRING MANAGER: ' + manager : 'HIRING MANAGER: Unknown — use "Dear Hiring Manager"'}
+
+APPLICANT BACKGROUND:
+${background}
+
+${whyCompany ? 'WHY THIS COMPANY:\n' + whyCompany : ''}
+${jobDesc ? 'JOB DESCRIPTION:\n' + jobDesc : ''}
+
+Write a complete, professional cover letter with:
+- Proper header with applicant name, email, and date
+- Appropriate salutation
+- Strong opening paragraph that grabs attention
+- 2 body paragraphs connecting their experience to the role
+- Closing paragraph with clear call to action
+- Professional sign-off
+
+Keep it to one page (around 300-400 words). Make it feel genuinely human and specific — not generic. Mirror language from the job description naturally. Output only the letter, no commentary.`;
+  }
+
+  async function generateLetter() {
+    const jobTitle = document.getElementById('jobTitle').value.trim();
+    const company = document.getElementById('companyName').value.trim();
+    const background = document.getElementById('yourBackground').value.trim();
+
+    if (!jobTitle || !company || !background) {
+      const eb = document.getElementById('errorBox');
+      eb.classList.remove('hidden');
+      eb.textContent = 'Please fill in the job title, company name, and your background before generating.';
+      return;
+    }
+
+    document.getElementById('errorBox').classList.add('hidden');
+    document.getElementById('formCard').classList.add('hidden');
+    document.getElementById('result').classList.add('hidden');
+    document.getElementById('generating').classList.remove('hidden');
+    document.getElementById('backLink').classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          messages: [{ role: 'user', content: buildPrompt() }]
+        })
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error.message);
+
+      generatedLetter = data.content[0].text;
+      document.getElementById('generating').classList.add('hidden');
+      document.getElementById('result').classList.remove('hidden');
+      document.getElementById('letterOutput').textContent = generatedLetter;
+      document.getElementById('backLink').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    } catch (err) {
+      document.getElementById('generating').classList.add('hidden');
+      document.getElementById('formCard').classList.remove('hidden');
+      const eb = document.getElementById('errorBox');
+      eb.classList.remove('hidden');
+      eb.textContent = 'Something went wrong. Please try again or contact risewithrisn@gmail.com';
+    }
+  }
+
+  function regenerate() {
+    document.getElementById('result').classList.add('hidden');
+    document.getElementById('formCard').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function copyLetter() {
+    navigator.clipboard.writeText(generatedLetter).then(() => {
+      const btn = event.target;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy text', 2000);
+    });
+  }
+
+  function downloadLetter() {
+    const name = document.getElementById('yourName').value || 'Cover_Letter';
+    const company = document.getElementById('companyName').value || 'Application';
+    const blob = new Blob([generatedLetter], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${name.replace(' ', '_')}_${company}_Cover_Letter.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+</script>
+
+</body>
+</html>
