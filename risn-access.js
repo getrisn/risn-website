@@ -52,7 +52,7 @@ function injectModal() {
     <div id="risnModalOverlay" style="
       display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);
       z-index:9999;align-items:center;justify-content:center;
-      padding:1rem;backdrop-filter:blur(4px);
+      padding:1rem;backdrop-filter:blur(4px);pointer-events:none;
     ">
       <div style="
         background:white;border-radius:20px;width:100%;max-width:460px;
@@ -143,6 +143,7 @@ function openRisnModal(onSuccess) {
   const overlay = document.getElementById('risnModalOverlay');
   if (overlay) {
     overlay.style.display = 'flex';
+    overlay.style.pointerEvents = 'all';
     const saved = getSavedEmail();
     if (saved) {
       const emailInput = document.getElementById('risnCodeEmail');
@@ -157,7 +158,10 @@ function openRisnModal(onSuccess) {
 
 function closeRisnModal() {
   const overlay = document.getElementById('risnModalOverlay');
-  if (overlay) overlay.style.display = 'none';
+  if (overlay) {
+    overlay.style.display = 'none';
+    overlay.style.pointerEvents = 'none';
+  }
 }
 
 function switchTab(tab) {
