@@ -675,13 +675,14 @@ CRITICAL: Only report what you actually find. Never fabricate. If you cannot fin
         <p style="font-size:13px;color:var(--muted);margin-top:12px;">${d.salaryNote || ''}</p>
       </div>
 
-      <div class="intel-section" style="background:var(--black);border-radius:0 0 16px 16px;">
+      <div class="intel-section" style="background:var(--black);border-radius:${(d.interviewers && d.interviewers.length > 0) ? '0' : '0 0 16px 16px'};">
         <div class="intel-section-header">
           <div class="intel-icon" style="background:#1a1a1a;font-size:18px;">✦</div>
           <p class="intel-section-title" style="color:var(--white);">Insider tip</p>
         </div>
         <p class="intel-content" style="color:#aaa;">${d.insiderTip || ''}</p>
-      </div>`;
+      </div>
+      ${(d.interviewers && d.interviewers.length > 0) ? renderInterviewers(d.interviewers) : ''}`;
 
     briefingText = `COMPANY INTEL BRIEFING: ${company} — ${role}\n\n` +
       `OVERVIEW\n${d.overview}\n\n` +
