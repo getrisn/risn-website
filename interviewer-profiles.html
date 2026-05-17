@@ -375,7 +375,7 @@
   <div id="formCard" class="card">
     <p class="card-step">Interviewer Profiles</p>
     <h1 class="card-title">Know Who's Across the Table</h1>
-    <p class="card-sub">Add up to 3 LinkedIn handles and RISN privately researches your interviewers — their career story, what drives them, and the conversation angles that turn an interview into a real human connection. They'll never know you looked.</p>
+    <p class="card-sub">Add up to 4 LinkedIn handles and RISN privately researches your interviewers — their career story, what drives them, and the conversation angles that turn an interview into a real human connection. They'll never know you looked.</p>
 
     <div class="privacy-badge">
       <span style="color:#10B981;font-size:14px;">🔒</span>
@@ -394,7 +394,7 @@
     </div>
 
     <div class="field-group">
-      <label>LinkedIn handles <span class="label-optional">(add up to 5)</span></label>
+      <label>LinkedIn handles <span class="label-optional">(add up to 4)</span></label>
       <p class="field-hint" style="margin-bottom:10px;">Paste their full LinkedIn URL or just the handle. e.g. <em>linkedin.com/in/sarahjohnson</em> or just <em>sarahjohnson</em></p>
 
       <div class="interviewer-block">
@@ -429,13 +429,6 @@
         <input type="text" id="li4" placeholder="optional" />
       </div>
 
-      <div class="interviewer-block">
-        <div class="interviewer-block-header">
-          <div class="interviewer-num" style="background:#DDD6FE;">5</div>
-          <span class="interviewer-label">Fifth interviewer <span class="label-optional">(optional)</span></span>
-        </div>
-        <input type="text" id="li5" placeholder="optional" />
-      </div>
     </div>
 
     <div class="field-group">
@@ -494,7 +487,7 @@
 
   function getLinkedInHandles() {
     const handles = [];
-    ['li1', 'li2', 'li3', 'li4', 'li5'].forEach(id => {
+    ['li1', 'li2', 'li3', 'li4'].forEach(id => {
       const val = document.getElementById(id).value.trim();
       if (val) {
         const clean = val
@@ -520,24 +513,18 @@ ${context ? 'Additional context: ' + context : ''}
 For each handle, search LinkedIn and any other public professional sources. Return a JSON object with an "interviewers" array. Each interviewer object must have these exact keys:
 
 {
-  "handle": "the LinkedIn handle searched",
-  "name": "their full name",
-  "currentRole": "their current job title and company",
-  "yearsAtCompany": "approximately how long they have been at ${company}",
-  "previousRoles": "2-3 most notable previous companies or roles before ${company}",
-  "education": "undergraduate and graduate schools if available",
-  "careerStory": "3-4 sentences synthesizing their career trajectory — what choices they made, what it reveals about what they value professionally, and how their background connects to the ${role} role",
-  "interests": "professional interests, causes they support, topics they frequently engage with publicly",
-  "recentActivity": "any notable recent posts, articles, talks, or public professional activity",
-  "interviewStyle": "2-3 sentences on the type of interviewer they are likely to be based on their background — what they probably care about and how they assess candidates",
-  "conversationAngles": [
-    "Specific natural topic 1 the candidate can authentically bring up",
-    "Specific natural topic 2",
-    "Specific natural topic 3"
-  ],
-  "connectionPoints": "any shared background, mutual companies, schools, or experiences that could create authentic rapport",
-  "confidence": "high if profile clearly identified and verified, medium if likely match with some uncertainty, low if unclear match",
-  "disclaimer": "explanation if confidence is medium or low, or empty string if high"
+  "handle": "LinkedIn handle searched",
+  "name": "full name",
+  "currentRole": "current title and company",
+  "yearsAtCompany": "time at ${company}",
+  "previousRoles": "top 2 previous companies or roles",
+  "education": "school and degree",
+  "careerStory": "2-3 sentences on career trajectory and what it reveals about them",
+  "interviewStyle": "1-2 sentences on how they likely interview and what they care about",
+  "conversationAngles": ["angle 1", "angle 2", "angle 3"],
+  "connectionPoints": "shared background or experiences if any",
+  "confidence": "high, medium, or low",
+  "disclaimer": "explanation if not high confidence, else empty string"
 }
 
 CRITICAL RULES:
@@ -579,15 +566,17 @@ Return only valid JSON, no markdown, no code blocks.`;
     const risn_unlimited = (function(){ try { const s = sessionStorage.getItem('risn_access'); if(!s) return false; const d = JSON.parse(s); return d && d.type === 'unlimited'; } catch(e) { return false; } })();
 
     try {
+      const _risnToken = window.getRisnToken ? await window.getRisnToken() : null;
       const response = await fetch('/api/claude', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          risn_secret: _risnToken,
           model: 'claude-sonnet-4-5',
           risn_email,
           risn_unlimited,
           risn_web_search: true,
-          max_tokens: 4000,
+          max_tokens: 2000,
           messages: [{ role: 'user', content: buildPrompt(handles) }]
         })
       });
@@ -757,7 +746,7 @@ Return only valid JSON, no markdown, no code blocks.`;
     document.getElementById('li2').value = '';
     document.getElementById('li3').value = '';
     document.getElementById('li4').value = '';
-    document.getElementById('li5').value = '';
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 </script>
