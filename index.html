@@ -531,11 +531,31 @@
       if (!isOpen) { answer.classList.add('open'); icon.classList.add('open'); }
     }
 
-    function submitEmail() {
+    async function submitEmail() {
       const email = document.getElementById('emailCapture').value.trim();
-      if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
-      document.getElementById('emailCapture').value = '';
-      document.getElementById('emailSuccess').style.display = 'block';
+      if (!email || !email.includes('@')) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+      const btn = document.querySelector('.email-btn');
+      btn.textContent = 'Subscribing...';
+      btn.disabled = true;
+      try {
+        const res = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const data = await res.json();
+        document.getElementById('emailCapture').value = '';
+        document.getElementById('emailSuccess').style.display = 'block';
+        document.getElementById('emailSuccess').textContent = data.message || "You're in! Welcome to the RISN community.";
+      } catch (err) {
+        alert('Something went wrong. Please try again.');
+      } finally {
+        btn.textContent = 'Subscribe';
+        btn.disabled = false;
+      }
     }
 
     const stickyCta = document.getElementById('stickyCta');
