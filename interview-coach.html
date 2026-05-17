@@ -417,7 +417,9 @@
 <script>
   let selectedType = 'mixed';
   let questions = [];
+  let allAskedQuestions = []; // tracks all questions across rounds to prevent repeats
   let answeredCount = 0;
+  let roundNumber = 0; // 0 = not started, 1 = first round, 2 = second (free), 3+ = paid
 
   function selectType(el, type) {
     document.querySelectorAll('.type-option').forEach(o => o.classList.remove('selected'));
@@ -425,12 +427,20 @@
     selectedType = type;
   }
 
-  function buildPrompt() {
+  function buildPrompt(excludeQuestions = []) {
     const job = document.getElementById('jobTitle').value;
     const company = document.getElementById('companyName').value;
     const exp = document.getElementById('experience').value;
     const bg = document.getElementById('background').value;
     const jd = document.getElementById('jobDesc').value;
+
+    const excludeSection = excludeQuestions.length > 0
+      ? `
+
+DO NOT repeat any of these previously asked questions:
+${excludeQuestions.map((q, i) => `${i+1}. ${q}`).join('
+')}`
+      : '';
 
     return `You are an expert interview coach. Generate exactly 6 interview questions for the following candidate, along with detailed coaching tips for each.
 
@@ -438,7 +448,7 @@ ROLE: ${job} at ${company}
 EXPERIENCE LEVEL: ${exp}
 INTERVIEW TYPE: ${selectedType}
 ${bg ? 'CANDIDATE BACKGROUND: ' + bg : ''}
-${jd ? 'JOB DESCRIPTION: ' + jd : ''}
+${jd ? 'JOB DESCRIPTION: ' + jd : ''}${excludeSection}
 
 Return your response as a valid JSON array with exactly 6 objects. Each object must have these exact keys:
 - "question": the interview question (string)
@@ -466,6 +476,25 @@ Return only the JSON array, no other text, no markdown code blocks.`;
     document.getElementById('generating').classList.remove('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
+    roundNumber = 1;
+    allAskedQuestions = [];
+    await fetchQuestions(job, company);
+  }
+
+  async function fetchMoreQuestions(usesSession) {
+    const job = document.getElementById('jobTitle').value.trim();
+    const company = document.getElementById('companyName').value.trim();
+
+    // Show generating state
+    document.getElementById('session').classList.add('hidden');
+    document.getElementById('generating').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    roundNumber++;
+    await fetchQuestions(job, company);
+  }
+
+  async function fetchQuestions(job, company) {
     try {
       const response = await fetch('/api/claude', {
         method: 'POST',
@@ -473,7 +502,7 @@ Return only the JSON array, no other text, no markdown code blocks.`;
         body: JSON.stringify({
           model: 'claude-sonnet-4-5',
           max_tokens: 2000,
-          messages: [{ role: 'user', content: buildPrompt() }]
+          messages: [{ role: 'user', content: buildPrompt(allAskedQuestions) }]
         })
       });
 
@@ -482,7 +511,12 @@ Return only the JSON array, no other text, no markdown code blocks.`;
 
       let text = data.content[0].text.trim();
       text = text.replace(/```json|```/g, '').trim();
-      questions = JSON.parse(text);
+      const newQuestions = JSON.parse(text);
+
+      // Track all asked questions to prevent future repeats
+      newQuestions.forEach(q => allAskedQuestions.push(q.question));
+      questions = newQuestions;
+      answeredCount = 0;
 
       document.getElementById('generating').classList.add('hidden');
       renderSession(job, company);
@@ -531,12 +565,42 @@ Return only the JSON array, no other text, no markdown code blocks.`;
 
     const complete = document.createElement('div');
     complete.className = 'session-complete';
+
+    // Determine what "more questions" button to show
+    let moreBtn = '';
+    if (roundNumber === 1) {
+      // First round done — second round is free
+      moreBtn = `
+        <div style="margin-bottom:1rem;padding:1rem;background:var(--purple-pale);border-radius:10px;border:0.5px solid #d8b4fe;">
+          <p style="font-size:12px;color:var(--purple);font-weight:500;margin-bottom:4px;">✦ Free bonus — 6 more questions</p>
+          <p style="font-size:12px;color:#555;margin-bottom:10px;">Get a fresh set of 6 questions — different from everything you just practiced.</p>
+          <button onclick="fetchMoreQuestions(false)" style="width:100%;padding:10px;background:var(--purple);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Get 6 more questions — free →</button>
+        </div>`;
+    } else if (roundNumber === 2) {
+      // Second round done — third round is still free
+      moreBtn = `
+        <div style="margin-bottom:1rem;padding:1rem;background:var(--purple-pale);border-radius:10px;border:0.5px solid #d8b4fe;">
+          <p style="font-size:12px;color:var(--purple);font-weight:500;margin-bottom:4px;">✦ One more free round</p>
+          <p style="font-size:12px;color:#555;margin-bottom:10px;">You've got one more set of 6 free questions — all different from what you've practiced so far.</p>
+          <button onclick="fetchMoreQuestions(false)" style="width:100%;padding:10px;background:var(--purple);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Get 6 more questions — free →</button>
+        </div>`;
+    } else {
+      // Round 4+ costs a session
+      moreBtn = `
+        <div style="margin-bottom:1rem;padding:1rem;background:#f7f7f7;border-radius:10px;border:0.5px solid #e8e8e8;">
+          <p style="font-size:12px;color:#555;font-weight:500;margin-bottom:4px;">Want even more practice?</p>
+          <p style="font-size:12px;color:#888;margin-bottom:10px;">You've already had 18 free questions — seriously impressive prep! Additional sets use 1 session from your account.</p>
+          <button onclick="risnGate(() => fetchMoreQuestions(true))" style="width:100%;padding:10px;background:#0a0a0a;color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;">Get 6 more questions — uses 1 session →</button>
+        </div>`;
+    }
+
     complete.innerHTML = `
       <div class="complete-icon">🎯</div>
-      <h2 class="complete-title">Session Complete</h2>
-      <p class="complete-sub">You've completed all ${questions.length} targeted questions for this role. Each was chosen specifically for its likelihood of being asked — quality over quantity. Practice your answers again until they feel natural, then walk in with confidence.</p>
+      <h2 class="complete-title">Round ${roundNumber} Complete</h2>
+      <p class="complete-sub">You've completed ${roundNumber === 1 ? 'your first 6' : 'another 6'} targeted questions — each chosen specifically for this role and different from everything you've practiced before. ${roundNumber < 3 ? 'Keep going — you have more free rounds available!' : 'With 18 questions under your belt, you are seriously prepared.'}</p>
+      ${moreBtn}
       <div class="complete-actions">
-        <button class="btn-restart" onclick="restart()">Practice again ↺</button>
+        <button class="btn-restart" onclick="restart()">Start over ↺</button>
         <a href="/" class="btn-home">Try another tool →</a>
       </div>`;
     wrap.appendChild(complete);
@@ -613,7 +677,9 @@ Give specific, constructive feedback in 3-4 sentences. Be direct and honest. Poi
 
   function restart() {
     questions = [];
+    allAskedQuestions = [];
     answeredCount = 0;
+    roundNumber = 0;
     document.getElementById('session').classList.add('hidden');
     document.getElementById('questionsWrap').innerHTML = '';
     document.getElementById('formCard').classList.remove('hidden');
