@@ -8,7 +8,7 @@
 const VALID_CODES = {
   // Base codes
   'GETRISN1': { sessions: 1, days: null, type: 'sessions' },
-  'GETRISN3': { sessions: 3, days: null, type: 'sessions' },
+  'GETRISN3': { sessions: 4, days: null, type: 'sessions' },
   'GETRISN100': { sessions: null, days: 7, type: 'unlimited' },
   'GETRISNUNLIMITED': { sessions: null, days: 30, type: 'unlimited' },
   // Add personalized codes below as needed:
