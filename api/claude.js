@@ -81,6 +81,25 @@ async function checkRateLimit(email) {
   }
 }
 
+// Simple IP-based rate limiter — max 30 requests per IP per minute
+const ipRequests = new Map();
+
+function checkIPLimit(ip) {
+  const now = Date.now();
+  const windowMs = 60 * 1000; // 1 minute
+  const maxRequests = 30;
+
+  if (!ipRequests.has(ip)) {
+    ipRequests.set(ip, []);
+  }
+
+  const requests = ipRequests.get(ip).filter(t => now - t < windowMs);
+  requests.push(now);
+  ipRequests.set(ip, requests);
+
+  return requests.length <= maxRequests;
+}
+
 export default async function handler(req, res) {
   const allowedOrigins = ['https://getrisn.com', 'https://www.getrisn.com'];
   const origin = req.headers.origin;
@@ -98,6 +117,19 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Layer 1: Verify request signature
+  const requestSecret = req.body.risn_secret;
+  const expectedSecret = process.env.RISN_API_SECRET;
+  if (!requestSecret || requestSecret !== expectedSecret) {
+    return res.status(403).json({ error: 'Unauthorized' });
+  }
+
+  // Layer 2: IP rate limiting — max 30 requests per minute per IP
+  const clientIP = req.headers['x-forwarded-for']?.split(',')[0] || req.socket?.remoteAddress || 'unknown';
+  if (!checkIPLimit(clientIP)) {
+    return res.status(429).json({ error: 'Too many requests. Please slow down.' });
+  }
+
   try {
     // Check rate limit for unlimited subscribers only
     const email = req.body.risn_email;
@@ -111,7 +143,7 @@ export default async function handler(req, res) {
     }
 
     // Always use the centrally configured model
-    const { risn_email, risn_unlimited, risn_web_search, ...claudeBody } = req.body;
+    const { risn_email, risn_unlimited, risn_web_search, risn_secret, ...claudeBody } = req.body;
     // Use requested model if approved, otherwise fall back to default
     const requestedModel = claudeBody.model;
     const model = (requestedModel && APPROVED_MODELS[requestedModel]) ? requestedModel : DEFAULT_MODEL;
