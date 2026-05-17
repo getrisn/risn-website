@@ -1,11 +1,7 @@
 // api/validate-code.js
 // Server-side promo code validation for RISN
-// Stores used codes in memory (resets on redeploy)
-// For production: replace usedCodes with a Supabase table
+// Uses Supabase to persistently track used codes per email
 
-const usedCodes = new Map(); // email -> [codes used]
-
-// Valid base codes and their access levels
 const BASE_CODES = {
   'GETRISN1': { sessions: 1, days: null, type: 'sessions' },
   'GETRISN3': { sessions: 3, days: null, type: 'sessions' },
@@ -17,15 +13,15 @@ function parseCode(code) {
   if (!code) return null;
   const upper = code.toUpperCase().trim();
 
-  // Check exact match first
+  // Exact match
   if (BASE_CODES[upper]) {
     return { base: upper, access: BASE_CODES[upper] };
   }
 
-  // Check prefix match for personalized codes (e.g. GETRISN1-ELI)
+  // Prefix match for personalized codes e.g. GETRISN1-ELI
   for (const [base, access] of Object.entries(BASE_CODES)) {
     if (upper.startsWith(base + '-') && upper.length > base.length + 1) {
-      return { base: upper, access }; // Full code is unique key
+      return { base: upper, access };
     }
   }
 
@@ -53,42 +49,70 @@ export default async function handler(req, res) {
   }
 
   const parsed = parseCode(code);
-
   if (!parsed) {
     return res.status(200).json({ valid: false, error: 'Invalid code. Please check and try again.' });
   }
 
-  // Check if this email has already used this code
   const emailKey = email.toLowerCase().trim();
   const codeKey = parsed.base;
-  const usedByEmail = usedCodes.get(emailKey) || [];
 
-  if (usedByEmail.includes(codeKey)) {
-    return res.status(200).json({
-      valid: false,
-      error: 'This code has already been used with this email address. Each code can only be used once per email.'
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_KEY = process.env.SUPABASE_SECRET_KEY;
+
+  try {
+    // Check if this email+code combo has already been used
+    const checkRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/used_codes?email=eq.${encodeURIComponent(emailKey)}&code=eq.${encodeURIComponent(codeKey)}&select=id`,
+      {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    const existing = await checkRes.json();
+
+    if (existing && existing.length > 0) {
+      return res.status(200).json({
+        valid: false,
+        error: 'This code has already been used with this email address. Each code can only be used once per email.'
+      });
+    }
+
+    // Record the use in Supabase
+    await fetch(`${SUPABASE_URL}/rest/v1/used_codes`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ email: emailKey, code: codeKey })
     });
+
+    // Build access grant
+    const access = parsed.access;
+    const expiresAt = access.days
+      ? new Date(Date.now() + access.days * 24 * 60 * 60 * 1000).toISOString()
+      : null;
+
+    return res.status(200).json({
+      valid: true,
+      type: access.type,
+      sessions: access.sessions,
+      days: access.days,
+      expiresAt,
+      email: emailKey,
+      message: access.type === 'sessions'
+        ? `Code accepted! You have ${access.sessions} session${access.sessions > 1 ? 's' : ''} to use.`
+        : `Code accepted! You have unlimited access for ${access.days} days.`
+    });
+
+  } catch (err) {
+    console.error('Supabase error:', err);
+    return res.status(500).json({ valid: false, error: 'Server error. Please try again.' });
   }
-
-  // Mark code as used for this email
-  usedByEmail.push(codeKey);
-  usedCodes.set(emailKey, usedByEmail);
-
-  // Build access grant
-  const access = parsed.access;
-  const expiresAt = access.days
-    ? new Date(Date.now() + access.days * 24 * 60 * 60 * 1000).toISOString()
-    : null;
-
-  return res.status(200).json({
-    valid: true,
-    type: access.type,
-    sessions: access.sessions,
-    days: access.days,
-    expiresAt,
-    email: emailKey,
-    message: access.type === 'sessions'
-      ? `Code accepted! You have ${access.sessions} session${access.sessions > 1 ? 's' : ''} to use.`
-      : `Code accepted! You have unlimited access for ${access.days} days.`
-  });
 }
