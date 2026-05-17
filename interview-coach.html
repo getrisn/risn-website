@@ -440,12 +440,12 @@ INTERVIEW TYPE: ${selectedType}
 ${bg ? 'CANDIDATE BACKGROUND: ' + bg : ''}
 ${jd ? 'JOB DESCRIPTION: ' + jd : ''}
 
-Return your response as a valid JSON array with exactly 8 objects. Each object must have these exact keys:
+Return your response as a valid JSON array with exactly 6 objects. Each object must have these exact keys:
 - "question": the interview question (string)
 - "type": one of "Behavioral", "Technical", "Situational", or "Culture Fit" (string)
 - "tip": 2-3 sentences of coaching advice on how to answer this specific question well (string)
 
-Focus on questions that are highly likely to be asked for this specific role at this type of company. Make the coaching tips specific and actionable — not generic advice.
+Focus on the most important questions likely to be asked. Keep each tip to 2-3 sentences maximum. Make coaching tips specific and actionable — not generic advice.
 
 Return only the JSON array, no other text, no markdown code blocks.`;
   }
@@ -472,7 +472,7 @@ Return only the JSON array, no other text, no markdown code blocks.`;
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'claude-sonnet-4-5',
-          max_tokens: 1000,
+          max_tokens: 2000,
           messages: [{ role: 'user', content: buildPrompt() }]
         })
       });
