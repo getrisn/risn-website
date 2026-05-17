@@ -11,7 +11,7 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Company Intel — Risn</title>
+  <title>Company Intel — RISN</title>
   <meta name="description" content="Get a deep AI briefing on any company before your interview. Walk in knowing more than every other candidate." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -301,7 +301,7 @@
   <div id="formCard" class="card">
     <p class="card-step">Company Intel</p>
     <h1 class="card-title">Know More Than Anyone Else in That Room</h1>
-    <p class="card-sub">Enter the company and role you're interviewing for. Risn AI builds you a complete intelligence briefing so you walk in completely prepared.</p>
+    <p class="card-sub">Enter the company and role you're interviewing for. RISN AI builds you a complete intelligence briefing so you walk in completely prepared.</p>
 
     <div class="field-row">
       <div class="field-group">
@@ -324,7 +324,7 @@
       <textarea id="extraContext" style="min-height:80px;" placeholder="e.g. 'I want to understand their engineering culture', 'I heard they recently had layoffs', 'I want salary negotiation tips for this company specifically'"></textarea>
     </div>
 
-    <button class="btn-generate" onclick="generateIntel()">Generate My Company Briefing ✦</button>
+    <button class="btn-generate" onclick="risnGate(generateIntel)">Generate My Company Briefing ✦</button>
     <div id="errorBox" class="error-box hidden"></div>
   </div>
 
@@ -332,7 +332,7 @@
   <div id="generating" class="generating-card hidden">
     <div class="spinner"></div>
     <h2 class="generating-title">Building Your Briefing</h2>
-    <p class="generating-sub">Risn AI is researching the company in depth...</p>
+    <p class="generating-sub">RISN AI is researching the company in depth...</p>
     <div class="generating-steps">
       <p class="gen-step s1">✦ Analyzing company background and mission...</p>
       <p class="gen-step s2">✦ Researching culture and values...</p>
@@ -582,7 +582,7 @@ Be specific to this company and role — not generic. Use your knowledge of this
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `Risn_Intel_${company}.txt`;
+    a.download = `RISN_Intel_${company}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -595,5 +595,6 @@ Be specific to this company and role — not generic. Use your knowledge of this
   }
 </script>
 
+  <script src="/risn-access.js"></script>
 </body>
 </html>
