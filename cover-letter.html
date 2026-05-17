@@ -463,7 +463,9 @@ Keep it to one page (around 300-400 words). Make it feel genuinely human and spe
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-5',
+          model: 'claude-haiku-4-5-20251001',
+          risn_email: (function(){ try { return localStorage.getItem('risn_user_email') || ''; } catch(e) { return ''; } })(),
+          risn_unlimited: (function(){ try { const s = sessionStorage.getItem('risn_access'); if(!s) return false; const d = JSON.parse(s); return d && d.type === 'unlimited'; } catch(e) { return false; } })(),
           max_tokens: 1000,
           messages: [{ role: 'user', content: buildPrompt() }]
         })
@@ -554,7 +556,9 @@ Keep it to one page (around 300-400 words). Make it feel genuinely human and spe
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-5',
+          model: 'claude-haiku-4-5-20251001',
+          risn_email: (function(){ try { return localStorage.getItem('risn_user_email') || ''; } catch(e) { return ''; } })(),
+          risn_unlimited: (function(){ try { const s = sessionStorage.getItem('risn_access'); if(!s) return false; const d = JSON.parse(s); return d && d.type === 'unlimited'; } catch(e) { return false; } })(),
           max_tokens: 500,
           messages: [{
             role: 'user',
