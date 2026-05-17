@@ -330,7 +330,7 @@
   <div id="formCard" class="card">
     <p class="card-step">Interview Coach</p>
     <h1 class="card-title">Prepare to Ace It</h1>
-    <p class="card-sub">Tell us about the role and we'll generate tailored interview questions with AI coaching on exactly how to answer each one.</p>
+    <p class="card-sub">Tell us about the role and we'll generate 6 tailored interview questions — each with detailed AI coaching on exactly how to answer it. Practice your answers and get instant AI feedback.</p>
 
     <div class="field-row">
       <div class="field-group">
@@ -389,7 +389,7 @@
   <div id="generating" class="generating-card hidden">
     <div class="spinner"></div>
     <h2 class="generating-title">Preparing Your Session</h2>
-    <p class="generating-sub">RISN AI is building your personalized interview questions...</p>
+    <p class="generating-sub">RISN AI is building your 6 personalized interview questions...</p>
     <div class="generating-steps">
       <p class="gen-step s1">✦ Analyzing the role and company...</p>
       <p class="gen-step s2">✦ Crafting targeted questions...</p>
@@ -432,7 +432,7 @@
     const bg = document.getElementById('background').value;
     const jd = document.getElementById('jobDesc').value;
 
-    return `You are an expert interview coach. Generate exactly 8 interview questions for the following candidate, along with coaching tips for each.
+    return `You are an expert interview coach. Generate exactly 6 interview questions for the following candidate, along with detailed coaching tips for each.
 
 ROLE: ${job} at ${company}
 EXPERIENCE LEVEL: ${exp}
@@ -534,7 +534,7 @@ Return only the JSON array, no other text, no markdown code blocks.`;
     complete.innerHTML = `
       <div class="complete-icon">🎯</div>
       <h2 class="complete-title">Session Complete</h2>
-      <p class="complete-sub">You've gone through all ${questions.length} questions. Practice makes perfect — go again or try another tool.</p>
+      <p class="complete-sub">You've completed all ${questions.length} targeted questions for this role. Each was chosen specifically for its likelihood of being asked — quality over quantity. Practice your answers again until they feel natural, then walk in with confidence.</p>
       <div class="complete-actions">
         <button class="btn-restart" onclick="restart()">Practice again ↺</button>
         <a href="/" class="btn-home">Try another tool →</a>
