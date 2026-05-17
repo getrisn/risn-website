@@ -4,13 +4,17 @@
 
 export default async function handler(req, res) {
   const allowedOrigins = ['https://getrisn.com', 'https://www.getrisn.com'];
-  const origin = req.headers.origin;
+  const origin = req.headers.origin || req.headers.referer || '';
 
-  if (!allowedOrigins.includes(origin)) {
+  // Allow requests from getrisn.com — check origin or referer
+  const isAllowed = allowedOrigins.some(o => origin.startsWith(o))
+    || allowedOrigins.includes(origin);
+
+  if (!isAllowed) {
     return res.status(403).json({ error: 'Unauthorized' });
   }
 
-  res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Access-Control-Allow-Origin', allowedOrigins.includes(origin) ? origin : allowedOrigins[0]);
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -19,10 +23,9 @@ export default async function handler(req, res) {
 
   const secret = process.env.RISN_API_SECRET;
   if (!secret) {
-    return res.status(500).json({ error: 'Server configuration error' });
+    return res.status(500).json({ error: 'Server configuration error — RISN_API_SECRET not set' });
   }
 
-  // Return token with short cache — frontend caches it for the session
   res.setHeader('Cache-Control', 'private, max-age=3600');
   return res.status(200).json({ token: secret });
 }
