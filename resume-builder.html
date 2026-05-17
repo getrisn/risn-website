@@ -1021,11 +1021,15 @@ Output only the resume markdown. No commentary. No code blocks.`;
     const prompt = buildPrompt(data);
 
     try {
+      const _risnToken = window.getRisnToken ? await window.getRisnToken() : null;
       const response = await fetch('/api/claude', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          risn_secret: _risnToken,
           model: 'claude-sonnet-4-5',
+          risn_email: (function(){ try { return localStorage.getItem('risn_user_email') || ''; } catch(e) { return ''; } })(),
+          risn_unlimited: (function(){ try { const s = sessionStorage.getItem('risn_access'); if(!s) return false; const d = JSON.parse(s); return d && d.type === 'unlimited'; } catch(e) { return false; } })(),
           max_tokens: 1500,
           messages: [{ role: 'user', content: prompt }]
         })
