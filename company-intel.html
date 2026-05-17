@@ -440,60 +440,58 @@
     return handles;
   }
 
-  function buildPrompt() {
+  function buildCompanyPrompt() {
     const company = document.getElementById('companyName').value;
     const role = document.getElementById('jobTitle').value;
     const industry = document.getElementById('industry').value;
     const extra = document.getElementById('extraContext').value;
-    const handles = interviewConfirmed ? getLinkedInHandles() : [];
 
-    const interviewerSection = handles.length > 0 ? `
-
-INTERVIEWER RESEARCH:
-The candidate has an interview confirmed. Research each of the following LinkedIn profiles and provide professional background, career insights, and conversation angles.
-LinkedIn handles to research: ${handles.join(', ')}
-
-For each interviewer found, add to the JSON response an "interviewers" array with objects containing:
-- "handle": their LinkedIn handle
-- "name": their name as found on LinkedIn
-- "currentRole": their current title and company
-- "careerStory": 2-3 sentences summarizing their career path and what it reveals about them professionally
-- "yearsAtCompany": approximately how long they have been at this company
-- "background": notable previous companies or roles
-- "education": where they studied if available
-- "interests": professional interests, causes they support, topics they post about
-- "conversationAngles": 2-3 specific topics or connections the candidate could naturally bring up
-- "interviewStyle": based on their background, what kind of interviewer are they likely to be
-- "confidence": "high" if profile clearly found and verified, "medium" if likely match, "low" if uncertain
-- "disclaimer": if confidence is medium or low, a note explaining the uncertainty
-
-IMPORTANT: Only include information you are highly confident about from their LinkedIn profile. If you cannot find a clear match for a handle, set confidence to "low" and explain why. Never fabricate details.` : '';
-
-    return `You are an expert career researcher and interview strategist. Create a comprehensive company intelligence briefing for a job candidate.
+    return `You are an expert career researcher. Create a company intelligence briefing for a job candidate.
 
 COMPANY: ${company}
 ROLE: ${role}
 ${industry ? 'INDUSTRY: ' + industry : ''}
-${extra ? 'SPECIFIC FOCUS: ' + extra : ''}${interviewerSection}
+${extra ? 'SPECIFIC FOCUS: ' + extra : ''}
 
 Return a JSON object with exactly these keys:
 {
-  "overview": "3-4 sentences covering what the company does, their mission, size, and market position",
-  "culture": "3-4 sentences on company culture, work environment, team dynamics, and what employees say about working there",
-  "recentNews": "2-3 sentences on recent notable developments, launches, news, or changes at the company",
-  "whatTheyLookFor": "3-4 sentences on what this company specifically values in candidates for this role",
-  "interviewProcess": "2-3 sentences describing the typical interview process at this company for this type of role",
-  "smartQuestions": ["Question 1 to ask the interviewer", "Question 2", "Question 3", "Question 4", "Question 5"],
-  "redFlags": ["Potential concern 1 to be aware of", "Potential concern 2", "Potential concern 3"],
+  "overview": "3-4 sentences on what the company does, mission, size, and market position",
+  "culture": "3-4 sentences on culture, work environment, and what employees say",
+  "recentNews": "2-3 sentences on recent notable developments or changes",
+  "whatTheyLookFor": "3-4 sentences on what this company values in candidates for this role",
+  "interviewProcess": "2-3 sentences on the typical interview process for this role",
+  "smartQuestions": ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"],
+  "redFlags": ["Concern 1", "Concern 2", "Concern 3"],
   "salaryMin": "e.g. $85,000",
   "salaryMid": "e.g. $105,000",
   "salaryMax": "e.g. $130,000",
-  "salaryNote": "1-2 sentences on salary negotiation context for this specific company and role",
-  "insiderTip": "One powerful insider insight that most candidates wouldn't know",
-  "interviewers": []
+  "salaryNote": "1-2 sentences on salary negotiation context",
+  "insiderTip": "One powerful insider insight most candidates would not know"
 }
 
-Be specific to this company and role. Return only valid JSON, no markdown, no code blocks.`;
+Be specific. Return only valid JSON, no markdown, no code blocks.`;
+  }
+
+  function buildInterviewerPrompt(handles, company, role) {
+    return `You are a professional researcher. Search LinkedIn to find information about these people who work at ${company} and will be interviewing a candidate for a ${role} position.
+
+LinkedIn handles to research: ${handles.join(', ')}
+
+For each handle, search LinkedIn and return what you find. Return a JSON object with an "interviewers" array. Each item should have:
+- "handle": the LinkedIn handle searched
+- "name": full name found
+- "currentRole": current title and company
+- "careerStory": 2-3 sentences on their career path and what it reveals
+- "yearsAtCompany": how long at current company
+- "background": notable previous companies or roles
+- "education": school and degree if available
+- "interests": professional interests and topics they engage with
+- "conversationAngles": 2-3 specific natural topics the candidate could bring up
+- "interviewStyle": what kind of interviewer they are likely to be based on background
+- "confidence": "high" if clearly found, "medium" if likely match, "low" if uncertain
+- "disclaimer": explanation if confidence is not high
+
+CRITICAL: Only report what you actually find. Never fabricate. If you cannot find someone, set confidence to "low" and explain. Return only valid JSON, no markdown.`;
   }
 
   async function generateIntel() {
@@ -514,26 +512,62 @@ Be specific to this company and role. Return only valid JSON, no markdown, no co
     document.getElementById('backLink').classList.add('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
+    const handles = interviewConfirmed ? getLinkedInHandles() : [];
+    const risn_email = (function(){ try { return localStorage.getItem('risn_user_email') || ''; } catch(e) { return ''; } })();
+    const risn_unlimited = (function(){ try { const s = sessionStorage.getItem('risn_access'); if(!s) return false; const d = JSON.parse(s); return d && d.type === 'unlimited'; } catch(e) { return false; } })();
+
     try {
-      const response = await fetch('/api/claude', {
+      // CALL 1: Company briefing (no web search)
+      const response1 = await fetch('/api/claude', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'claude-sonnet-4-5',
-          risn_email: (function(){ try { return localStorage.getItem('risn_user_email') || ''; } catch(e) { return ''; } })(),
-          risn_unlimited: (function(){ try { const s = sessionStorage.getItem('risn_access'); if(!s) return false; const d = JSON.parse(s); return d && d.type === 'unlimited'; } catch(e) { return false; } })(),
-          risn_web_search: interviewConfirmed && getLinkedInHandles().length > 0,
-          max_tokens: 2500,
-          messages: [{ role: 'user', content: buildPrompt() }]
+          risn_email,
+          risn_unlimited,
+          max_tokens: 1500,
+          messages: [{ role: 'user', content: buildCompanyPrompt() }]
         })
       });
 
-      const data = await response.json();
-      if (data.error) throw new Error(data.error.message);
+      const data1 = await response1.json();
+      if (data1.error) throw new Error(data1.error);
 
-      let text = data.content[0].text.trim();
-      text = text.replace(/```json|```/g, '').trim();
-      briefingData = JSON.parse(text);
+      let text1 = data1.content[0].text.trim().replace(/```json|```/g, '').trim();
+      briefingData = JSON.parse(text1);
+      briefingData.interviewers = [];
+
+      // CALL 2: Interviewer research (web search, only if handles provided)
+      if (handles.length > 0) {
+        // Update generating message
+        const genSub = document.querySelector('.generating-sub');
+        if (genSub) genSub.textContent = 'Researching your interviewers privately...';
+
+        const response2 = await fetch('/api/claude', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-5',
+            risn_email,
+            risn_unlimited,
+            risn_web_search: true,
+            max_tokens: 2000,
+            messages: [{ role: 'user', content: buildInterviewerPrompt(handles, company, role) }]
+          })
+        });
+
+        const data2 = await response2.json();
+        if (!data2.error) {
+          try {
+            let text2 = data2.content[0].text.trim().replace(/```json|```/g, '').trim();
+            const interviewerData = JSON.parse(text2);
+            briefingData.interviewers = interviewerData.interviewers || [];
+          } catch(e) {
+            // If interviewer parsing fails, show briefing without it
+            briefingData.interviewers = [];
+          }
+        }
+      }
 
       document.getElementById('generating').classList.add('hidden');
       renderDossier(company, role);
