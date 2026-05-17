@@ -435,11 +435,7 @@
     const jd = document.getElementById('jobDesc').value;
 
     const excludeSection = excludeQuestions.length > 0
-      ? `
-
-DO NOT repeat any of these previously asked questions:
-${excludeQuestions.map((q, i) => `${i+1}. ${q}`).join('
-')}`
+      ? '\n\nDO NOT repeat any of these previously asked questions:\n' + excludeQuestions.map((q, i) => (i+1) + '. ' + q).join('\n')
       : '';
 
     return `You are an expert interview coach. Generate exactly 6 interview questions for the following candidate, along with detailed coaching tips for each.
