@@ -324,37 +324,6 @@
       <textarea id="extraContext" style="min-height:80px;" placeholder="e.g. 'I want to understand their engineering culture', 'I heard they recently had layoffs', 'I want salary negotiation tips for this company specifically'"></textarea>
     </div>
 
-    <div class="field-group" style="background:#F5F0FF;border-radius:12px;padding:1.25rem;border:0.5px solid #d8b4fe;">
-      <p style="font-size:13px;font-weight:700;color:#7C3AFF;margin-bottom:4px;">✦ Interviewer Intelligence — New</p>
-      <p style="font-size:12px;color:#555;margin-bottom:1rem;line-height:1.6;">Do you have an interview confirmed? Add your interviewers' LinkedIn handles and RISN will privately research their professional background, career story, and interests — giving you conversation angles and connection points that make you unforgettable. Zero footprint. They'll never know you looked.</p>
-
-      <div style="margin-bottom:10px;">
-        <label style="font-size:13px;font-weight:500;color:#0a0a0a;margin-bottom:4px;display:block;">Do you have an interview confirmed?</label>
-        <div style="display:flex;gap:10px;">
-          <button type="button" id="interviewYes" onclick="toggleInterviewSection(true)" style="flex:1;padding:9px;border:1px solid #e8e8e8;border-radius:8px;background:white;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;">Yes — I have interviewers</button>
-          <button type="button" id="interviewNo" onclick="toggleInterviewSection(false)" style="flex:1;padding:9px;border:1px solid #e8e8e8;border-radius:8px;background:white;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;">Not yet — skip this</button>
-        </div>
-      </div>
-
-      <div id="interviewerFields" style="display:none;margin-top:12px;">
-        <p style="font-size:12px;color:#555;margin-bottom:10px;">Add up to 3 LinkedIn handles (e.g. <em>linkedin.com/in/sarahjohnson</em> or just <em>sarahjohnson</em>)</p>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="font-size:12px;color:#888;width:20px;">1.</span>
-            <input type="text" id="li1" placeholder="linkedin.com/in/handle or just the handle" style="flex:1;padding:9px 14px;border:1px solid #e8e8e8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;" />
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="font-size:12px;color:#888;width:20px;">2.</span>
-            <input type="text" id="li2" placeholder="optional" style="flex:1;padding:9px 14px;border:1px solid #e8e8e8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;" />
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="font-size:12px;color:#888;width:20px;">3.</span>
-            <input type="text" id="li3" placeholder="optional" style="flex:1;padding:9px 14px;border:1px solid #e8e8e8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;" />
-          </div>
-        </div>
-        <p style="font-size:11px;color:#888;margin-top:8px;">💡 Tip: The full URL or just the handle both work. e.g. "sarahjohnson" or "linkedin.com/in/sarahjohnson"</p>
-      </div>
-    </div>
 
     <button class="btn-generate" onclick="risnGate(generateIntel)">Generate My Company Briefing ✦</button>
     <div id="errorBox" class="error-box hidden"></div>
@@ -371,7 +340,6 @@
       <p class="gen-step s3">✦ Identifying what interviewers care about...</p>
       <p class="gen-step s4">✦ Generating smart questions to ask...</p>
       <p class="gen-step s5">✦ Compiling salary intelligence...</p>
-      <p class="gen-step" style="animation-delay:10s;font-size:13px;color:var(--muted);opacity:0;animation:fadeIn 0.5s forwards;">✦ Researching interviewer profiles privately...</p>
     </div>
   </div>
 
@@ -389,7 +357,10 @@
     <div class="dossier-body" id="dossierBody"></div>
     <div class="research-again">
       <p>Research a different company?</p>
-      <button class="btn-again" onclick="resetForm()">Start over ↺</button>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <button class="btn-again" onclick="resetForm()">Start over ↺</button>
+        <a href="/interviewer-profiles.html" style="font-size:13px;color:#7C3AFF;text-decoration:none;font-weight:500;">Research your interviewers too →</a>
+      </div>
     </div>
   </div>
 
@@ -512,16 +483,21 @@ CRITICAL: Only report what you actually find. Never fabricate. If you cannot fin
     document.getElementById('backLink').classList.add('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    const handles = interviewConfirmed ? getLinkedInHandles() : [];
+    // Check both the confirmed flag AND whether handles were actually entered
+    const rawHandles = getLinkedInHandles();
+    const handles = (interviewConfirmed || rawHandles.length > 0) ? rawHandles : [];
+    console.log('Interview confirmed:', interviewConfirmed, 'Handles found:', handles);
     const risn_email = (function(){ try { return localStorage.getItem('risn_user_email') || ''; } catch(e) { return ''; } })();
     const risn_unlimited = (function(){ try { const s = sessionStorage.getItem('risn_access'); if(!s) return false; const d = JSON.parse(s); return d && d.type === 'unlimited'; } catch(e) { return false; } })();
 
     try {
       // CALL 1: Company briefing (no web search)
+      const _risnToken = window.getRisnToken ? await window.getRisnToken() : null;
       const response1 = await fetch('/api/claude', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          risn_secret: _risnToken,
           model: 'claude-sonnet-4-5',
           risn_email,
           risn_unlimited,
@@ -547,6 +523,7 @@ CRITICAL: Only report what you actually find. Never fabricate. If you cannot fin
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            risn_secret: _risnToken,
             model: 'claude-sonnet-4-5',
             risn_email,
             risn_unlimited,
