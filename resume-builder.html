@@ -987,26 +987,14 @@ Follow industry-standard resume best practices: clean formatting, strong action 
   function downloadPDF() {
     const win = window.open('', '_blank');
     const data = collectData();
-    win.document.write(`
-      <!DOCTYPE html><html><head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ESZ2G28T51"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-ESZ2G28T51');
-  </script>
-      <title>${data.firstName} ${data.lastName} — Resume</title>
-      <style>
-        body { font-family: Arial, sans-serif; font-size: 12px; line-height: 1.5; margin: 40px; color: #111; }
-        pre { white-space: pre-wrap; font-family: Arial, sans-serif; font-size: 12px; }
-      </style>
-      </head><body>
-      <pre>${generatedResume}</pre>
-      <script>window.onload = function(){ window.print(); }<\/script>
-        <script src="/risn-access.js"></script>
-</body></html>`);
+    const pdfContent = '<!DOCTYPE html><html><head>' +
+      '<title>' + data.firstName + ' ' + data.lastName + ' - Resume</title>' +
+      '<style>body { font-family: Arial, sans-serif; font-size: 12px; line-height: 1.5; margin: 40px; color: #111; } pre { white-space: pre-wrap; font-family: Arial, sans-serif; font-size: 12px; }</style>' +
+      '</head><body>' +
+      '<pre>' + generatedResume + '</pre>' +
+      '<scr' + 'ipt>window.onload = function(){ window.print(); }</scr' + 'ipt>' +
+      '</body></html>';
+    win.document.write(pdfContent);
     win.document.close();
   }
 
