@@ -316,11 +316,58 @@
     .resume-preview {
       padding: 2.5rem;
       font-family: 'DM Sans', sans-serif;
-      line-height: 1.6;
-      white-space: pre-wrap;
+      line-height: 1.7;
       font-size: 14px;
       color: #222;
       min-height: 400px;
+    }
+    .resume-preview h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #0a0a0a;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+    }
+    .resume-preview h2 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #7C3AFF;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 1.25rem 0 6px;
+      padding-bottom: 4px;
+      border-bottom: 1.5px solid #7C3AFF;
+    }
+    .resume-preview h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0a0a0a;
+      margin: 10px 0 2px;
+    }
+    .resume-preview p {
+      margin-bottom: 6px;
+      color: #333;
+    }
+    .resume-preview ul {
+      margin: 6px 0 10px 1.25rem;
+    }
+    .resume-preview ul li {
+      margin-bottom: 4px;
+      color: #333;
+      line-height: 1.6;
+    }
+    .resume-preview strong {
+      color: #0a0a0a;
+      font-weight: 600;
+    }
+    .resume-preview em {
+      color: #666;
+      font-style: italic;
+    }
+    .resume-preview hr {
+      border: none;
+      border-top: 0.5px solid #e8e8e8;
+      margin: 12px 0;
     }
 
     /* REGENERATE */
@@ -919,15 +966,44 @@ ${data.certifications ? 'Certifications: ' + data.certifications : ''}
 ${data.jobDescription ? 'JOB DESCRIPTION TO OPTIMIZE FOR:\n' + data.jobDescription : ''}
 ${data.extraNotes ? 'SPECIAL INSTRUCTIONS: ' + data.extraNotes : ''}
 
-Write a complete, professional resume. Use this structure:
-- Full name and contact info at top
-- Professional Summary (2-3 sentences tailored to the target role)
-- Work Experience (reverse chronological, 3-5 bullet points per role using strong action verbs)
-- Education
-- Skills (organized by category if possible)
-- Certifications/Languages if provided
+Write a complete, professional, ATS-optimized resume.
 
-Follow industry-standard resume best practices: clean formatting, strong action verbs, and naturally incorporate keywords from the job description to align with the role. Output only the resume text, no commentary.`;
+SECTION ORDER — follow this exactly based on experience level:
+
+FOR EXPERIENCED PROFESSIONALS (2+ years experience):
+1. Full name and contact info (name, phone, email, location, LinkedIn if provided)
+2. Professional Summary (2-3 punchy sentences targeting the specific role)
+3. Professional Experience (reverse chronological — most recent first, 3-5 bullet points per role using strong action verbs and quantified achievements)
+4. Skills (organized by category — Technical, Leadership, Tools, Languages etc.)
+5. Education (degree, school, year — omit graduation year if 8+ years ago)
+6. Certifications and Languages (if provided)
+
+FOR RECENT GRADUATES (0-2 years experience or limited work history):
+1. Full name and contact info
+2. Objective Statement (2 sentences on goals and value)
+3. Education (move to top — it's their strongest asset)
+4. Skills
+5. Work Experience (include internships, part-time, volunteer work)
+6. Certifications and Languages (if provided)
+
+Determine which structure to use based on the experience provided.
+
+FORMATTING RULES:
+- Use strong action verbs: Led, Built, Drove, Managed, Increased, Reduced, Delivered etc.
+- Quantify achievements wherever possible: percentages, dollar amounts, team sizes, timeframes
+- Mirror exact keywords from the job description naturally throughout
+- Keep bullet points concise and achievement-focused, not task-focused
+- Do NOT use the word "junior" anywhere
+
+Format using clean Markdown:
+- # for candidate name
+- ## for section headers (PROFESSIONAL SUMMARY, EXPERIENCE, SKILLS, EDUCATION etc.)
+- ### for job titles
+- *italic* for company name and date range
+- - for bullet points
+- --- for section dividers
+
+Output only the resume markdown. No commentary. No code blocks.`;
     return prompt;
   }
 
@@ -963,7 +1039,7 @@ Follow industry-standard resume best practices: clean formatting, strong action 
 
       document.getElementById('generating').classList.add('hidden');
       document.getElementById('result').classList.remove('hidden');
-      document.getElementById('resumeOutput').textContent = generatedResume;
+      document.getElementById('resumeOutput').innerHTML = marked.parse(generatedResume);
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
     } catch (err) {
@@ -987,11 +1063,23 @@ Follow industry-standard resume best practices: clean formatting, strong action 
   function downloadPDF() {
     const win = window.open('', '_blank');
     const data = collectData();
+    const renderedResume = typeof marked !== 'undefined' ? marked.parse(generatedResume) : generatedResume;
     const pdfContent = '<!DOCTYPE html><html><head>' +
       '<title>' + data.firstName + ' ' + data.lastName + ' - Resume</title>' +
-      '<style>body { font-family: Arial, sans-serif; font-size: 12px; line-height: 1.5; margin: 40px; color: #111; } pre { white-space: pre-wrap; font-family: Arial, sans-serif; font-size: 12px; }</style>' +
+      '<style>' +
+      'body { font-family: Arial, sans-serif; font-size: 12px; line-height: 1.6; margin: 40px 50px; color: #111; }' +
+      'h1 { font-size: 20px; font-weight: bold; margin-bottom: 2px; color: #000; }' +
+      'h2 { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.08em; color: #000; border-bottom: 1px solid #000; padding-bottom: 2px; margin: 14px 0 6px; }' +
+      'h3 { font-size: 12px; font-weight: bold; margin: 8px 0 2px; }' +
+      'p { margin: 3px 0; }' +
+      'ul { margin: 4px 0 8px 16px; }' +
+      'li { margin-bottom: 3px; }' +
+      'hr { border: none; border-top: 0.5px solid #ccc; margin: 8px 0; }' +
+      'strong { font-weight: bold; }' +
+      'em { font-style: italic; color: #444; }' +
+      '</style>' +
       '</head><body>' +
-      '<pre>' + generatedResume + '</pre>' +
+      renderedResume +
       '<scr' + 'ipt>window.onload = function(){ window.print(); }</scr' + 'ipt>' +
       '</body></html>';
     win.document.write(pdfContent);
@@ -1036,6 +1124,7 @@ Follow industry-standard resume best practices: clean formatting, strong action 
   }
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js" crossorigin="anonymous"></script>
   <script src="/risn-access.js"></script>
 </body>
 </html>
