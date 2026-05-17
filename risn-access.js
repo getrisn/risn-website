@@ -133,7 +133,7 @@ function injectModal() {
 
           <div style="margin-bottom:1rem;">
             <label style="display:block;font-size:13px;font-weight:500;color:#0a0a0a;margin-bottom:6px;">Promo code</label>
-            <input type="text" id="risnCodeInput" placeholder="e.g. GETRISN3-KIM" style="width:100%;padding:10px 14px;border:1px solid #e8e8e8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;text-transform:uppercase;letter-spacing:1px;" />
+            <input type="text" id="risnCodeInput" placeholder="Enter your code here" style="width:100%;padding:10px 14px;border:1px solid #e8e8e8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;text-transform:uppercase;letter-spacing:1px;" />
           </div>
 
           <div id="risnCodeError" style="display:none;background:#FCEBEB;border:1px solid #F09595;border-radius:8px;padding:10px 14px;font-size:13px;color:#791F1F;margin-bottom:1rem;"></div>
