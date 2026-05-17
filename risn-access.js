@@ -3,6 +3,41 @@
 // Uses Supabase for persistent session management across tabs and browsers
 
 const RISN_EMAIL_KEY = 'risn_user_email';
+const RISN_TOKEN_KEY = 'risn_api_token';
+
+// ─── API Token Management ─────────────────────────────────────────────────────
+
+let _cachedToken = null;
+
+async function getRisnToken() {
+  // Return cached token if available
+  if (_cachedToken) return _cachedToken;
+
+  // Try sessionStorage
+  try {
+    const stored = sessionStorage.getItem(RISN_TOKEN_KEY);
+    if (stored) {
+      _cachedToken = stored;
+      return _cachedToken;
+    }
+  } catch(e) {}
+
+  // Fetch from server
+  try {
+    const res = await fetch('/api/get-token');
+    const data = await res.json();
+    if (data.token) {
+      _cachedToken = data.token;
+      try { sessionStorage.setItem(RISN_TOKEN_KEY, data.token); } catch(e) {}
+      return _cachedToken;
+    }
+  } catch(e) {}
+
+  return null;
+}
+
+// Expose globally so tool pages can use it
+window.getRisnToken = getRisnToken;
 
 // ─── Email Storage ────────────────────────────────────────────────────────────
 
