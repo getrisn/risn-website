@@ -11,8 +11,8 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Company Intel — RISN</title>
-  <meta name="description" content="Get a deep AI briefing on any company before your interview. Walk in knowing more than every other candidate." />
+  <title>Interview Coach — RISN</title>
+  <meta name="description" content="Practice your interview with AI coaching tailored to your exact role and company." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -29,8 +29,7 @@
       --border: #e8e8e8;
       --dark-border: #222;
       --success: #10B981;
-      --amber: #F59E0B;
-      --amber-pale: #FFFBEB;
+      --success-pale: #D1FAE5;
     }
     html { scroll-behavior: smooth; }
     body { font-family: 'DM Sans', sans-serif; background: var(--gray); color: var(--black); min-height: 100vh; }
@@ -88,6 +87,13 @@
     textarea { resize: vertical; line-height: 1.6; }
     .field-hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
+    .type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 6px; }
+    .type-option { border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; cursor: pointer; text-align: center; transition: all 0.2s; }
+    .type-option:hover { border-color: var(--purple); background: var(--purple-pale); }
+    .type-option.selected { border-color: var(--purple); background: var(--purple-pale); }
+    .type-name { font-size: 13px; font-weight: 500; color: var(--black); }
+    .type-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
     .btn-generate {
       width: 100%;
       padding: 14px;
@@ -126,142 +132,166 @@
     .generating-steps { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 8px; }
     .gen-step { font-size: 13px; color: var(--muted); opacity: 0; animation: fadeIn 0.5s forwards; }
     .gen-step.s1 { animation-delay: 0.5s; }
-    .gen-step.s2 { animation-delay: 2s; }
-    .gen-step.s3 { animation-delay: 4s; }
-    .gen-step.s4 { animation-delay: 6s; }
-    .gen-step.s5 { animation-delay: 8s; }
+    .gen-step.s2 { animation-delay: 2.5s; }
+    .gen-step.s3 { animation-delay: 5s; }
     @keyframes fadeIn { to { opacity: 1; } }
 
-    /* DOSSIER */
-    .dossier-header {
+    /* SESSION */
+    .session-header {
       background: var(--black);
       border-radius: 16px 16px 0 0;
-      padding: 1.5rem 2rem;
-    }
-    .dossier-label { font-size: 11px; color: #555; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
-    .dossier-company { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--white); letter-spacing: 2px; margin-bottom: 4px; }
-    .dossier-role { font-size: 14px; color: var(--purple-mid); }
-    .dossier-toolbar {
-      background: #111;
-      padding: 10px 2rem;
+      padding: 1.25rem 1.5rem;
       display: flex;
-      gap: 8px;
-      border-bottom: 0.5px solid var(--dark-border);
+      align-items: center;
+      justify-content: space-between;
       flex-wrap: wrap;
+      gap: 10px;
     }
-    .dl-btn {
-      padding: 7px 16px;
+    .session-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--white); letter-spacing: 1px; }
+    .session-meta { font-size: 12px; color: #555; }
+    .session-meta span { color: var(--purple-mid); }
+    .progress-bar-wrap { background: #1a1a1a; height: 3px; }
+    .progress-bar { height: 3px; background: var(--purple); transition: width 0.5s ease; }
+
+    .question-card {
+      background: var(--white);
+      border-left: 0.5px solid var(--border);
+      border-right: 0.5px solid var(--border);
+      padding: 1.75rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .question-card:last-of-type { border-radius: 0 0 16px 16px; }
+
+    .q-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 1rem; }
+    .q-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--purple-pale);
+      color: var(--purple);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .q-num.answered { background: var(--success-pale); color: var(--success); }
+    .q-text { font-size: 16px; font-weight: 500; color: var(--black); line-height: 1.5; flex: 1; }
+    .q-type-badge {
+      font-size: 10px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--purple-pale);
+      color: #6D28D9;
+      font-weight: 500;
+      white-space: nowrap;
+      margin-top: 4px;
+    }
+
+    .coach-tip {
+      background: var(--gray);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      border-left: 3px solid var(--purple);
+      border-radius: 0 8px 8px 0;
+    }
+    .coach-tip-label { font-size: 11px; color: var(--purple); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+    .coach-tip-text { font-size: 13px; color: #444; line-height: 1.6; }
+
+    .practice-area { margin-top: 1rem; }
+    .practice-label { font-size: 13px; font-weight: 500; color: var(--black); margin-bottom: 6px; }
+    .practice-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--black);
+      resize: vertical;
+      min-height: 90px;
+      line-height: 1.6;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .practice-textarea:focus { border-color: var(--purple); }
+
+    .feedback-btn {
+      margin-top: 8px;
+      padding: 9px 20px;
+      background: var(--purple);
+      color: var(--white);
+      border: none;
       border-radius: 6px;
       font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 500;
       cursor: pointer;
-      border: 1px solid #333;
-      background: transparent;
-      color: var(--white);
-      transition: background 0.2s;
+      transition: opacity 0.2s;
     }
-    .dl-btn:hover { background: #1a1a1a; }
-    .dl-btn.purple { background: var(--purple); border-color: var(--purple); }
-    .dl-btn.purple:hover { opacity: 0.85; }
+    .feedback-btn:hover { opacity: 0.85; }
+    .feedback-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    .dossier-body {
+    .feedback-box {
+      margin-top: 10px;
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+    }
+    .feedback-label { font-size: 11px; color: var(--success); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+    .feedback-text { font-size: 13px; color: #065F46; line-height: 1.6; }
+    .feedback-spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #BBF7D0;
+      border-top-color: var(--success);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto;
+    }
+
+    .session-complete {
       background: var(--white);
       border-radius: 0 0 16px 16px;
       border: 0.5px solid var(--border);
       border-top: none;
-      overflow: hidden;
+      padding: 2rem;
+      text-align: center;
     }
-
-    .intel-section {
-      padding: 1.5rem 2rem;
-      border-bottom: 0.5px solid var(--border);
-    }
-    .intel-section:last-child { border-bottom: none; }
-
-    .intel-section-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 1rem;
-    }
-    .intel-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      flex-shrink: 0;
-    }
-    .intel-section-title { font-size: 14px; font-weight: 700; color: var(--black); }
-    .intel-content { font-size: 14px; color: #333; line-height: 1.7; white-space: pre-wrap; }
-
-    .questions-list { list-style: none; }
-    .questions-list li {
-      font-size: 14px;
-      color: #333;
-      padding: 8px 0;
-      border-bottom: 0.5px solid var(--border);
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      line-height: 1.5;
-    }
-    .questions-list li:last-child { border-bottom: none; }
-    .q-bullet { color: var(--purple); font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-
-    .redflags-list { list-style: none; }
-    .redflags-list li {
-      font-size: 14px;
-      color: #333;
-      padding: 8px 0;
-      border-bottom: 0.5px solid #FEF3C7;
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      line-height: 1.5;
-    }
-    .redflags-list li:last-child { border-bottom: none; }
-
-    .salary-range {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 4px;
-    }
-    .salary-card {
-      background: var(--purple-pale);
-      border-radius: 8px;
-      padding: 10px 16px;
-      flex: 1;
-      min-width: 120px;
-    }
-    .salary-label { font-size: 11px; color: var(--purple-mid); font-weight: 500; margin-bottom: 4px; }
-    .salary-value { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--purple); letter-spacing: 1px; }
-
-    .research-again {
-      padding: 1.5rem 2rem;
-      border-top: 0.5px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .research-again p { font-size: 13px; color: var(--muted); }
-    .btn-again {
-      padding: 9px 20px;
+    .complete-icon { font-size: 40px; margin-bottom: 1rem; }
+    .complete-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; color: var(--black); margin-bottom: 8px; }
+    .complete-sub { font-size: 14px; color: var(--muted); margin-bottom: 1.5rem; }
+    .complete-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .btn-restart {
+      padding: 11px 24px;
       border: 1px solid var(--border);
       border-radius: 8px;
       background: var(--white);
       color: var(--black);
       font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
+      font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
     }
-    .btn-again:hover { background: var(--gray); }
+    .btn-home {
+      padding: 11px 24px;
+      background: var(--purple);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
 
     .error-box {
       background: #FCEBEB;
@@ -276,9 +306,8 @@
 
     @media (max-width: 600px) {
       .field-row { grid-template-columns: 1fr; }
+      .type-grid { grid-template-columns: 1fr 1fr; }
       .main { padding: 1rem; }
-      .intel-section { padding: 1.25rem; }
-      .dossier-header { padding: 1.25rem; }
     }
   </style>
 </head>
@@ -290,134 +319,151 @@
     <span class="nav-underbar"></span>
   </a>
   <div class="nav-right">
-    <span class="nav-tool-name">Company Intel</span>
+    <span class="nav-tool-name">Interview Coach</span>
     <a href="/" class="nav-back">← Home</a>
   </div>
 </nav>
 
 <div class="main">
 
-  <!-- FORM -->
+  <!-- SETUP FORM -->
   <div id="formCard" class="card">
-    <p class="card-step">Company Intel</p>
-    <h1 class="card-title">Know More Than Anyone Else in That Room</h1>
-    <p class="card-sub">Enter the company and role you're interviewing for. RISN AI builds you a complete intelligence briefing so you walk in completely prepared.</p>
+    <p class="card-step">Interview Coach</p>
+    <h1 class="card-title">Prepare to Ace It</h1>
+    <p class="card-sub">Tell us about the role and we'll generate tailored interview questions with AI coaching on exactly how to answer each one.</p>
 
     <div class="field-row">
       <div class="field-group">
-        <label for="companyName">Company name</label>
-        <input type="text" id="companyName" placeholder="e.g. Tesla, Deloitte, local startup" />
+        <label for="jobTitle">Job title you're interviewing for</label>
+        <input type="text" id="jobTitle" placeholder="e.g. Product Manager" />
       </div>
       <div class="field-group">
-        <label for="jobTitle">Role you're interviewing for</label>
-        <input type="text" id="jobTitle" placeholder="e.g. Software Engineer" />
+        <label for="companyName">Company name</label>
+        <input type="text" id="companyName" placeholder="e.g. Apple" />
       </div>
     </div>
 
     <div class="field-group">
-      <label for="industry">Industry <span class="label-optional">(optional — helps if company is less known)</span></label>
-      <input type="text" id="industry" placeholder="e.g. Fintech, Healthcare, E-commerce, Consulting" />
+      <label for="experience">Your experience level</label>
+      <select id="experience">
+        <option value="entry">Entry level — 0 to 2 years</option>
+        <option value="mid" selected>Mid level — 3 to 6 years</option>
+        <option value="senior">Senior level — 7+ years</option>
+        <option value="career-change">Career changer — switching industries</option>
+      </select>
     </div>
 
     <div class="field-group">
-      <label for="extraContext">Anything specific you want to know? <span class="label-optional">(optional)</span></label>
-      <textarea id="extraContext" style="min-height:80px;" placeholder="e.g. 'I want to understand their engineering culture', 'I heard they recently had layoffs', 'I want salary negotiation tips for this company specifically'"></textarea>
+      <label>Interview type focus</label>
+      <div class="type-grid">
+        <div class="type-option selected" onclick="selectType(this, 'mixed')">
+          <p class="type-name">Mixed</p>
+          <p class="type-desc">Behavioral + technical</p>
+        </div>
+        <div class="type-option" onclick="selectType(this, 'behavioral')">
+          <p class="type-name">Behavioral</p>
+          <p class="type-desc">Situational questions</p>
+        </div>
+        <div class="type-option" onclick="selectType(this, 'technical')">
+          <p class="type-name">Technical</p>
+          <p class="type-desc">Role-specific skills</p>
+        </div>
+      </div>
     </div>
 
-    <button class="btn-generate" onclick="generateIntel()">Generate My Company Briefing ✦</button>
+    <div class="field-group">
+      <label for="background">Your background <span class="label-optional">(optional — helps personalize coaching)</span></label>
+      <textarea id="background" style="min-height:90px;" placeholder="Brief summary of your experience. e.g. '4 years in marketing, led a team of 3, strong in data analytics and campaign management...'"></textarea>
+    </div>
+
+    <div class="field-group">
+      <label for="jobDesc">Job description <span class="label-optional">(optional — generates more targeted questions)</span></label>
+      <textarea id="jobDesc" style="min-height:90px;" placeholder="Paste the job posting here for hyper-targeted questions specific to this exact role..."></textarea>
+    </div>
+
+    <button class="btn-generate" onclick="risnGate(startSession)">Start My Interview Session ✦</button>
     <div id="errorBox" class="error-box hidden"></div>
   </div>
 
   <!-- GENERATING -->
   <div id="generating" class="generating-card hidden">
     <div class="spinner"></div>
-    <h2 class="generating-title">Building Your Briefing</h2>
-    <p class="generating-sub">RISN AI is researching the company in depth...</p>
+    <h2 class="generating-title">Preparing Your Session</h2>
+    <p class="generating-sub">RISN AI is building your personalized interview questions...</p>
     <div class="generating-steps">
-      <p class="gen-step s1">✦ Analyzing company background and mission...</p>
-      <p class="gen-step s2">✦ Researching culture and values...</p>
-      <p class="gen-step s3">✦ Identifying what interviewers care about...</p>
-      <p class="gen-step s4">✦ Generating smart questions to ask...</p>
-      <p class="gen-step s5">✦ Compiling salary intelligence...</p>
+      <p class="gen-step s1">✦ Analyzing the role and company...</p>
+      <p class="gen-step s2">✦ Crafting targeted questions...</p>
+      <p class="gen-step s3">✦ Building coaching tips for each question...</p>
     </div>
   </div>
 
-  <!-- DOSSIER -->
-  <div id="dossier" class="hidden">
-    <div class="dossier-header">
-      <p class="dossier-label">Intelligence Briefing</p>
-      <p class="dossier-company" id="dossierCompany"></p>
-      <p class="dossier-role" id="dossierRole"></p>
+  <!-- SESSION -->
+  <div id="session" class="hidden">
+    <div class="session-header">
+      <div>
+        <p class="session-title" id="sessionTitle">Interview Session</p>
+        <p class="session-meta">Question <span id="currentQ">1</span> of <span id="totalQ">10</span></p>
+      </div>
+      <p class="session-meta" id="sessionCompany"></p>
     </div>
-    <div class="dossier-toolbar">
-      <button class="dl-btn" onclick="copyBriefing()">Copy briefing</button>
-      <button class="dl-btn purple" onclick="downloadBriefing()">Download .txt</button>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progressBar" style="width:10%"></div>
     </div>
-    <div class="dossier-body" id="dossierBody"></div>
-    <div class="research-again">
-      <p>Research a different company?</p>
-      <button class="btn-again" onclick="resetForm()">Start over ↺</button>
-    </div>
-  </div>
-
-  <div id="backLink" class="hidden" style="margin-top:1rem;text-align:center;">
-    <p style="font-size:13px;color:var(--muted);">Try another tool — <a href="/" style="color:var(--purple);">back to home →</a></p>
+    <div id="questionsWrap"></div>
   </div>
 
 </div>
 
 <script>
-  let briefingText = '';
-  let briefingData = null;
+  let selectedType = 'mixed';
+  let questions = [];
+  let answeredCount = 0;
 
-  function buildPrompt() {
-    const company = document.getElementById('companyName').value;
-    const role = document.getElementById('jobTitle').value;
-    const industry = document.getElementById('industry').value;
-    const extra = document.getElementById('extraContext').value;
-
-    return `You are an expert career researcher and interview strategist. Create a comprehensive company intelligence briefing for a job candidate.
-
-COMPANY: ${company}
-ROLE: ${role}
-${industry ? 'INDUSTRY: ' + industry : ''}
-${extra ? 'SPECIFIC FOCUS: ' + extra : ''}
-
-Return a JSON object with exactly these keys:
-{
-  "overview": "3-4 sentences covering what the company does, their mission, size, and market position",
-  "culture": "3-4 sentences on company culture, work environment, team dynamics, and what employees say about working there",
-  "recentNews": "2-3 sentences on recent notable developments, launches, news, or changes at the company",
-  "whatTheyLookFor": "3-4 sentences on what this company specifically values in candidates for this role — what traits, skills, and experiences tend to impress them",
-  "interviewProcess": "2-3 sentences describing the typical interview process at this company for this type of role",
-  "smartQuestions": ["Question 1 to ask the interviewer", "Question 2", "Question 3", "Question 4", "Question 5"],
-  "redFlags": ["Potential concern 1 to be aware of", "Potential concern 2", "Potential concern 3"],
-  "salaryMin": "e.g. $85,000",
-  "salaryMid": "e.g. $105,000",
-  "salaryMax": "e.g. $130,000",
-  "salaryNote": "1-2 sentences on salary negotiation context for this specific company and role",
-  "insiderTip": "One powerful insider insight that most candidates wouldn't know — something specific that will make them stand out"
-}
-
-Be specific to this company and role — not generic. Use your knowledge of this company's actual culture, reputation, and hiring practices. Return only valid JSON, no markdown, no code blocks.`;
+  function selectType(el, type) {
+    document.querySelectorAll('.type-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedType = type;
   }
 
-  async function generateIntel() {
-    const company = document.getElementById('companyName').value.trim();
-    const role = document.getElementById('jobTitle').value.trim();
+  function buildPrompt() {
+    const job = document.getElementById('jobTitle').value;
+    const company = document.getElementById('companyName').value;
+    const exp = document.getElementById('experience').value;
+    const bg = document.getElementById('background').value;
+    const jd = document.getElementById('jobDesc').value;
 
-    if (!company || !role) {
+    return `You are an expert interview coach. Generate exactly 8 interview questions for the following candidate, along with coaching tips for each.
+
+ROLE: ${job} at ${company}
+EXPERIENCE LEVEL: ${exp}
+INTERVIEW TYPE: ${selectedType}
+${bg ? 'CANDIDATE BACKGROUND: ' + bg : ''}
+${jd ? 'JOB DESCRIPTION: ' + jd : ''}
+
+Return your response as a valid JSON array with exactly 8 objects. Each object must have these exact keys:
+- "question": the interview question (string)
+- "type": one of "Behavioral", "Technical", "Situational", or "Culture Fit" (string)
+- "tip": 2-3 sentences of coaching advice on how to answer this specific question well (string)
+
+Focus on questions that are highly likely to be asked for this specific role at this type of company. Make the coaching tips specific and actionable — not generic advice.
+
+Return only the JSON array, no other text, no markdown code blocks.`;
+  }
+
+  async function startSession() {
+    const job = document.getElementById('jobTitle').value.trim();
+    const company = document.getElementById('companyName').value.trim();
+
+    if (!job || !company) {
       const eb = document.getElementById('errorBox');
       eb.classList.remove('hidden');
-      eb.textContent = 'Please enter both the company name and the role you are interviewing for.';
+      eb.textContent = 'Please enter the job title and company name to start your session.';
       return;
     }
 
     document.getElementById('errorBox').classList.add('hidden');
     document.getElementById('formCard').classList.add('hidden');
     document.getElementById('generating').classList.remove('hidden');
-    document.getElementById('dossier').classList.add('hidden');
-    document.getElementById('backLink').classList.add('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     try {
@@ -426,7 +472,7 @@ Be specific to this company and role — not generic. Use your knowledge of this
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'claude-sonnet-4-20250514',
-          max_tokens: 1500,
+          max_tokens: 1000,
           messages: [{ role: 'user', content: buildPrompt() }]
         })
       });
@@ -436,164 +482,145 @@ Be specific to this company and role — not generic. Use your knowledge of this
 
       let text = data.content[0].text.trim();
       text = text.replace(/```json|```/g, '').trim();
-      briefingData = JSON.parse(text);
+      questions = JSON.parse(text);
 
       document.getElementById('generating').classList.add('hidden');
-      renderDossier(company, role);
+      renderSession(job, company);
 
     } catch (err) {
       document.getElementById('generating').classList.add('hidden');
       document.getElementById('formCard').classList.remove('hidden');
       const eb = document.getElementById('errorBox');
       eb.classList.remove('hidden');
-      eb.textContent = 'Something went wrong generating your briefing. Please try again or contact risewithrisn@gmail.com';
+      eb.textContent = 'Something went wrong. Please try again or contact risewithrisn@gmail.com';
     }
   }
 
-  function renderDossier(company, role) {
-    document.getElementById('dossierCompany').textContent = company.toUpperCase();
-    document.getElementById('dossierRole').textContent = role + ' — Intelligence Briefing';
+  function renderSession(job, company) {
+    document.getElementById('sessionTitle').textContent = job + ' Interview';
+    document.getElementById('sessionCompany').innerHTML = '<span>' + company + '</span>';
+    document.getElementById('totalQ').textContent = questions.length;
 
-    const d = briefingData;
-    const body = document.getElementById('dossierBody');
+    const wrap = document.getElementById('questionsWrap');
+    wrap.innerHTML = '';
 
-    const smartQs = (d.smartQuestions || []).map(q =>
-      `<li><span class="q-bullet">→</span>${q}</li>`
-    ).join('');
-
-    const redFlags = (d.redFlags || []).map(f =>
-      `<li><span class="q-bullet" style="color:var(--amber);">⚠</span>${f}</li>`
-    ).join('');
-
-    body.innerHTML = `
-      <div class="intel-section">
-        <div class="intel-section-header">
-          <div class="intel-icon" style="background:#F5F0FF;">🏢</div>
-          <p class="intel-section-title">Company overview</p>
-        </div>
-        <p class="intel-content">${d.overview || ''}</p>
-      </div>
-
-      <div class="intel-section">
-        <div class="intel-section-header">
-          <div class="intel-icon" style="background:#F0FDF4;">🌱</div>
-          <p class="intel-section-title">Culture and work environment</p>
-        </div>
-        <p class="intel-content">${d.culture || ''}</p>
-      </div>
-
-      <div class="intel-section">
-        <div class="intel-section-header">
-          <div class="intel-icon" style="background:#EFF6FF;">📰</div>
-          <p class="intel-section-title">Recent news and developments</p>
-        </div>
-        <p class="intel-content">${d.recentNews || ''}</p>
-      </div>
-
-      <div class="intel-section">
-        <div class="intel-section-header">
-          <div class="intel-icon" style="background:#FFF7ED;">🎯</div>
-          <p class="intel-section-title">What they look for in candidates</p>
-        </div>
-        <p class="intel-content">${d.whatTheyLookFor || ''}</p>
-      </div>
-
-      <div class="intel-section">
-        <div class="intel-section-header">
-          <div class="intel-icon" style="background:#F5F0FF;">🗺</div>
-          <p class="intel-section-title">Typical interview process</p>
-        </div>
-        <p class="intel-content">${d.interviewProcess || ''}</p>
-      </div>
-
-      <div class="intel-section">
-        <div class="intel-section-header">
-          <div class="intel-icon" style="background:#F0FDF4;">💬</div>
-          <p class="intel-section-title">Smart questions to ask the interviewer</p>
-        </div>
-        <ul class="questions-list">${smartQs}</ul>
-      </div>
-
-      <div class="intel-section" style="background:var(--amber-pale);">
-        <div class="intel-section-header">
-          <div class="intel-icon" style="background:#FEF3C7;">⚠️</div>
-          <p class="intel-section-title">Things to be aware of</p>
-        </div>
-        <ul class="redflags-list">${redFlags}</ul>
-      </div>
-
-      <div class="intel-section">
-        <div class="intel-section-header">
-          <div class="intel-icon" style="background:#F5F0FF;">💰</div>
-          <p class="intel-section-title">Salary intelligence for ${document.getElementById('jobTitle').value}</p>
-        </div>
-        <div class="salary-range">
-          <div class="salary-card">
-            <p class="salary-label">Entry range</p>
-            <p class="salary-value">${d.salaryMin || 'Varies'}</p>
-          </div>
-          <div class="salary-card" style="background:#EDE9FE;">
-            <p class="salary-label" style="color:var(--purple);">Midpoint</p>
-            <p class="salary-value">${d.salaryMid || 'Varies'}</p>
-          </div>
-          <div class="salary-card">
-            <p class="salary-label">Senior range</p>
-            <p class="salary-value">${d.salaryMax || 'Varies'}</p>
+    questions.forEach((q, i) => {
+      const div = document.createElement('div');
+      div.className = 'question-card';
+      div.id = 'qcard' + i;
+      div.innerHTML = `
+        <div class="q-header">
+          <div class="q-num" id="qnum${i}">${i + 1}</div>
+          <div style="flex:1">
+            <p class="q-text">${q.question}</p>
+            <span class="q-type-badge">${q.type}</span>
           </div>
         </div>
-        <p style="font-size:13px;color:var(--muted);margin-top:12px;">${d.salaryNote || ''}</p>
-      </div>
-
-      <div class="intel-section" style="background:var(--black);border-radius:0 0 16px 16px;">
-        <div class="intel-section-header">
-          <div class="intel-icon" style="background:#1a1a1a;font-size:18px;">✦</div>
-          <p class="intel-section-title" style="color:var(--white);">Insider tip</p>
+        <div class="coach-tip">
+          <p class="coach-tip-label">Coach's tip</p>
+          <p class="coach-tip-text">${q.tip}</p>
         </div>
-        <p class="intel-content" style="color:#aaa;">${d.insiderTip || ''}</p>
+        <div class="practice-area">
+          <p class="practice-label">Practice your answer <span style="font-weight:400;color:var(--muted);font-size:12px;">(optional — get AI feedback)</span></p>
+          <textarea class="practice-textarea" id="ans${i}" placeholder="Type your answer here and get instant AI feedback on how you did..."></textarea>
+          <button class="feedback-btn" id="fbtn${i}" onclick="getFeedback(${i})">Get feedback on my answer →</button>
+          <div id="feedback${i}" class="hidden"></div>
+        </div>`;
+      wrap.appendChild(div);
+    });
+
+    const complete = document.createElement('div');
+    complete.className = 'session-complete';
+    complete.innerHTML = `
+      <div class="complete-icon">🎯</div>
+      <h2 class="complete-title">Session Complete</h2>
+      <p class="complete-sub">You've gone through all ${questions.length} questions. Practice makes perfect — go again or try another tool.</p>
+      <div class="complete-actions">
+        <button class="btn-restart" onclick="restart()">Practice again ↺</button>
+        <a href="/" class="btn-home">Try another tool →</a>
       </div>`;
+    wrap.appendChild(complete);
 
-    briefingText = `COMPANY INTEL BRIEFING: ${company} — ${role}\n\n` +
-      `OVERVIEW\n${d.overview}\n\n` +
-      `CULTURE\n${d.culture}\n\n` +
-      `RECENT NEWS\n${d.recentNews}\n\n` +
-      `WHAT THEY LOOK FOR\n${d.whatTheyLookFor}\n\n` +
-      `INTERVIEW PROCESS\n${d.interviewProcess}\n\n` +
-      `SMART QUESTIONS TO ASK\n${(d.smartQuestions || []).map((q, i) => `${i + 1}. ${q}`).join('\n')}\n\n` +
-      `THINGS TO BE AWARE OF\n${(d.redFlags || []).map((f, i) => `${i + 1}. ${f}`).join('\n')}\n\n` +
-      `SALARY RANGE\nEntry: ${d.salaryMin} | Mid: ${d.salaryMid} | Senior: ${d.salaryMax}\n${d.salaryNote}\n\n` +
-      `INSIDER TIP\n${d.insiderTip}`;
-
-    document.getElementById('dossier').classList.remove('hidden');
-    document.getElementById('backLink').classList.remove('hidden');
+    document.getElementById('session').classList.remove('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function copyBriefing() {
-    navigator.clipboard.writeText(briefingText).then(() => {
-      const btn = event.target;
-      btn.textContent = 'Copied!';
-      setTimeout(() => btn.textContent = 'Copy briefing', 2000);
-    });
+  async function getFeedback(i) {
+    const answer = document.getElementById('ans' + i).value.trim();
+    if (!answer) {
+      alert('Type your practice answer first, then click Get feedback.');
+      return;
+    }
+
+    const btn = document.getElementById('fbtn' + i);
+    const feedbackDiv = document.getElementById('feedback' + i);
+    btn.disabled = true;
+    btn.textContent = 'Analyzing...';
+
+    feedbackDiv.classList.remove('hidden');
+    feedbackDiv.className = 'feedback-box';
+    feedbackDiv.innerHTML = '<div class="feedback-spinner"></div>';
+
+    const q = questions[i];
+    const job = document.getElementById('jobTitle').value;
+
+    try {
+      const response = await fetch('/api/claude', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 400,
+          messages: [{
+            role: 'user',
+            content: `You are an expert interview coach. A candidate is interviewing for a ${job} role.
+
+Interview question: "${q.question}"
+
+Their answer: "${answer}"
+
+Give specific, constructive feedback in 3-4 sentences. Be direct and honest. Point out what they did well, what was missing, and one specific improvement they can make. Be encouraging but realistic. Don't use bullet points — write in plain flowing sentences.`
+          }]
+        })
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error.message);
+
+      feedbackDiv.innerHTML = `
+        <p class="feedback-label">AI Coach Feedback</p>
+        <p class="feedback-text">${data.content[0].text}</p>`;
+
+      document.getElementById('qnum' + i).classList.add('answered');
+      answeredCount++;
+      updateProgress();
+
+      btn.textContent = 'Get feedback again ↺';
+      btn.disabled = false;
+
+    } catch (err) {
+      feedbackDiv.innerHTML = `<p class="feedback-text" style="color:#791F1F;">Something went wrong. Please try again.</p>`;
+      btn.disabled = false;
+      btn.textContent = 'Get feedback on my answer →';
+    }
   }
 
-  function downloadBriefing() {
-    const company = document.getElementById('companyName').value.replace(/\s+/g, '_');
-    const blob = new Blob([briefingText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `RISN_Intel_${company}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+  function updateProgress() {
+    const pct = Math.round((answeredCount / questions.length) * 100);
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('currentQ').textContent = Math.min(answeredCount + 1, questions.length);
   }
 
-  function resetForm() {
-    document.getElementById('dossier').classList.add('hidden');
-    document.getElementById('backLink').classList.add('hidden');
+  function restart() {
+    questions = [];
+    answeredCount = 0;
+    document.getElementById('session').classList.add('hidden');
+    document.getElementById('questionsWrap').innerHTML = '';
     document.getElementById('formCard').classList.remove('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 </script>
 
+  <script src="/risn-access.js"></script>
 </body>
 </html>
