@@ -1088,30 +1088,162 @@ Output only the resume markdown. No commentary. No code blocks.`;
 
   function downloadWord() {
     const data = collectData();
-    const name = `${data.firstName}_${data.lastName}_Resume.docx`;
-    const lines = generatedResume.split('\n');
+    const name = (data.firstName + '_' + data.lastName + '_Resume.docx');
 
     if (typeof docx === 'undefined') {
       alert('Word download is loading — please try again in a moment.');
       return;
     }
 
-    const { Document, Packer, Paragraph, TextRun } = docx;
+    const { Document, Packer, Paragraph, TextRun, HeadingLevel, BorderStyle, AlignmentType } = docx;
 
-    const paragraphs = lines.map(line => {
-      const isHeading = line.trim().length > 0 && line === line.toUpperCase() && line.length < 40;
-      return new Paragraph({
-        children: [new TextRun({
-          text: line,
-          bold: isHeading,
-          size: isHeading ? 24 : 20,
-          font: 'Calibri'
-        })],
-        spacing: { after: isHeading ? 100 : 60 }
+    const lines = generatedResume.split('\n');
+    const paragraphs = [];
+
+    lines.forEach(line => {
+      const trimmed = line.trim();
+
+      // Skip empty lines — add spacing instead
+      if (!trimmed) {
+        paragraphs.push(new Paragraph({ spacing: { after: 80 } }));
+        return;
+      }
+
+      // H1 — candidate name (# Name)
+      if (trimmed.startsWith('# ')) {
+        paragraphs.push(new Paragraph({
+          children: [new TextRun({
+            text: trimmed.replace(/^# /, ''),
+            bold: true,
+            size: 36,
+            font: 'Calibri',
+            color: '0a0a0a'
+          })],
+          spacing: { after: 60 }
+        }));
+        return;
+      }
+
+      // H2 — section headers (## SECTION)
+      if (trimmed.startsWith('## ')) {
+        const text = trimmed.replace(/^## /, '');
+        paragraphs.push(new Paragraph({
+          children: [new TextRun({
+            text: text.toUpperCase(),
+            bold: true,
+            size: 22,
+            font: 'Calibri',
+            color: '000000',
+            allCaps: true
+          })],
+          spacing: { before: 200, after: 60 },
+          border: {
+            bottom: { style: BorderStyle.SINGLE, size: 6, color: '000000' }
+          }
+        }));
+        return;
+      }
+
+      // H3 — job titles (### Title)
+      if (trimmed.startsWith('### ')) {
+        paragraphs.push(new Paragraph({
+          children: [new TextRun({
+            text: trimmed.replace(/^### /, ''),
+            bold: true,
+            size: 22,
+            font: 'Calibri',
+            color: '0a0a0a'
+          })],
+          spacing: { before: 120, after: 40 }
+        }));
+        return;
+      }
+
+      // Horizontal rule (---)
+      if (trimmed === '---') {
+        paragraphs.push(new Paragraph({
+          spacing: { after: 60 },
+          border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: 'cccccc' } }
+        }));
+        return;
+      }
+
+      // Bullet points (- item)
+      if (trimmed.startsWith('- ')) {
+        const bulletText = trimmed.replace(/^- /, '');
+        // Handle bold within bullets (**text**)
+        const parts = bulletText.split(/(\*\*[^*]+\*\*)/g);
+        const runs = parts.map(part => {
+          if (part.startsWith('**') && part.endsWith('**')) {
+            return new TextRun({ text: part.replace(/\*\*/g, ''), bold: true, size: 20, font: 'Calibri' });
+          }
+          return new TextRun({ text: part, size: 20, font: 'Calibri' });
+        });
+        paragraphs.push(new Paragraph({
+          children: runs,
+          bullet: { level: 0 },
+          spacing: { after: 60 }
+        }));
+        return;
+      }
+
+      // Italic lines (*text* — company and dates)
+      if (trimmed.startsWith('*') && trimmed.endsWith('*') && !trimmed.startsWith('**')) {
+        paragraphs.push(new Paragraph({
+          children: [new TextRun({
+            text: trimmed.replace(/^\*|\*$/g, ''),
+            italics: true,
+            size: 20,
+            font: 'Calibri',
+            color: '555555'
+          })],
+          spacing: { after: 40 }
+        }));
+        return;
+      }
+
+      // Bold text (**text**)
+      if (trimmed.startsWith('**') && trimmed.endsWith('**')) {
+        paragraphs.push(new Paragraph({
+          children: [new TextRun({
+            text: trimmed.replace(/\*\*/g, ''),
+            bold: true,
+            size: 20,
+            font: 'Calibri'
+          })],
+          spacing: { after: 60 }
+        }));
+        return;
+      }
+
+      // Regular paragraph — handle inline bold/italic
+      const parts = trimmed.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+      const runs = parts.map(part => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          return new TextRun({ text: part.replace(/\*\*/g, ''), bold: true, size: 20, font: 'Calibri' });
+        }
+        if (part.startsWith('*') && part.endsWith('*')) {
+          return new TextRun({ text: part.replace(/\*/g, ''), italics: true, size: 20, font: 'Calibri', color: '555555' });
+        }
+        return new TextRun({ text: part, size: 20, font: 'Calibri' });
       });
+
+      paragraphs.push(new Paragraph({
+        children: runs,
+        spacing: { after: 60 }
+      }));
     });
 
-    const doc = new Document({ sections: [{ children: paragraphs }] });
+    const doc = new Document({
+      sections: [{
+        properties: {
+          page: {
+            margin: { top: 720, right: 720, bottom: 720, left: 720 }
+          }
+        },
+        children: paragraphs
+      }]
+    });
 
     Packer.toBlob(doc).then(blob => {
       const url = URL.createObjectURL(blob);
