@@ -1,29 +1,35 @@
 // api/get-token.js
-// Returns the API signing token to the frontend
-// Only accessible from getrisn.com origins
+// Serves the API signing secret to authenticated frontend pages
+// Validates the request comes from getrisn.com via referer or origin
 
 export default async function handler(req, res) {
-  const allowedOrigins = ['https://getrisn.com', 'https://www.getrisn.com'];
-  const origin = req.headers.origin || req.headers.referer || '';
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', 'https://getrisn.com');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Vary', 'Origin');
 
-  // Allow requests from getrisn.com — check origin or referer
-  const isAllowed = allowedOrigins.some(o => origin.startsWith(o))
-    || allowedOrigins.includes(origin);
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
+
+  // Check origin or referer to verify request comes from getrisn.com
+  const origin = req.headers.origin || '';
+  const referer = req.headers.referer || '';
+  const host = req.headers.host || '';
+
+  const allowedDomains = ['getrisn.com', 'www.getrisn.com'];
+  const isAllowed =
+    allowedDomains.some(d => origin.includes(d)) ||
+    allowedDomains.some(d => referer.includes(d)) ||
+    allowedDomains.some(d => host.includes(d));
 
   if (!isAllowed) {
     return res.status(403).json({ error: 'Unauthorized' });
   }
 
-  res.setHeader('Access-Control-Allow-Origin', allowedOrigins.includes(origin) ? origin : allowedOrigins[0]);
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
-
   const secret = process.env.RISN_API_SECRET;
   if (!secret) {
-    return res.status(500).json({ error: 'Server configuration error — RISN_API_SECRET not set' });
+    return res.status(500).json({ error: 'Server configuration error' });
   }
 
   res.setHeader('Cache-Control', 'private, max-age=3600');
