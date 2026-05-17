@@ -111,14 +111,14 @@ export default async function handler(req, res) {
     }
 
     // Always use the centrally configured model
-    const { risn_email, risn_unlimited, ...claudeBody } = req.body;
+    const { risn_email, risn_unlimited, risn_web_search, ...claudeBody } = req.body;
     // Use requested model if approved, otherwise fall back to default
     const requestedModel = claudeBody.model;
     const model = (requestedModel && APPROVED_MODELS[requestedModel]) ? requestedModel : DEFAULT_MODEL;
     const body = { ...claudeBody, model };
 
     // Add web search tool for company intel requests
-    const useWebSearch = req.body.risn_web_search === true;
+    const useWebSearch = risn_web_search === true;
     if (useWebSearch) {
       body.tools = [{
         type: 'web_search_20250305',
