@@ -301,7 +301,7 @@
   <div id="formCard" class="card">
     <p class="card-step">Company Intel</p>
     <h1 class="card-title">Know More Than Anyone Else in That Room</h1>
-    <p class="card-sub">Enter the company and role you're interviewing for. RISN AI builds you a complete intelligence briefing so you walk in completely prepared.</p>
+    <p class="card-sub">Enter the company and role you're interviewing for. If you have an interview confirmed, add your interviewers' LinkedIn handles for a private deep profile on each person — their career story, interests, and conversation angles that create real connection.</p>
 
     <div class="field-row">
       <div class="field-group">
@@ -324,6 +324,38 @@
       <textarea id="extraContext" style="min-height:80px;" placeholder="e.g. 'I want to understand their engineering culture', 'I heard they recently had layoffs', 'I want salary negotiation tips for this company specifically'"></textarea>
     </div>
 
+    <div class="field-group" style="background:#F5F0FF;border-radius:12px;padding:1.25rem;border:0.5px solid #d8b4fe;">
+      <p style="font-size:13px;font-weight:700;color:#7C3AFF;margin-bottom:4px;">✦ Interviewer Intelligence — New</p>
+      <p style="font-size:12px;color:#555;margin-bottom:1rem;line-height:1.6;">Do you have an interview confirmed? Add your interviewers' LinkedIn handles and RISN will privately research their professional background, career story, and interests — giving you conversation angles and connection points that make you unforgettable. Zero footprint. They'll never know you looked.</p>
+
+      <div style="margin-bottom:10px;">
+        <label style="font-size:13px;font-weight:500;color:#0a0a0a;margin-bottom:4px;display:block;">Do you have an interview confirmed?</label>
+        <div style="display:flex;gap:10px;">
+          <button type="button" id="interviewYes" onclick="toggleInterviewSection(true)" style="flex:1;padding:9px;border:1px solid #e8e8e8;border-radius:8px;background:white;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;">Yes — I have interviewers</button>
+          <button type="button" id="interviewNo" onclick="toggleInterviewSection(false)" style="flex:1;padding:9px;border:1px solid #e8e8e8;border-radius:8px;background:white;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;">Not yet — skip this</button>
+        </div>
+      </div>
+
+      <div id="interviewerFields" style="display:none;margin-top:12px;">
+        <p style="font-size:12px;color:#555;margin-bottom:10px;">Add up to 3 LinkedIn handles (e.g. <em>linkedin.com/in/sarahjohnson</em> or just <em>sarahjohnson</em>)</p>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;color:#888;width:20px;">1.</span>
+            <input type="text" id="li1" placeholder="linkedin.com/in/handle or just the handle" style="flex:1;padding:9px 14px;border:1px solid #e8e8e8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;" />
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;color:#888;width:20px;">2.</span>
+            <input type="text" id="li2" placeholder="optional" style="flex:1;padding:9px 14px;border:1px solid #e8e8e8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;" />
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;color:#888;width:20px;">3.</span>
+            <input type="text" id="li3" placeholder="optional" style="flex:1;padding:9px 14px;border:1px solid #e8e8e8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;" />
+          </div>
+        </div>
+        <p style="font-size:11px;color:#888;margin-top:8px;">💡 Tip: The full URL or just the handle both work. e.g. "sarahjohnson" or "linkedin.com/in/sarahjohnson"</p>
+      </div>
+    </div>
+
     <button class="btn-generate" onclick="risnGate(generateIntel)">Generate My Company Briefing ✦</button>
     <div id="errorBox" class="error-box hidden"></div>
   </div>
@@ -339,6 +371,7 @@
       <p class="gen-step s3">✦ Identifying what interviewers care about...</p>
       <p class="gen-step s4">✦ Generating smart questions to ask...</p>
       <p class="gen-step s5">✦ Compiling salary intelligence...</p>
+      <p class="gen-step" style="animation-delay:10s;font-size:13px;color:var(--muted);opacity:0;animation:fadeIn 0.5s forwards;">✦ Researching interviewer profiles privately...</p>
     </div>
   </div>
 
@@ -370,25 +403,85 @@
   let briefingText = '';
   let briefingData = null;
 
+  let interviewConfirmed = false;
+
+  function toggleInterviewSection(show) {
+    interviewConfirmed = show;
+    document.getElementById('interviewerFields').style.display = show ? 'block' : 'none';
+    const yesBtn = document.getElementById('interviewYes');
+    const noBtn = document.getElementById('interviewNo');
+    if (show) {
+      yesBtn.style.background = '#7C3AFF';
+      yesBtn.style.color = 'white';
+      yesBtn.style.borderColor = '#7C3AFF';
+      noBtn.style.background = 'white';
+      noBtn.style.color = '#0a0a0a';
+      noBtn.style.borderColor = '#e8e8e8';
+    } else {
+      noBtn.style.background = '#7C3AFF';
+      noBtn.style.color = 'white';
+      noBtn.style.borderColor = '#7C3AFF';
+      yesBtn.style.background = 'white';
+      yesBtn.style.color = '#0a0a0a';
+      yesBtn.style.borderColor = '#e8e8e8';
+    }
+  }
+
+  function getLinkedInHandles() {
+    const handles = [];
+    ['li1', 'li2', 'li3'].forEach(id => {
+      const val = document.getElementById(id).value.trim();
+      if (val) {
+        // Normalize — extract just the handle
+        const clean = val.replace(/https?:\/\/(www\.)?linkedin\.com\/in\//i, '').replace(/\/$/, '').trim();
+        if (clean) handles.push(clean);
+      }
+    });
+    return handles;
+  }
+
   function buildPrompt() {
     const company = document.getElementById('companyName').value;
     const role = document.getElementById('jobTitle').value;
     const industry = document.getElementById('industry').value;
     const extra = document.getElementById('extraContext').value;
+    const handles = interviewConfirmed ? getLinkedInHandles() : [];
+
+    const interviewerSection = handles.length > 0 ? `
+
+INTERVIEWER RESEARCH:
+The candidate has an interview confirmed. Research each of the following LinkedIn profiles and provide professional background, career insights, and conversation angles.
+LinkedIn handles to research: ${handles.join(', ')}
+
+For each interviewer found, add to the JSON response an "interviewers" array with objects containing:
+- "handle": their LinkedIn handle
+- "name": their name as found on LinkedIn
+- "currentRole": their current title and company
+- "careerStory": 2-3 sentences summarizing their career path and what it reveals about them professionally
+- "yearsAtCompany": approximately how long they have been at this company
+- "background": notable previous companies or roles
+- "education": where they studied if available
+- "interests": professional interests, causes they support, topics they post about
+- "conversationAngles": 2-3 specific topics or connections the candidate could naturally bring up
+- "interviewStyle": based on their background, what kind of interviewer are they likely to be
+- "confidence": "high" if profile clearly found and verified, "medium" if likely match, "low" if uncertain
+- "disclaimer": if confidence is medium or low, a note explaining the uncertainty
+
+IMPORTANT: Only include information you are highly confident about from their LinkedIn profile. If you cannot find a clear match for a handle, set confidence to "low" and explain why. Never fabricate details.` : '';
 
     return `You are an expert career researcher and interview strategist. Create a comprehensive company intelligence briefing for a job candidate.
 
 COMPANY: ${company}
 ROLE: ${role}
 ${industry ? 'INDUSTRY: ' + industry : ''}
-${extra ? 'SPECIFIC FOCUS: ' + extra : ''}
+${extra ? 'SPECIFIC FOCUS: ' + extra : ''}${interviewerSection}
 
 Return a JSON object with exactly these keys:
 {
   "overview": "3-4 sentences covering what the company does, their mission, size, and market position",
   "culture": "3-4 sentences on company culture, work environment, team dynamics, and what employees say about working there",
   "recentNews": "2-3 sentences on recent notable developments, launches, news, or changes at the company",
-  "whatTheyLookFor": "3-4 sentences on what this company specifically values in candidates for this role — what traits, skills, and experiences tend to impress them",
+  "whatTheyLookFor": "3-4 sentences on what this company specifically values in candidates for this role",
   "interviewProcess": "2-3 sentences describing the typical interview process at this company for this type of role",
   "smartQuestions": ["Question 1 to ask the interviewer", "Question 2", "Question 3", "Question 4", "Question 5"],
   "redFlags": ["Potential concern 1 to be aware of", "Potential concern 2", "Potential concern 3"],
@@ -396,10 +489,11 @@ Return a JSON object with exactly these keys:
   "salaryMid": "e.g. $105,000",
   "salaryMax": "e.g. $130,000",
   "salaryNote": "1-2 sentences on salary negotiation context for this specific company and role",
-  "insiderTip": "One powerful insider insight that most candidates wouldn't know — something specific that will make them stand out"
+  "insiderTip": "One powerful insider insight that most candidates wouldn't know",
+  "interviewers": []
 }
 
-Be specific to this company and role — not generic. Use your knowledge of this company's actual culture, reputation, and hiring practices. Return only valid JSON, no markdown, no code blocks.`;
+Be specific to this company and role. Return only valid JSON, no markdown, no code blocks.`;
   }
 
   async function generateIntel() {
@@ -426,7 +520,10 @@ Be specific to this company and role — not generic. Use your knowledge of this
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'claude-sonnet-4-5',
-          max_tokens: 1500,
+          risn_email: (function(){ try { return localStorage.getItem('risn_user_email') || ''; } catch(e) { return ''; } })(),
+          risn_unlimited: (function(){ try { const s = sessionStorage.getItem('risn_access'); if(!s) return false; const d = JSON.parse(s); return d && d.type === 'unlimited'; } catch(e) { return false; } })(),
+          risn_web_search: interviewConfirmed && getLinkedInHandles().length > 0,
+          max_tokens: 2500,
           messages: [{ role: 'user', content: buildPrompt() }]
         })
       });
@@ -566,6 +663,62 @@ Be specific to this company and role — not generic. Use your knowledge of this
     document.getElementById('dossier').classList.remove('hidden');
     document.getElementById('backLink').classList.remove('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function renderInterviewers(interviewers) {
+    if (!interviewers || interviewers.length === 0) return '';
+
+    const cards = interviewers.map(p => {
+      const confidenceBadge = p.confidence === 'high'
+        ? '<span style="font-size:10px;background:#D1FAE5;color:#065F46;padding:2px 8px;border-radius:20px;font-weight:500;">✓ High confidence</span>'
+        : p.confidence === 'medium'
+        ? '<span style="font-size:10px;background:#FEF3C7;color:#92400E;padding:2px 8px;border-radius:20px;font-weight:500;">⚠ Medium confidence</span>'
+        : '<span style="font-size:10px;background:#FCEBEB;color:#791F1F;padding:2px 8px;border-radius:20px;font-weight:500;">⚠ Low confidence</span>';
+
+      const disclaimer = (p.confidence !== 'high' && p.disclaimer)
+        ? `<p style="font-size:12px;color:#888;font-style:italic;margin-top:8px;padding:8px;background:#f7f7f7;border-radius:6px;">Note: ${p.disclaimer}</p>`
+        : '';
+
+      const angles = (p.conversationAngles || []).map(a =>
+        `<li style="font-size:13px;color:#333;padding:4px 0;display:flex;gap:8px;align-items:flex-start;"><span style="color:#7C3AFF;flex-shrink:0;">→</span>${a}</li>`
+      ).join('');
+
+      return `
+        <div style="background:white;border:0.5px solid #e8e8e8;border-radius:12px;padding:1.25rem;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+            <div>
+              <p style="font-size:15px;font-weight:700;color:#0a0a0a;margin-bottom:2px;">${p.name || p.handle}</p>
+              <p style="font-size:13px;color:#888;">${p.currentRole || ''}</p>
+            </div>
+            ${confidenceBadge}
+          </div>
+          ${disclaimer}
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            ${p.yearsAtCompany ? `<div style="background:#f7f7f7;border-radius:8px;padding:10px;"><p style="font-size:11px;color:#888;margin-bottom:2px;">AT THIS COMPANY</p><p style="font-size:13px;font-weight:500;color:#0a0a0a;">${p.yearsAtCompany}</p></div>` : ''}
+            ${p.education ? `<div style="background:#f7f7f7;border-radius:8px;padding:10px;"><p style="font-size:11px;color:#888;margin-bottom:2px;">EDUCATION</p><p style="font-size:13px;font-weight:500;color:#0a0a0a;">${p.education}</p></div>` : ''}
+            ${p.background ? `<div style="background:#f7f7f7;border-radius:8px;padding:10px;grid-column:1/-1;"><p style="font-size:11px;color:#888;margin-bottom:2px;">PREVIOUS EXPERIENCE</p><p style="font-size:13px;font-weight:500;color:#0a0a0a;">${p.background}</p></div>` : ''}
+          </div>
+          ${p.careerStory ? `<p style="font-size:13px;color:#444;line-height:1.6;margin-bottom:12px;">${p.careerStory}</p>` : ''}
+          ${p.interviewStyle ? `<div style="background:#F5F0FF;border-radius:8px;padding:10px;margin-bottom:12px;"><p style="font-size:11px;color:#7C3AFF;font-weight:500;margin-bottom:4px;">LIKELY INTERVIEW STYLE</p><p style="font-size:13px;color:#555;">${p.interviewStyle}</p></div>` : ''}
+          ${angles ? `<div><p style="font-size:11px;color:#7C3AFF;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">Conversation angles</p><ul style="list-style:none;">${angles}</ul></div>` : ''}
+          ${p.interests ? `<p style="font-size:12px;color:#888;margin-top:10px;"><strong style="color:#555;">Interests & activity:</strong> ${p.interests}</p>` : ''}
+        </div>`;
+    }).join('');
+
+    return `
+      <div style="background:#0a0a0a;padding:1.5rem;border-top:0.5px solid #1e1e1e;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <div style="width:32px;height:32px;background:#1a1a1a;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">🔍</div>
+          <div>
+            <p style="font-size:14px;font-weight:700;color:white;">Interviewer Intelligence</p>
+            <p style="font-size:11px;color:#555;">Researched privately — zero footprint</p>
+          </div>
+        </div>
+      </div>
+      <div style="background:white;padding:1.5rem;border-radius:0 0 16px 16px;border:0.5px solid #e8e8e8;border-top:none;">
+        ${cards}
+        <p style="font-size:11px;color:#bbb;margin-top:4px;text-align:center;">Based on publicly available LinkedIn profile information only. Always verify details independently.</p>
+      </div>`;
   }
 
   function copyBriefing() {
