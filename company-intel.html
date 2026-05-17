@@ -498,6 +498,7 @@ CRITICAL: Only report what you actually find. Never fabricate. If you cannot fin
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           risn_secret: _risnToken,
+          risn_tool: 'company_intel',
           model: 'claude-sonnet-4-5',
           risn_email,
           risn_unlimited,
@@ -524,6 +525,7 @@ CRITICAL: Only report what you actually find. Never fabricate. If you cannot fin
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             risn_secret: _risnToken,
+          risn_tool: 'company_intel',
             model: 'claude-sonnet-4-5',
             risn_email,
             risn_unlimited,
