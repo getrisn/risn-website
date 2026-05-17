@@ -375,7 +375,7 @@
   <div id="formCard" class="card">
     <p class="card-step">Interviewer Profiles</p>
     <h1 class="card-title">Know Who's Across the Table</h1>
-    <p class="card-sub">Add up to 4 LinkedIn handles and RISN privately researches your interviewers — their career story, what drives them, and the conversation angles that turn an interview into a real human connection. They'll never know you looked.</p>
+    <p class="card-sub">Add up to 3 LinkedIn handles and RISN privately researches your interviewers — their career story, what drives them, and the conversation angles that turn an interview into a real human connection. They'll never know you looked.</p>
 
     <div class="privacy-badge">
       <span style="color:#10B981;font-size:14px;">🔒</span>
@@ -394,7 +394,7 @@
     </div>
 
     <div class="field-group">
-      <label>LinkedIn handles <span class="label-optional">(add up to 4)</span></label>
+      <label>LinkedIn handles <span class="label-optional">(add up to 3)</span></label>
       <p class="field-hint" style="margin-bottom:10px;">Paste their full LinkedIn URL or just the handle. e.g. <em>linkedin.com/in/sarahjohnson</em> or just <em>sarahjohnson</em></p>
 
       <div class="interviewer-block">
@@ -421,13 +421,6 @@
         <input type="text" id="li3" placeholder="optional" />
       </div>
 
-      <div class="interviewer-block">
-        <div class="interviewer-block-header">
-          <div class="interviewer-num" style="background:#C084FC;">4</div>
-          <span class="interviewer-label">Fourth interviewer <span class="label-optional">(optional)</span></span>
-        </div>
-        <input type="text" id="li4" placeholder="optional" />
-      </div>
 
     </div>
 
@@ -436,6 +429,9 @@
       <textarea id="context" style="min-height:70px;" placeholder="e.g. 'This is a panel interview', 'I know one of them previously worked at my company', 'The hiring manager will be on the call'"></textarea>
     </div>
 
+    <div style="background:#FFFBEB;border:0.5px solid #FDE68A;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#92400E;">
+      ⚠ This tool uses 1 session per research — even on unlimited plans. Web-based research has higher costs than other RISN tools.
+    </div>
     <button class="btn-generate" onclick="risnGate(generateProfiles)">Research My Interviewers ✦</button>
     <div id="errorBox" class="error-box hidden"></div>
   </div>
@@ -487,7 +483,7 @@
 
   function getLinkedInHandles() {
     const handles = [];
-    ['li1', 'li2', 'li3', 'li4'].forEach(id => {
+    ['li1', 'li2', 'li3'].forEach(id => {
       const val = document.getElementById(id).value.trim();
       if (val) {
         const clean = val
@@ -572,11 +568,12 @@ Return only valid JSON, no markdown, no code blocks.`;
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           risn_secret: _risnToken,
+          risn_tool: 'interviewer_profiles',
           model: 'claude-sonnet-4-5',
           risn_email,
           risn_unlimited,
           risn_web_search: true,
-          max_tokens: 2000,
+          max_tokens: 1500,
           messages: [{ role: 'user', content: buildPrompt(handles) }]
         })
       });
@@ -745,7 +742,6 @@ Return only valid JSON, no markdown, no code blocks.`;
     document.getElementById('li1').value = '';
     document.getElementById('li2').value = '';
     document.getElementById('li3').value = '';
-    document.getElementById('li4').value = '';
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
