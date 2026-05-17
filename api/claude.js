@@ -117,12 +117,22 @@ export default async function handler(req, res) {
     const model = (requestedModel && APPROVED_MODELS[requestedModel]) ? requestedModel : DEFAULT_MODEL;
     const body = { ...claudeBody, model };
 
+    // Add web search tool for company intel requests
+    const useWebSearch = req.body.risn_web_search === true;
+    if (useWebSearch) {
+      body.tools = [{
+        type: 'web_search_20250305',
+        name: 'web_search'
+      }];
+    }
+
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
+        'anthropic-version': '2023-06-01',
+        'anthropic-beta': 'web-search-2025-03-05'
       },
       body: JSON.stringify(body)
     });
@@ -131,6 +141,17 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       return res.status(response.status).json({ error: data.error?.message || 'API error' });
+    }
+
+    // If web search was used, extract just the final text response
+    if (useWebSearch && data.content) {
+      const textBlock = data.content.find(b => b.type === 'text');
+      if (textBlock) {
+        return res.status(200).json({
+          ...data,
+          content: [textBlock]
+        });
+      }
     }
 
     return res.status(200).json(data);
