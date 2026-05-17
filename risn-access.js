@@ -1,58 +1,46 @@
 // risn-access.js
-// Shared access control system for all RISN tool pages
-// Handles promo codes, session counting, and payment gating
+// RISN Access Control System
+// Uses Supabase for persistent session management across tabs and browsers
 
-const RISN_ACCESS_KEY = 'risn_access';
+const RISN_EMAIL_KEY = 'risn_user_email';
 
-// ─── Session Management ───────────────────────────────────────────────────────
+// ─── Email Storage ────────────────────────────────────────────────────────────
 
-function getAccess() {
+function getSavedEmail() {
+  try { return localStorage.getItem(RISN_EMAIL_KEY) || ''; } catch { return ''; }
+}
+
+function saveEmail(email) {
+  try { localStorage.setItem(RISN_EMAIL_KEY, email); } catch {}
+}
+
+// ─── Session Check via API ────────────────────────────────────────────────────
+
+async function checkActiveSession(email) {
+  if (!email) return null;
   try {
-    const raw = sessionStorage.getItem(RISN_ACCESS_KEY);
-    if (!raw) return null;
-    const data = JSON.parse(raw);
-
-    // Check expiry for unlimited codes
-    if (data.expiresAt && new Date(data.expiresAt) < new Date()) {
-      sessionStorage.removeItem(RISN_ACCESS_KEY);
-      return null;
-    }
-
-    return data;
+    const response = await fetch('/api/check-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await response.json();
+    if (data.valid) return data;
+    return null;
   } catch {
     return null;
   }
 }
 
-function setAccess(data) {
-  sessionStorage.setItem(RISN_ACCESS_KEY, JSON.stringify(data));
-}
-
-function hasAccess() {
-  const access = getAccess();
-  if (!access) return false;
-  if (access.type === 'unlimited') return true;
-  if (access.type === 'sessions' && access.sessionsRemaining > 0) return true;
-  return false;
-}
-
-function consumeSession() {
-  const access = getAccess();
-  if (!access) return false;
-  if (access.type === 'unlimited') return true;
-  if (access.sessionsRemaining > 0) {
-    access.sessionsRemaining--;
-    setAccess(access);
-    return true;
-  }
-  return false;
-}
-
-function getSessionsRemaining() {
-  const access = getAccess();
-  if (!access) return 0;
-  if (access.type === 'unlimited') return '∞';
-  return access.sessionsRemaining || 0;
+async function consumeSession(sessionId) {
+  if (!sessionId) return;
+  try {
+    await fetch('/api/consume-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId })
+    });
+  } catch {}
 }
 
 // ─── Modal HTML ───────────────────────────────────────────────────────────────
@@ -63,15 +51,15 @@ function injectModal() {
   modal.innerHTML = `
     <div id="risnModalOverlay" style="
       display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);
-      z-index:9999;display:flex;align-items:center;justify-content:center;
+      z-index:9999;align-items:center;justify-content:center;
       padding:1rem;backdrop-filter:blur(4px);
     ">
       <div style="
         background:white;border-radius:20px;width:100%;max-width:460px;
         overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.3);
+        max-height:90vh;overflow-y:auto;
       ">
-        <!-- Header -->
-        <div style="background:#0a0a0a;padding:1.5rem 1.75rem;display:flex;align-items:center;justify-content:space-between;">
+        <div style="background:#0a0a0a;padding:1.5rem 1.75rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;">
           <div>
             <p style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:white;letter-spacing:2px;line-height:1;">RISN</p>
             <p style="font-size:12px;color:#555;margin-top:2px;">Start your session</p>
@@ -79,9 +67,14 @@ function injectModal() {
           <button onclick="closeRisnModal()" style="background:none;border:none;color:#555;font-size:22px;cursor:pointer;padding:4px;">✕</button>
         </div>
 
-        <!-- Session indicator (shown if has partial access) -->
-        <div id="risnSessionBanner" style="display:none;background:#F5F0FF;padding:10px 1.75rem;border-bottom:0.5px solid #e8e8e8;">
-          <p style="font-size:13px;color:#7C3AFF;font-weight:500;" id="risnSessionText"></p>
+        <!-- Returning user check -->
+        <div id="risnReturningSection" style="padding:1.25rem 1.75rem;background:#F5F0FF;border-bottom:0.5px solid #e8e8e8;display:none;">
+          <p style="font-size:13px;color:#6D28D9;font-weight:500;margin-bottom:8px;">Already have access? Check your active session:</p>
+          <div style="display:flex;gap:8px;">
+            <input type="email" id="risnReturningEmail" placeholder="Enter your email" style="flex:1;padding:9px 14px;border:1px solid #e8e8e8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;" />
+            <button onclick="checkReturningUser()" style="padding:9px 16px;background:#7C3AFF;color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;">Check</button>
+          </div>
+          <div id="risnReturningResult" style="margin-top:8px;font-size:12px;"></div>
         </div>
 
         <!-- Tabs -->
@@ -93,7 +86,6 @@ function injectModal() {
         <!-- Pay Tab -->
         <div id="risnPayTab" style="padding:1.5rem 1.75rem;">
           <p style="font-size:13px;color:#888;margin-bottom:1.25rem;">Choose your plan — pay once, use immediately.</p>
-
           <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:1.25rem;">
             <div style="border:0.5px solid #e8e8e8;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;">
               <div>
@@ -118,54 +110,30 @@ function injectModal() {
               <a href="#" id="payBtnUnlimited" style="background:#7C3AFF;color:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 18px;border-radius:6px;text-decoration:none;white-space:nowrap;">$14.99/mo</a>
             </div>
           </div>
-
           <p style="font-size:11px;color:#bbb;text-align:center;">Secured by Stripe · SSL encrypted · No account required</p>
         </div>
 
         <!-- Code Tab -->
         <div id="risnCodeTab" style="padding:1.5rem 1.75rem;display:none;">
-          <p style="font-size:13px;color:#888;margin-bottom:1.25rem;">Enter your promo code and email address. Each code can only be used once per email.</p>
-
+          <p style="font-size:13px;color:#888;margin-bottom:1.25rem;">Enter your email and promo code. Each code can only be used once per email address.</p>
           <div style="margin-bottom:1rem;">
             <label style="display:block;font-size:13px;font-weight:500;color:#0a0a0a;margin-bottom:6px;">Email address</label>
             <input type="email" id="risnCodeEmail" placeholder="your@email.com" style="width:100%;padding:10px 14px;border:1px solid #e8e8e8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;" />
           </div>
-
           <div style="margin-bottom:1rem;">
             <label style="display:block;font-size:13px;font-weight:500;color:#0a0a0a;margin-bottom:6px;">Promo code</label>
             <input type="text" id="risnCodeInput" placeholder="Enter your code here" style="width:100%;padding:10px 14px;border:1px solid #e8e8e8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;text-transform:uppercase;letter-spacing:1px;" />
           </div>
-
           <div id="risnCodeError" style="display:none;background:#FCEBEB;border:1px solid #F09595;border-radius:8px;padding:10px 14px;font-size:13px;color:#791F1F;margin-bottom:1rem;"></div>
           <div id="risnCodeSuccess" style="display:none;background:#D1FAE5;border:1px solid #6EE7B7;border-radius:8px;padding:10px 14px;font-size:13px;color:#065F46;margin-bottom:1rem;"></div>
-
           <button onclick="validateCode()" id="risnCodeBtn" style="width:100%;padding:12px;background:#7C3AFF;color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Apply Code</button>
-
-          <p style="font-size:11px;color:#bbb;text-align:center;margin-top:1rem;">Don't have a code? <a href="#" onclick="switchTab('pay');return false;" style="color:#7C3AFF;">Choose a plan →</a></p>
+          <p style="font-size:11px;color:#bbb;text-align:center;margin-top:1rem;">Already used a code? <a href="#" onclick="document.getElementById('risnReturningSection').style.display='block';return false;" style="color:#7C3AFF;">Check your session →</a></p>
+          <p style="font-size:11px;color:#bbb;text-align:center;margin-top:6px;">Don't have a code? <a href="#" onclick="switchTab('pay');return false;" style="color:#7C3AFF;">Choose a plan →</a></p>
         </div>
 
       </div>
     </div>`;
   document.body.appendChild(modal);
-
-  // Update session banner if has access
-  updateSessionBanner();
-}
-
-function updateSessionBanner() {
-  const banner = document.getElementById('risnSessionBanner');
-  const text = document.getElementById('risnSessionText');
-  if (!banner || !text) return;
-
-  const access = getAccess();
-  if (access && access.type === 'sessions' && access.sessionsRemaining > 0) {
-    banner.style.display = 'block';
-    text.textContent = `You have ${access.sessionsRemaining} session${access.sessionsRemaining !== 1 ? 's' : ''} remaining`;
-  } else if (access && access.type === 'unlimited') {
-    banner.style.display = 'block';
-    const exp = access.expiresAt ? new Date(access.expiresAt).toLocaleDateString() : 'soon';
-    text.textContent = `Unlimited access active · expires ${exp}`;
-  }
 }
 
 // ─── Modal Controls ───────────────────────────────────────────────────────────
@@ -175,7 +143,15 @@ function openRisnModal(onSuccess) {
   const overlay = document.getElementById('risnModalOverlay');
   if (overlay) {
     overlay.style.display = 'flex';
-    updateSessionBanner();
+    const saved = getSavedEmail();
+    if (saved) {
+      const emailInput = document.getElementById('risnCodeEmail');
+      const returningInput = document.getElementById('risnReturningEmail');
+      if (emailInput) emailInput.value = saved;
+      if (returningInput) returningInput.value = saved;
+      // Auto-show returning section if email is saved
+      document.getElementById('risnReturningSection').style.display = 'block';
+    }
   }
 }
 
@@ -212,6 +188,38 @@ function switchTab(tab) {
     tabPay.style.color = '#888';
     tabPay.style.fontWeight = '500';
     tabPay.style.borderBottom = '2px solid transparent';
+  }
+}
+
+// ─── Returning User Check ─────────────────────────────────────────────────────
+
+async function checkReturningUser() {
+  const email = document.getElementById('risnReturningEmail').value.trim();
+  const resultEl = document.getElementById('risnReturningResult');
+
+  if (!email || !email.includes('@')) {
+    resultEl.innerHTML = '<span style="color:#E24B4A;">Please enter a valid email.</span>';
+    return;
+  }
+
+  resultEl.innerHTML = '<span style="color:#888;">Checking...</span>';
+
+  const session = await checkActiveSession(email);
+
+  if (session) {
+    saveEmail(email);
+    const expiry = session.expiresAt ? new Date(session.expiresAt).toLocaleDateString() : 'never';
+    const msg = session.type === 'unlimited'
+      ? `Unlimited access active — expires ${expiry}`
+      : `${session.sessionsRemaining} session${session.sessionsRemaining !== 1 ? 's' : ''} remaining`;
+    resultEl.innerHTML = `<span style="color:#065F46;font-weight:500;">✓ ${msg}</span>`;
+
+    setTimeout(() => {
+      closeRisnModal();
+      if (window._risnOnSuccess) window._risnOnSuccess(session);
+    }, 1500);
+  } else {
+    resultEl.innerHTML = '<span style="color:#E24B4A;">No active session found. Please use a code or purchase access below.</span>';
   }
 }
 
@@ -253,24 +261,15 @@ async function validateCode() {
       return;
     }
 
-    // Store access
-    setAccess({
-      type: data.type,
-      sessionsRemaining: data.sessions,
-      expiresAt: data.expiresAt,
-      email: email,
-      code: code
-    });
-
+    saveEmail(email);
     successEl.textContent = data.message;
     successEl.style.display = 'block';
     btn.textContent = 'Apply Code';
     btn.disabled = false;
 
-    // Auto-close and proceed after 1.5s
     setTimeout(() => {
       closeRisnModal();
-      if (window._risnOnSuccess) window._risnOnSuccess();
+      if (window._risnOnSuccess) window._risnOnSuccess(data);
     }, 1500);
 
   } catch (err) {
@@ -282,20 +281,23 @@ async function validateCode() {
 }
 
 // ─── Main Gate Function ───────────────────────────────────────────────────────
-// Call this before any AI generation. Passes through if access exists,
-// otherwise shows modal. Calls callback when access is confirmed.
 
-function risnGate(callback) {
-  if (hasAccess()) {
-    // Has valid access — consume a session and proceed
-    consumeSession();
-    callback();
-    return;
+async function risnGate(callback) {
+  const savedEmail = getSavedEmail();
+
+  if (savedEmail) {
+    const session = await checkActiveSession(savedEmail);
+    if (session) {
+      await consumeSession(session.sessionId);
+      callback();
+      return;
+    }
   }
-  // No access — show modal
-  openRisnModal(() => {
-    // After successful code entry, consume session and proceed
-    consumeSession();
+
+  openRisnModal(async (sessionData) => {
+    if (sessionData && sessionData.sessionId) {
+      await consumeSession(sessionData.sessionId);
+    }
     callback();
   });
 }
@@ -305,12 +307,10 @@ function risnGate(callback) {
 document.addEventListener('DOMContentLoaded', () => {
   injectModal();
 
-  // Close modal on overlay click
   document.getElementById('risnModalOverlay').addEventListener('click', (e) => {
     if (e.target === document.getElementById('risnModalOverlay')) closeRisnModal();
   });
 
-  // Uppercase code input as user types
   const codeInput = document.getElementById('risnCodeInput');
   if (codeInput) {
     codeInput.addEventListener('input', () => {
