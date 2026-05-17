@@ -1,0 +1,9 @@
+{
+  "name": "risn-website",
+  "version": "1.0.0",
+  "description": "RISN AI Career Platform",
+  "type": "module",
+  "engines": {
+    "node": "20.x"
+  }
+}
