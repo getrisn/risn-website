@@ -627,7 +627,7 @@
     </div>
     <div class="btn-row">
       <button class="btn-prev" onclick="goToStep(4)">← Back</button>
-      <button class="btn-next" id="generateBtn" onclick="generateResume()">Generate My Resume ✦</button>
+      <button class="btn-next" id="generateBtn" onclick="risnGate(generateResume)">Generate My Resume ✦</button>
     </div>
   </div>
 
@@ -661,7 +661,7 @@
       <div class="resume-preview" id="resumeOutput"></div>
       <div class="regen-row">
         <p class="regen-note">Not happy with the result? Regenerate for a fresh version.</p>
-        <button class="regen-btn" onclick="generateResume()">Regenerate ↺</button>
+        <button class="regen-btn" onclick="risnGate(generateResume)">Regenerate ↺</button>
       </div>
       <div style="padding:1.5rem 2rem;background:#fafafa;border-top:0.5px solid var(--border);">
         <p style="font-size:11px;color:var(--purple);letter-spacing:0.1em;text-transform:uppercase;font-weight:500;margin-bottom:12px;">Download guide — which format to use</p>
@@ -1005,7 +1005,8 @@ Follow industry-standard resume best practices: clean formatting, strong action 
       </head><body>
       <pre>${generatedResume}</pre>
       <script>window.onload = function(){ window.print(); }<\/script>
-      </body></html>`);
+        <script src="/risn-access.js"></script>
+</body></html>`);
     win.document.close();
   }
 
@@ -1047,5 +1048,6 @@ Follow industry-standard resume best practices: clean formatting, strong action 
   }
 </script>
 
+  <script src="/risn-access.js"></script>
 </body>
 </html>
