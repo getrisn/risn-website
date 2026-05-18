@@ -375,7 +375,7 @@
   <div id="formCard" class="card">
     <p class="card-step">Interviewer Profiles</p>
     <h1 class="card-title">Know Who's Across the Table</h1>
-    <p class="card-sub">Add up to 3 LinkedIn handles and RISN privately researches your interviewers — their career story, what drives them, and the conversation angles that turn an interview into a real human connection. They'll never know you looked.</p>
+    <p class="card-sub">Enter one LinkedIn handle and RISN privately researches your interviewer — their career story, what drives them, and the exact conversation angles that create real connection. Have a panel? Research them one at a time. They'll never know you looked.</p>
 
     <div class="privacy-badge">
       <span style="color:#10B981;font-size:14px;">🔒</span>
@@ -405,21 +405,7 @@
         <input type="text" id="li1" placeholder="linkedin.com/in/handle or just the handle" />
       </div>
 
-      <div class="interviewer-block">
-        <div class="interviewer-block-header">
-          <div class="interviewer-num" style="background:#9061F9;">2</div>
-          <span class="interviewer-label">Second interviewer <span class="label-optional">(optional)</span></span>
-        </div>
-        <input type="text" id="li2" placeholder="optional" />
-      </div>
 
-      <div class="interviewer-block">
-        <div class="interviewer-block-header">
-          <div class="interviewer-num" style="background:#A855F7;">3</div>
-          <span class="interviewer-label">Third interviewer <span class="label-optional">(optional)</span></span>
-        </div>
-        <input type="text" id="li3" placeholder="optional" />
-      </div>
 
 
     </div>
@@ -430,7 +416,7 @@
     </div>
 
     <div style="background:#FFFBEB;border:0.5px solid #FDE68A;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#92400E;">
-      ⚠ This tool uses 1 session per research — even on unlimited plans. Web-based research has higher costs than other RISN tools.
+      ⚠ This tool uses 1 session per profile researched — even on unlimited plans. Unlimited subscribers get 10 Interviewer Profile sessions per month.
     </div>
     <button class="btn-generate" onclick="risnGate(generateProfiles)">Research My Interviewers ✦</button>
     <div id="errorBox" class="error-box hidden"></div>
@@ -440,7 +426,7 @@
   <div id="generating" class="generating-card hidden">
     <div class="spinner"></div>
     <h2 class="generating-title">Researching Your Interviewers</h2>
-    <p class="generating-sub" id="genSub">Searching LinkedIn profiles privately...</p>
+    <p class="generating-sub" id="genSub">Searching LinkedIn privately — one search only...</p>
     <div class="generating-steps">
       <p class="gen-step s1">✦ Finding LinkedIn profiles...</p>
       <p class="gen-step s2">✦ Analyzing career history and trajectory...</p>
@@ -453,7 +439,7 @@
   <div id="results" class="hidden">
     <div class="results-header">
       <div>
-        <p class="results-title">Interviewer Profiles</p>
+        <p class="results-title">Interviewer Profile</p>
         <p class="results-meta" id="resultsMeta"></p>
       </div>
       <div style="display:flex;gap:8px;">
@@ -482,18 +468,13 @@
   let profilesData = [];
 
   function getLinkedInHandles() {
-    const handles = [];
-    ['li1', 'li2', 'li3'].forEach(id => {
-      const val = document.getElementById(id).value.trim();
-      if (val) {
-        const clean = val
-          .replace(/https?:\/\/(www\.)?linkedin\.com\/in\//i, '')
-          .replace(/\/$/, '')
-          .trim();
-        if (clean) handles.push(clean);
-      }
-    });
-    return handles;
+    const val = document.getElementById('li1').value.trim();
+    if (!val) return [];
+    const clean = val
+      .replace(/https?:\/\/(www\.)?linkedin\.com\/in\//i, '')
+      .replace(/\/$/, '')
+      .trim();
+    return clean ? [clean] : [];
   }
 
   function buildPrompt(handles) {
@@ -501,36 +482,43 @@
     const role = document.getElementById('jobTitle').value;
     const context = document.getElementById('context').value;
 
-    return `You are a professional career researcher. A job candidate has an interview at ${company} for a ${role} position. Use web search to research the following LinkedIn profiles and build detailed professional briefings for each person.
+    const handle = handles[0];
+    return `You are a professional career researcher. A job candidate is interviewing at ${company} for a ${role} role. Search LinkedIn for this person and build a professional briefing.
 
-LinkedIn handles to research: ${handles.join(', ')}
+LinkedIn handle to research: ${handle}
 ${context ? 'Additional context: ' + context : ''}
 
-For each handle, search LinkedIn and any other public professional sources. Return a JSON object with an "interviewers" array. Each interviewer object must have these exact keys:
+IMPORTANT: Search LinkedIn ONLY. Do exactly ONE search for this person's LinkedIn profile. Do not search other sources.
+
+Return a JSON object with an "interviewers" array containing exactly one object with these keys:
 
 {
-  "handle": "LinkedIn handle searched",
-  "name": "full name",
-  "currentRole": "current title and company",
-  "yearsAtCompany": "time at ${company}",
-  "previousRoles": "top 2 previous companies or roles",
-  "education": "school and degree",
-  "careerStory": "2-3 sentences on career trajectory and what it reveals about them",
-  "interviewStyle": "1-2 sentences on how they likely interview and what they care about",
-  "conversationAngles": ["angle 1", "angle 2", "angle 3"],
-  "connectionPoints": "shared background or experiences if any",
-  "confidence": "high, medium, or low",
-  "disclaimer": "explanation if not high confidence, else empty string"
+  "handle": "${handle}",
+  "name": "their full name from LinkedIn",
+  "currentRole": "their current job title and company",
+  "yearsAtCompany": "approximately how long at ${company}",
+  "previousRoles": "their 2-3 most notable previous companies or roles",
+  "education": "school and degree if on their profile",
+  "careerStory": "3-4 sentences synthesizing their career trajectory — what choices they made, what it reveals about what they value, and how it connects to interviewing a ${role} candidate",
+  "interviewStyle": "2-3 sentences on what kind of interviewer they likely are based on their background — what they probably care about most when assessing candidates",
+  "conversationAngles": [
+    "one specific concrete topic to bring up naturally",
+    "another specific angle based on their actual background",
+    "a third authentic connection point"
+  ],
+  "connectionPoints": "any shared background, schools, companies, or experiences that could create genuine rapport",
+  "confidence": "high if clearly found on LinkedIn, medium if likely match, low if uncertain",
+  "disclaimer": "explanation if confidence is not high, otherwise empty string"
 }
 
-CRITICAL RULES:
-- Only report information you actually find — never fabricate or guess
-- If you cannot find a clear match for a handle, still include the entry with confidence "low" and explain in disclaimer
-- Be specific — generic platitudes are useless. If they went to UT Austin, say UT Austin. If they previously worked at Salesforce, say Salesforce
-- The careerStory and interviewStyle fields are the most valuable — make them insightful and specific
-- conversationAngles must be concrete and natural, not generic advice like "ask about their experience"
+RULES:
+- Search LinkedIn once only — do not run additional searches
+- Only report what you actually find — never invent details
+- If you cannot clearly identify this person, set confidence to low and explain
+- Be specific and concrete — vague platitudes are worthless
+- conversationAngles must be based on their actual background, not generic interview advice
 
-Return only valid JSON, no markdown, no code blocks.`;
+Return only valid JSON. No markdown. No code blocks.`;
   }
 
   async function generateProfiles() {
@@ -540,7 +528,7 @@ Return only valid JSON, no markdown, no code blocks.`;
     if (handles.length === 0) {
       const eb = document.getElementById('errorBox');
       eb.classList.remove('hidden');
-      eb.textContent = 'Please add at least one LinkedIn handle to research.';
+      eb.textContent = 'Please enter a LinkedIn handle or URL to research.';
       return;
     }
 
@@ -573,7 +561,7 @@ Return only valid JSON, no markdown, no code blocks.`;
           risn_email,
           risn_unlimited,
           risn_web_search: true,
-          max_tokens: 1500,
+          max_tokens: 1000,
           messages: [{ role: 'user', content: buildPrompt(handles) }]
         })
       });
@@ -599,8 +587,8 @@ Return only valid JSON, no markdown, no code blocks.`;
 
   function renderProfiles(company) {
     const role = document.getElementById('jobTitle').value;
-    document.getElementById('resultsMeta').textContent =
-      profilesData.length + ' profile' + (profilesData.length !== 1 ? 's' : '') + ' · ' + company + ' · ' + role;
+    const handle = getLinkedInHandles()[0] || '';
+    document.getElementById('resultsMeta').textContent = handle + ' · ' + company + ' · ' + role;
 
     const body = document.getElementById('profilesBody');
     profilesText = 'INTERVIEWER PROFILES — ' + company + ' · ' + role + '\n' +
@@ -728,7 +716,7 @@ Return only valid JSON, no markdown, no code blocks.`;
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'RISN_Interviewer_Profiles_' + company + '.txt';
+    a.download = 'RISN_Interviewer_Profile_' + company + '.txt';
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -740,8 +728,6 @@ Return only valid JSON, no markdown, no code blocks.`;
     document.getElementById('backLink').classList.add('hidden');
     document.getElementById('formCard').classList.remove('hidden');
     document.getElementById('li1').value = '';
-    document.getElementById('li2').value = '';
-    document.getElementById('li3').value = '';
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
