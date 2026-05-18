@@ -394,8 +394,8 @@
     </div>
 
     <div class="field-group">
-      <label>LinkedIn handles <span class="label-optional">(add up to 3)</span></label>
-      <p class="field-hint" style="margin-bottom:10px;">Paste their full LinkedIn URL or just the handle. e.g. <em>linkedin.com/in/sarahjohnson</em> or just <em>sarahjohnson</em></p>
+      <label for="li1">LinkedIn handle or URL</label>
+      <p class="field-hint" style="margin-bottom:10px;">Paste their LinkedIn URL or handle. RISN searches LinkedIn plus other public sources — company bios, news, articles, and more — for the most complete picture.</p>
 
       <input type="text" id="li1" placeholder="linkedin.com/in/sarahjohnson or just sarahjohnson" style="font-size:14px;padding:12px 14px;" />
 
@@ -420,9 +420,9 @@
   <div id="generating" class="generating-card hidden">
     <div class="spinner"></div>
     <h2 class="generating-title">Researching Your Interviewers</h2>
-    <p class="generating-sub" id="genSub">Searching LinkedIn privately — one search only...</p>
+    <p class="generating-sub" id="genSub">Searching LinkedIn and public professional sources...</p>
     <div class="generating-steps">
-      <p class="gen-step s1">✦ Finding LinkedIn profiles...</p>
+      <p class="gen-step s1">✦ Searching LinkedIn and public sources...</p>
       <p class="gen-step s2">✦ Analyzing career history and trajectory...</p>
       <p class="gen-step s3">✦ Identifying conversation angles and interests...</p>
       <p class="gen-step s4">✦ Building your private briefings...</p>
@@ -482,7 +482,7 @@
 LinkedIn handle to research: ${handle}
 ${context ? 'Additional context: ' + context : ''}
 
-IMPORTANT: Search LinkedIn ONLY. Do exactly ONE search for this person's LinkedIn profile. Do not search other sources.
+Search for this person using their LinkedIn handle as the starting point, but also search the broader web — company bios, news mentions, conference talks, published articles, Twitter/X, GitHub, or any other public professional sources. Use up to 3 searches total to find the most complete picture.
 
 Return a JSON object with an "interviewers" array containing exactly one object with these keys:
 
@@ -506,11 +506,12 @@ Return a JSON object with an "interviewers" array containing exactly one object 
 }
 
 RULES:
-- Search LinkedIn once only — do not run additional searches
-- Only report what you actually find — never invent details
-- If you cannot clearly identify this person, set confidence to low and explain
-- Be specific and concrete — vague platitudes are worthless
-- conversationAngles must be based on their actual background, not generic interview advice
+- Search multiple public sources — LinkedIn, company website, news, articles, social media
+- Only report what you actually find — never invent or guess details
+- If you cannot find enough information for a useful briefing, set confidence to low
+- Be specific and concrete — name actual companies, schools, interests you find
+- conversationAngles must be based on their actual background, not generic advice
+- If LinkedIn is blocked, use other public sources to build the profile
 
 Return ONLY the raw JSON object. No explanatory text before or after. No markdown. No code blocks. Start your response with { and end with }.`;
   }
@@ -593,7 +594,7 @@ Return ONLY the JSON. No text before or after. Start with { end with }.`;
           risn_email,
           risn_unlimited,
           risn_web_search: true,
-          max_tokens: 1000,
+          max_tokens: 1200,
           messages: [{ role: 'user', content: buildPrompt(handles) }]
         })
       });
