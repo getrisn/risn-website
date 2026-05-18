@@ -397,13 +397,7 @@
       <label>LinkedIn handles <span class="label-optional">(add up to 3)</span></label>
       <p class="field-hint" style="margin-bottom:10px;">Paste their full LinkedIn URL or just the handle. e.g. <em>linkedin.com/in/sarahjohnson</em> or just <em>sarahjohnson</em></p>
 
-      <div class="interviewer-block">
-        <div class="interviewer-block-header">
-          <div class="interviewer-num">1</div>
-          <span class="interviewer-label">First interviewer</span>
-        </div>
-        <input type="text" id="li1" placeholder="linkedin.com/in/handle or just the handle" />
-      </div>
+      <input type="text" id="li1" placeholder="linkedin.com/in/sarahjohnson or just sarahjohnson" style="font-size:14px;padding:12px 14px;" />
 
 
 
@@ -518,12 +512,49 @@ RULES:
 - Be specific and concrete — vague platitudes are worthless
 - conversationAngles must be based on their actual background, not generic interview advice
 
-Return only valid JSON. No markdown. No code blocks.`;
+Return ONLY the raw JSON object. No explanatory text before or after. No markdown. No code blocks. Start your response with { and end with }.`;
+  }
+
+  function parseJSON(rawText) {
+    const fenceMatch = rawText.match(/```(?:json)?\s*([\s\S]*?)```/);
+    if (fenceMatch) return JSON.parse(fenceMatch[1].trim());
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    if (jsonMatch) return JSON.parse(jsonMatch[0]);
+    return JSON.parse(rawText.trim());
+  }
+
+  function buildCompanyFallbackPrompt(handle, company, role) {
+    return `A job candidate is interviewing at ${company} for a ${role} position. The LinkedIn profile for handle "${handle}" had limited public visibility.
+
+Since we cannot provide a personal profile, give the candidate useful intel about what to expect when interviewing with someone in a ${role}-adjacent position at ${company}.
+
+Return ONLY this JSON object, starting with { and ending with }:
+{
+  "handle": "${handle}",
+  "name": "Profile not publicly available",
+  "currentRole": "Role at ${company}",
+  "yearsAtCompany": "Unknown",
+  "previousRoles": "Unknown",
+  "education": "Unknown",
+  "careerStory": "2-3 sentences on what typical career paths look like for people in this type of role at ${company} — what backgrounds they tend to come from and what it suggests about their professional values",
+  "interviewStyle": "2-3 sentences on what interviewers at ${company} for this type of role typically care about and how they tend to assess candidates, based on the company culture",
+  "conversationAngles": [
+    "a conversation topic relevant to ${company} culture or recent news",
+    "a topic relevant to the ${role} function at ${company}",
+    "a broader industry topic relevant to ${company}'s business"
+  ],
+  "connectionPoints": "any publicly known things about ${company} culture or values that could create rapport",
+  "confidence": "company_fallback",
+  "disclaimer": "This person's LinkedIn profile had limited public visibility. We've provided company-level intel instead — no session was charged for the profile research."
+}
+
+Return ONLY the JSON. No text before or after. Start with { end with }.`;
   }
 
   async function generateProfiles() {
     const handles = getLinkedInHandles();
     const company = document.getElementById('companyName').value.trim();
+    const role = document.getElementById('jobTitle').value.trim();
 
     if (handles.length === 0) {
       const eb = document.getElementById('errorBox');
@@ -548,9 +579,10 @@ Return only valid JSON. No markdown. No code blocks.`;
 
     const risn_email = (function(){ try { return localStorage.getItem('risn_user_email') || ''; } catch(e) { return ''; } })();
     const risn_unlimited = (function(){ try { const s = sessionStorage.getItem('risn_access'); if(!s) return false; const d = JSON.parse(s); return d && d.type === 'unlimited'; } catch(e) { return false; } })();
+    const _risnToken = window.getRisnToken ? await window.getRisnToken() : null;
 
     try {
-      const _risnToken = window.getRisnToken ? await window.getRisnToken() : null;
+      // STEP 1: LinkedIn search
       const response = await fetch('/api/claude', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -569,9 +601,39 @@ Return only valid JSON. No markdown. No code blocks.`;
       const data = await response.json();
       if (data.error) throw new Error(data.error);
 
-      let text = data.content[0].text.trim().replace(/```json|```/g, '').trim();
-      const parsed = JSON.parse(text);
+      const parsed = parseJSON(data.content[0].text.trim());
       profilesData = parsed.interviewers || [];
+
+      // STEP 2: Check if profile was private/limited
+      const profile = profilesData[0];
+      const isLowConfidence = profile && profile.confidence === 'low';
+
+      if (isLowConfidence) {
+        // Update generating message
+        const genSub = document.getElementById('genSub');
+        if (genSub) genSub.textContent = 'Profile is private — generating company intel instead...';
+
+        // STEP 3: Pivot to company intel fallback — no session consumed
+        const fallbackResponse = await fetch('/api/claude', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            risn_secret: _risnToken,
+            risn_tool: 'interviewer_profiles_fallback',
+            model: 'claude-sonnet-4-5',
+            risn_email,
+            risn_unlimited: false, // Don't count against daily cap
+            max_tokens: 800,
+            messages: [{ role: 'user', content: buildCompanyFallbackPrompt(handles[0], company, role) }]
+          })
+        });
+
+        const fallbackData = await fallbackResponse.json();
+        if (!fallbackData.error) {
+          const fallbackParsed = parseJSON(fallbackData.content[0].text.trim());
+          profilesData = fallbackParsed.interviewers || profilesData;
+        }
+      }
 
       document.getElementById('generating').classList.add('hidden');
       renderProfiles(company);
@@ -630,8 +692,11 @@ Return only valid JSON. No markdown. No code blocks.`;
       </div>`;
     }
 
-    const confClass = p.confidence === 'high' ? 'conf-high' : p.confidence === 'medium' ? 'conf-medium' : 'conf-low';
-    const confLabel = p.confidence === 'high' ? '✓ Verified' : p.confidence === 'medium' ? '⚠ Likely match' : '⚠ Uncertain';
+    let confClass, confLabel;
+    if (p.confidence === 'high') { confClass = 'conf-high'; confLabel = '✓ Verified'; }
+    else if (p.confidence === 'medium') { confClass = 'conf-medium'; confLabel = '⚠ Likely match'; }
+    else if (p.confidence === 'company_fallback') { confClass = 'conf-medium'; confLabel = '🏢 Company intel'; }
+    else { confClass = 'conf-low'; confLabel = '⚠ Profile private'; }
 
     const stats = [
       p.yearsAtCompany ? { label: 'At this company', value: p.yearsAtCompany } : null,
@@ -653,7 +718,8 @@ Return only valid JSON. No markdown. No code blocks.`;
           <span class="confidence-badge ${confClass}">${confLabel}</span>
         </div>
 
-        ${p.disclaimer ? `<div class="disclaimer-box">⚠ ${p.disclaimer}</div>` : ''}
+        ${p.disclaimer && p.confidence !== 'company_fallback' ? `<div class="disclaimer-box">⚠ ${p.disclaimer}</div>` : ''}
+      ${p.confidence === 'company_fallback' ? `<div style="background:#EEF3FB;border:0.5px solid #BFDBFE;border-radius:8px;padding:10px 14px;margin-bottom:1rem;font-size:12px;color:#1E40AF;line-height:1.5;">🏢 ${p.disclaimer}</div>` : ''}
 
         ${stats.length > 0 ? `
         <div class="profile-grid">
