@@ -27,6 +27,53 @@ function parseCode(code) {
   return null;
 }
 
+// ─── Failed Attempt Rate Limiter ─────────────────────────────────────────────
+// Blocks IPs after 3 failed code attempts for 1 hour
+const failedAttempts = new Map();
+
+function checkFailedAttempts(ip) {
+  const now = Date.now();
+  const blockDuration = 60 * 60 * 1000; // 1 hour
+  const maxAttempts = 3;
+
+  if (!failedAttempts.has(ip)) return { blocked: false };
+
+  const record = failedAttempts.get(ip);
+
+  // Check if still blocked
+  if (record.blockedUntil && now < record.blockedUntil) {
+    const minutesLeft = Math.ceil((record.blockedUntil - now) / 60000);
+    return { blocked: true, minutesLeft };
+  }
+
+  // Reset if block has expired
+  if (record.blockedUntil && now >= record.blockedUntil) {
+    failedAttempts.delete(ip);
+    return { blocked: false };
+  }
+
+  return { blocked: false, attempts: record.attempts };
+}
+
+function recordFailedAttempt(ip) {
+  const now = Date.now();
+  const blockDuration = 60 * 60 * 1000;
+  const maxAttempts = 3;
+
+  const record = failedAttempts.get(ip) || { attempts: 0, blockedUntil: null };
+  record.attempts += 1;
+
+  if (record.attempts >= maxAttempts) {
+    record.blockedUntil = now + blockDuration;
+  }
+
+  failedAttempts.set(ip, record);
+}
+
+function clearFailedAttempts(ip) {
+  failedAttempts.delete(ip);
+}
+
 export default async function handler(req, res) {
   const allowedOrigins = ['https://getrisn.com', 'https://www.getrisn.com'];
   const origin = req.headers.origin;
@@ -38,6 +85,16 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  // Check if IP is blocked from too many failed attempts
+  const clientIP = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || 'unknown';
+  const ipCheck = checkFailedAttempts(clientIP);
+  if (ipCheck.blocked) {
+    return res.status(429).json({
+      valid: false,
+      error: `Too many invalid attempts. Please try again later.`
+    });
+  }
 
   const { code, email } = req.body;
 
@@ -78,11 +135,15 @@ export default async function handler(req, res) {
     const existing = await checkRes.json();
 
     if (existing && existing.length > 0) {
+      recordFailedAttempt(clientIP);
       return res.status(200).json({
         valid: false,
-        error: 'This code is no longer valid. Please contact us at risewithrisn@gmail.com if you need assistance.'
+        error: 'This code is no longer valid. Please check and try again.'
       });
     }
+
+    // Clear failed attempts on success
+    clearFailedAttempts(clientIP);
 
     // Record the use in used_codes table
     await fetch(`${SUPABASE_URL}/rest/v1/used_codes`, {
