@@ -195,8 +195,21 @@ function openRisnModal(onSuccess) {
       const returningInput = document.getElementById('risnReturningEmail');
       if (emailInput) emailInput.value = saved;
       if (returningInput) returningInput.value = saved;
-      // Auto-show returning section if email is saved
       document.getElementById('risnReturningSection').style.display = 'block';
+    }
+    // Highlight pre-selected tier if coming from pricing page
+    const tier = window._risnSelectedTier;
+    if (tier) {
+      setTimeout(() => {
+        const btn = tier === 'single' ? document.getElementById('payBtn1')
+          : tier === 'starter' ? document.getElementById('payBtn3')
+          : document.getElementById('payBtnUnlimited');
+        if (btn) {
+          btn.style.transform = 'scale(1.05)';
+          btn.style.boxShadow = '0 0 0 3px rgba(124,58,255,0.3)';
+        }
+        window._risnSelectedTier = null;
+      }, 300);
     }
   }
 }
