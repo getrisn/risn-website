@@ -70,7 +70,21 @@ async function checkActiveSession(email) {
       body: JSON.stringify({ email })
     });
     const data = await response.json();
-    if (data.valid) return data;
+    if (data.valid) {
+      // Store plan caps from session so tools use correct limits
+      try {
+        const planCaps = {
+          feedbackCap: data.feedbackCap || 2,
+          questionCap: data.questionCap || 12,
+          interviewerCap: data.interviewerCap || 4,
+          dailyCap: data.dailyCap || 5,
+          isPaidPlan: data.isPaidPlan || false,
+          plan: data.plan || 'promo_month'
+        };
+        sessionStorage.setItem('risn_plan_caps', JSON.stringify(planCaps));
+      } catch(e) {}
+      return data;
+    }
     return null;
   } catch {
     return null;
