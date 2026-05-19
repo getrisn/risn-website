@@ -66,7 +66,7 @@ export default async function handler(req, res) {
       sessionId: session.id,
       // Return plan caps from session or derive from code type
       feedbackCap: session.feedback_cap ?? (isPaidPlan ? 6 : 3),
-      questionCap: session.question_cap ?? (isPaidPlan ? null : 12),
+      questionCap: session.question_cap ?? (isPaidPlan ? null : 2),
       interviewerCap: session.interviewer_cap ?? (isPaidPlan ? 10 : 4),
       dailyCap: session.daily_cap ?? (isPaidPlan ? 15 : 5),
       isPaidPlan,
