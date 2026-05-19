@@ -623,7 +623,7 @@ Return ONLY the JSON. No text before or after. Start with { end with }.`;
             risn_tool: 'interviewer_profiles_fallback',
             model: 'claude-sonnet-4-5',
             risn_email,
-            risn_unlimited: false, // Don't count against daily cap
+            risn_unlimited: false, // Don't count against daily cap — fallback call
             max_tokens: 800,
             messages: [{ role: 'user', content: buildCompanyFallbackPrompt(handles[0], company, role) }]
           })
