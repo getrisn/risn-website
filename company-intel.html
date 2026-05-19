@@ -426,6 +426,7 @@ Return a JSON object with exactly these keys:
   "salaryMid": "e.g. $105,000",
   "salaryMax": "e.g. $130,000",
   "salaryNote": "1-2 sentences on salary negotiation context",
+  "benefits": "3-5 sentences on publicly known benefits — PTO/vacation days, 401k matching, health insurance quality, parental leave, remote work policy, equity/RSUs, notable perks. Be specific with numbers where publicly known (e.g. '15 days PTO', '4% 401k match'). If specific details are not publicly available, describe general reputation.",
   "insiderTip": "One powerful insider insight most candidates would not know"
 }
 
@@ -640,6 +641,13 @@ CRITICAL: Only report what you actually find. Never fabricate. If you cannot fin
         <p style="font-size:13px;color:var(--muted);margin-top:12px;">${d.salaryNote || ''}</p>
       </div>
 
+      <div class="intel-section">
+        <div class="intel-section-header">
+          <div class="intel-icon">🎁</div>
+          <p class="intel-section-title">Benefits & perks</p>
+        </div>
+        <p class="intel-content">${d.benefits || 'Benefits information not publicly available for this company.'}</p>
+      </div>
       <div class="intel-section" style="background:var(--black);border-radius:${(d.interviewers && d.interviewers.length > 0) ? '0' : '0 0 16px 16px'};">
         <div class="intel-section-header">
           <div class="intel-icon" style="background:#1a1a1a;font-size:18px;">✦</div>
@@ -658,6 +666,7 @@ CRITICAL: Only report what you actually find. Never fabricate. If you cannot fin
       `SMART QUESTIONS TO ASK\n${(d.smartQuestions || []).map((q, i) => `${i + 1}. ${q}`).join('\n')}\n\n` +
       `THINGS TO BE AWARE OF\n${(d.redFlags || []).map((f, i) => `${i + 1}. ${f}`).join('\n')}\n\n` +
       `SALARY RANGE\nEntry: ${d.salaryMin} | Mid: ${d.salaryMid} | Senior: ${d.salaryMax}\n${d.salaryNote}\n\n` +
+      `BENEFITS & PERKS\n${d.benefits || "Not available"}\n\n` +
       `INSIDER TIP\n${d.insiderTip}`;
 
     document.getElementById('dossier').classList.remove('hidden');
