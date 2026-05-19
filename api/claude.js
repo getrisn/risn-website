@@ -121,8 +121,6 @@ export default async function handler(req, res) {
   }
 
   // Layer 3: Daily usage cap and tool-specific limits
-  const { risn_plan, risn_session_id, risn_feedback_count } = req.body;
-
   // Feedback cap — max 3 per session
   if (risn_tool === 'interview_feedback' && risn_feedback_count >= FEEDBACK_PER_SESSION_CAP) {
     return res.status(429).json({ error: 'You have reached the feedback limit for this session (3 per session). Start a new session to get more feedback.' });
