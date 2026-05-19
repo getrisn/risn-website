@@ -7,14 +7,15 @@
 // To create personalized codes, add them explicitly e.g. 'GETRISN1-ELI'
 const VALID_CODES = {
   // Base codes
-  'GETRISN1': { sessions: 1, days: null, type: 'sessions' },
-  'GETRISN3': { sessions: 4, days: null, type: 'sessions' },
-  'GETRISN100': { sessions: null, days: 7, type: 'unlimited' },
-  'GETRISNUNLIMITED': { sessions: null, days: 30, type: 'unlimited' },
+  'GETRISN1': { sessions: 1, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null, questionCap: 12, feedbackCap: 2 },
+  'GETRISN5': { sessions: 5, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null, questionCap: 12, feedbackCap: 2 },
+  'GETRISNWEEK': { sessions: null, days: 7, type: 'unlimited', interviewerCap: 2, dailyCap: 5, questionCap: 12, feedbackCap: 2 },
+  'GETRISNUNLIMITED': { sessions: null, days: 30, type: 'unlimited', interviewerCap: 4, dailyCap: 5, questionCap: 12, feedbackCap: 2 },
   // Add personalized codes below as needed:
-  // 'GETRISN1-ELI': { sessions: 1, days: null, type: 'sessions' },
-  // 'GETRISN3-KIM': { sessions: 3, days: null, type: 'sessions' },
-  // 'GETRISNUNLIMITED-JUAN': { sessions: null, days: 30, type: 'unlimited' },
+  // 'GETRISN1-ELI': { sessions: 1, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null },
+  // 'GETRISN5-KIM': { sessions: 5, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null },
+  // 'GETRISNWEEK-JUAN': { sessions: null, days: 7, type: 'unlimited', interviewerCap: 2, dailyCap: 5, questionCap: 12, feedbackCap: 2 },
+  // 'GETRISNUNLIMITED-JUAN': { sessions: null, days: 30, type: 'unlimited', interviewerCap: 4, dailyCap: 5, questionCap: 12, feedbackCap: 2 },
 };
 
 function parseCode(code) {
@@ -130,8 +131,15 @@ export default async function handler(req, res) {
       expiresAt,
       email: emailKey,
       sessionId,
+      interviewerCap: access.interviewerCap || 1,
+      dailyCap: access.dailyCap || null,
+      questionCap: access.questionCap || null,
+      feedbackCap: access.feedbackCap || 3,
+      isPaidPlan: false,
       message: access.type === 'sessions'
         ? `Code accepted! You have ${access.sessions} session${access.sessions > 1 ? 's' : ''} to use.`
+        : access.days === 7
+        ? `Code accepted! You have 1 week of access — up to ${access.dailyCap} sessions per day.`
         : `Code accepted! You have unlimited access for ${access.days} days.`
     });
 
