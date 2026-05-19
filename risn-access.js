@@ -39,6 +39,16 @@ async function getRisnToken() {
 // Expose globally so tool pages can use it
 window.getRisnToken = getRisnToken;
 
+// Get plan caps stored during code validation
+window.getRisnPlanCaps = function() {
+  try {
+    const raw = sessionStorage.getItem('risn_plan_caps');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  // Defaults for paid unlimited plan
+  return { feedbackCap: 3, questionCap: null, interviewerCap: 10, dailyCap: 15, isPaidPlan: true, plan: 'paid' };
+};
+
 // ─── Email Storage ────────────────────────────────────────────────────────────
 
 function getSavedEmail() {
@@ -133,7 +143,7 @@ function injectModal() {
               <div style="position:absolute;top:-10px;left:12px;background:#7C3AFF;color:white;font-size:10px;font-weight:700;padding:2px 10px;border-radius:20px;">MOST POPULAR</div>
               <div>
                 <p style="font-size:14px;font-weight:700;color:#0a0a0a;">Starter pack</p>
-                <p style="font-size:12px;color:#888;">4 sessions — mix any tools</p>
+                <p style="font-size:12px;color:#888;">5 sessions — mix any tools</p>
               </div>
               <a href="#" id="payBtn3" style="background:#7C3AFF;color:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 18px;border-radius:6px;text-decoration:none;white-space:nowrap;">$9.99</a>
             </div>
@@ -301,6 +311,20 @@ async function validateCode() {
     }
 
     saveEmail(email);
+
+    // Store plan caps for tools to read
+    try {
+      const planCaps = {
+        feedbackCap: data.feedbackCap || 3,
+        questionCap: data.questionCap || null,
+        interviewerCap: data.interviewerCap || 10,
+        dailyCap: data.dailyCap || 15,
+        isPaidPlan: data.isPaidPlan || false,
+        plan: data.days === 7 ? 'week' : data.days === 30 && !data.isPaidPlan ? 'promo_month' : data.isPaidPlan ? 'paid' : 'sessions'
+      };
+      sessionStorage.setItem('risn_plan_caps', JSON.stringify(planCaps));
+    } catch(e) {}
+
     successEl.textContent = data.message;
     successEl.style.display = 'block';
     btn.textContent = 'Apply Code';
