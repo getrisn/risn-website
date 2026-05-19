@@ -424,9 +424,9 @@
 
   // Read plan caps — set at code validation time
   function getPlanCaps() {
-    return window.getRisnPlanCaps ? window.getRisnPlanCaps() : { feedbackCap: 3, questionCap: null };
+    return window.getRisnPlanCaps ? window.getRisnPlanCaps() : { feedbackCap: 6, questionCap: null };
   }
-  function FEEDBACK_CAP() { return getPlanCaps().feedbackCap || 3; }
+  function FEEDBACK_CAP() { return getPlanCaps().feedbackCap || 6; }
   function QUESTION_CAP() { return getPlanCaps().questionCap || null; } // null = use default 6
 
   function selectType(el, type) {
