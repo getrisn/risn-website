@@ -203,13 +203,18 @@ export default async function handler(req, res) {
 
   // ── Layer 4: Daily + monthly usage caps ───────────────────────────────────
   if (risn_email && risn_unlimited) {
-    const usageCheck = await checkAndLogUsage(
-      risn_email,
-      risn_tool || 'unknown',
-      risn_plan || 'paid'
-    );
-    if (!usageCheck.allowed) {
-      return res.status(429).json({ error: usageCheck.message });
+    try {
+      const usageCheck = await checkAndLogUsage(
+        risn_email,
+        risn_tool || 'unknown',
+        risn_plan || 'paid'
+      );
+      if (!usageCheck.allowed) {
+        return res.status(429).json({ error: usageCheck.message });
+      }
+    } catch (usageErr) {
+      // Log but don't block — never fail a legitimate request due to usage tracking error
+      console.error('Usage tracking error:', usageErr);
     }
   }
 
