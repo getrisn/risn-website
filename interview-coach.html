@@ -517,7 +517,8 @@ Return ONLY a raw JSON array. Start your response with [ and end with ]. No code
       });
 
       const data = await response.json();
-      if (data.error) throw new Error(data.error.message);
+      if (data.error) throw new Error(typeof data.error === 'string' ? data.error : data.error.message || JSON.stringify(data.error));
+      if (!data.content || !data.content[0]) throw new Error('Empty response from API');
 
       let rawText = data.content[0].text.trim();
       // Handle Claude wrapping JSON in code fences or adding preamble text
@@ -541,11 +542,12 @@ Return ONLY a raw JSON array. Start your response with [ and end with ]. No code
       renderSession(job, company);
 
     } catch (err) {
+      console.error('Interview coach error:', err.message, err);
       document.getElementById('generating').classList.add('hidden');
       document.getElementById('formCard').classList.remove('hidden');
       const eb = document.getElementById('errorBox');
       eb.classList.remove('hidden');
-      eb.textContent = 'Something went wrong. Please try again or contact risewithrisn@gmail.com';
+      eb.textContent = 'Something went wrong: ' + err.message + '. Please try again or contact risewithrisn@gmail.com';
     }
   }
 
