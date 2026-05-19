@@ -176,7 +176,12 @@ export default async function handler(req, res) {
         code: codeKey,
         type: access.type,
         sessions_remaining: access.sessions,
-        expires_at: expiresAt
+        expires_at: expiresAt,
+        feedback_cap: access.feedbackCap || 2,
+        question_cap: access.questionCap || 12,
+        interviewer_cap: access.interviewerCap || 1,
+        daily_cap: access.dailyCap || null,
+        days: access.days || null
       })
     });
 
