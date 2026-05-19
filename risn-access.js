@@ -46,7 +46,7 @@ window.getRisnPlanCaps = function() {
     if (raw) return JSON.parse(raw);
   } catch(e) {}
   // Defaults for paid unlimited plan
-  return { feedbackCap: 3, questionCap: null, interviewerCap: 10, dailyCap: 15, isPaidPlan: true, plan: 'paid' };
+  return { feedbackCap: 6, questionCap: null, interviewerCap: 10, dailyCap: 15, isPaidPlan: true, plan: 'paid' };
 };
 
 // ─── Email Storage ────────────────────────────────────────────────────────────
@@ -160,7 +160,7 @@ function injectModal() {
 
         <!-- Code Tab -->
         <div id="risnCodeTab" style="padding:1.5rem 1.75rem;display:none;">
-          <p style="font-size:13px;color:#888;margin-bottom:1.25rem;">Enter your email and promo code. Each code can only be used once per email address.</p>
+          <p style="font-size:13px;color:#888;margin-bottom:1.25rem;">Enter your email and promo code to unlock access.</p>
           <div style="margin-bottom:1rem;">
             <label style="display:block;font-size:13px;font-weight:500;color:#0a0a0a;margin-bottom:6px;">Email address</label>
             <input type="email" id="risnCodeEmail" placeholder="your@email.com" style="width:100%;padding:10px 14px;border:1px solid #e8e8e8;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;" />
@@ -328,7 +328,7 @@ async function validateCode() {
     // Store plan caps for tools to read
     try {
       const planCaps = {
-        feedbackCap: data.feedbackCap || 3,
+        feedbackCap: data.feedbackCap || (data.isPaidPlan ? 6 : 3),
         questionCap: data.questionCap || null,
         interviewerCap: data.interviewerCap || 10,
         dailyCap: data.dailyCap || 15,
