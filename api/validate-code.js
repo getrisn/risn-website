@@ -7,23 +7,23 @@
 // To add personalized codes copy a line and generate a new code at the bottom
 const VALID_CODES = {
   // Single use (1 session, 2 feedbacks, 12 questions)
-  'RISN-C937-HZM6-KCZK': { sessions: 1, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null, questionCap: 12, feedbackCap: 2 },
-  'RISN-SE3J-3PFA-EDD9': { sessions: 1, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null, questionCap: 12, feedbackCap: 2 },
+  'RISN-C937-HZM6-KCZK': { sessions: 1, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null, questionCap: 2, feedbackCap: 2 },
+  'RISN-SE3J-3PFA-EDD9': { sessions: 1, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null, questionCap: 2, feedbackCap: 2 },
 
   // Starter pack (5 sessions, 2 feedbacks, 12 questions)
-  'RISN-AT28-UW4G-SX64': { sessions: 5, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null, questionCap: 12, feedbackCap: 2 },
-  'RISN-YRVS-FUX3-RCS8': { sessions: 5, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null, questionCap: 12, feedbackCap: 2 },
+  'RISN-AT28-UW4G-SX64': { sessions: 5, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null, questionCap: 2, feedbackCap: 2 },
+  'RISN-YRVS-FUX3-RCS8': { sessions: 5, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null, questionCap: 2, feedbackCap: 2 },
 
   // Week access (7 days, 5/day, 2 interviewers, 2 feedbacks, 12 questions)
-  'RISN-WWMH-CK5T-KJR6': { sessions: null, days: 7, type: 'unlimited', interviewerCap: 2, dailyCap: 5, questionCap: 12, feedbackCap: 2 },
-  'RISN-5M4Y-YRSM-4PNS': { sessions: null, days: 7, type: 'unlimited', interviewerCap: 2, dailyCap: 5, questionCap: 12, feedbackCap: 2 },
+  'RISN-WWMH-CK5T-KJR6': { sessions: null, days: 7, type: 'unlimited', interviewerCap: 2, dailyCap: 5, questionCap: 2, feedbackCap: 2 },
+  'RISN-5M4Y-YRSM-4PNS': { sessions: null, days: 7, type: 'unlimited', interviewerCap: 2, dailyCap: 5, questionCap: 2, feedbackCap: 2 },
 
   // Month access (30 days, 5/day, 4 interviewers, 3 feedbacks, 12 questions)
-  'RISN-QWKW-58TN-VX8F': { sessions: null, days: 30, type: 'unlimited', interviewerCap: 4, dailyCap: 5, questionCap: 12, feedbackCap: 3 },
-  'RISN-M8UL-F9YL-5CDT': { sessions: null, days: 30, type: 'unlimited', interviewerCap: 4, dailyCap: 5, questionCap: 12, feedbackCap: 3 },
+  'RISN-QWKW-58TN-VX8F': { sessions: null, days: 30, type: 'unlimited', interviewerCap: 4, dailyCap: 5, questionCap: 2, feedbackCap: 3 },
+  'RISN-M8UL-F9YL-5CDT': { sessions: null, days: 30, type: 'unlimited', interviewerCap: 4, dailyCap: 5, questionCap: 2, feedbackCap: 3 },
 
   // Add personalized codes below:
-  // 'RISN-XXXX-XXXX-XXXX': { sessions: 1, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null, questionCap: 12, feedbackCap: 2 },
+  // 'RISN-XXXX-XXXX-XXXX': { sessions: 1, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null, questionCap: 2, feedbackCap: 2 },
 };
 
 function parseCode(code) {
