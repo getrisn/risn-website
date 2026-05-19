@@ -10,7 +10,7 @@ const VALID_CODES = {
   'GETRISN1': { sessions: 1, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null, questionCap: 12, feedbackCap: 2 },
   'GETRISN5': { sessions: 5, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null, questionCap: 12, feedbackCap: 2 },
   'GETRISNWEEK': { sessions: null, days: 7, type: 'unlimited', interviewerCap: 2, dailyCap: 5, questionCap: 12, feedbackCap: 2 },
-  'GETRISNUNLIMITED': { sessions: null, days: 30, type: 'unlimited', interviewerCap: 4, dailyCap: 5, questionCap: 12, feedbackCap: 2 },
+  'GETRISNUNLIMITED': { sessions: null, days: 30, type: 'unlimited', interviewerCap: 4, dailyCap: 5, questionCap: 12, feedbackCap: 3 },
   // Add personalized codes below as needed:
   // 'GETRISN1-ELI': { sessions: 1, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null },
   // 'GETRISN5-KIM': { sessions: 5, days: null, type: 'sessions', interviewerCap: 1, dailyCap: null },
@@ -80,7 +80,7 @@ export default async function handler(req, res) {
     if (existing && existing.length > 0) {
       return res.status(200).json({
         valid: false,
-        error: 'This code has already been used with this email address. Each code can only be used once per email.'
+        error: 'This code is no longer valid. Please contact us at risewithrisn@gmail.com if you need assistance.'
       });
     }
 
