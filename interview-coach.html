@@ -508,6 +508,7 @@ Return ONLY a raw JSON array. Start your response with [ and end with ]. No code
         body: JSON.stringify({
           risn_secret: _risnToken,
           risn_tool: 'interview',
+          risn_plan: (function(){ try { const c = JSON.parse(sessionStorage.getItem('risn_plan_caps') || '{}'); return c.plan || 'paid'; } catch(e) { return 'paid'; } })(),
           model: 'claude-sonnet-4-5',
           risn_email: (function(){ try { return localStorage.getItem('risn_user_email') || ''; } catch(e) { return ''; } })(),
           risn_unlimited: (function(){ try { const s = sessionStorage.getItem('risn_access'); if(!s) return false; const d = JSON.parse(s); return d && d.type === 'unlimited'; } catch(e) { return false; } })(),
