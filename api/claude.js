@@ -8,7 +8,6 @@ const APPROVED_MODELS = {
   'claude-haiku-4-5-20251001': true,
 };
 const DEFAULT_MODEL = 'claude-sonnet-4-5';
-const UNLIMITED_DAILY_CAP = 15;
 
 // ─── IP Rate Limiter ──────────────────────────────────────────────────────────
 const ipRequests = new Map();
@@ -25,7 +24,7 @@ function checkIPLimit(ip) {
 }
 
 // ─── Daily Usage Cap (Supabase) ───────────────────────────────────────────────
-async function checkAndLogUsage(email, tool) {
+async function checkAndLogUsage(email, tool, dailyCap = PAID_DAILY_CAP, interviewerCap = PAID_INTERVIEWER_MONTHLY_CAP) {
   if (!email) return { allowed: true };
 
   const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -51,10 +50,10 @@ async function checkAndLogUsage(email, tool) {
     // Calculate total usage today across all tools
     const totalToday = rows.reduce((sum, r) => sum + (r.count || 0), 0);
 
-    if (totalToday >= UNLIMITED_DAILY_CAP) {
+    if (totalToday >= dailyCap) {
       return {
         allowed: false,
-        message: `Daily limit of ${UNLIMITED_DAILY_CAP} generations reached. Resets at midnight. This keeps RISN fast and fair for everyone.`
+        message: `Daily limit of ${dailyCap} generations reached. Resets at midnight. This keeps RISN fast and fair for everyone.`
       };
     }
 
@@ -109,7 +108,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   // Layer 1: Request signing
-  const { risn_email, risn_unlimited, risn_web_search, risn_secret, risn_tool, ...claudeBody } = req.body;
+  const { risn_email, risn_unlimited, risn_web_search, risn_secret, risn_tool, risn_plan, risn_session_id, risn_feedback_count, ...claudeBody } = req.body;
   const expectedSecret = process.env.RISN_API_SECRET;
   if (expectedSecret && (!risn_secret || risn_secret !== expectedSecret)) {
     return res.status(403).json({ error: 'Unauthorized' });
@@ -121,9 +120,26 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'Too many requests. Please slow down.' });
   }
 
-  // Layer 3: Daily usage cap for unlimited subscribers
+  // Layer 3: Daily usage cap and tool-specific limits
+  const { risn_plan, risn_session_id, risn_feedback_count } = req.body;
+
+  // Feedback cap — max 3 per session
+  if (risn_tool === 'interview_feedback' && risn_feedback_count >= FEEDBACK_PER_SESSION_CAP) {
+    return res.status(429).json({ error: 'You have reached the feedback limit for this session (3 per session). Start a new session to get more feedback.' });
+  }
+
   if (risn_email && risn_unlimited) {
-    const usageCheck = await checkAndLogUsage(risn_email, risn_tool || 'unknown');
+    // Determine correct daily cap based on plan
+    const dailyCap = risn_plan === 'week' ? PROMO_WEEK_DAILY_CAP
+      : risn_plan === 'promo_month' ? PROMO_MONTH_DAILY_CAP
+      : PAID_DAILY_CAP;
+
+    // Determine interviewer monthly cap based on plan
+    const interviewerCap = risn_plan === 'week' ? PROMO_WEEK_INTERVIEWER_CAP
+      : risn_plan === 'promo_month' ? PROMO_MONTH_INTERVIEWER_CAP
+      : PAID_INTERVIEWER_MONTHLY_CAP;
+
+    const usageCheck = await checkAndLogUsage(risn_email, risn_tool || 'unknown', dailyCap, interviewerCap);
     if (!usageCheck.allowed) {
       return res.status(429).json({ error: usageCheck.message });
     }
