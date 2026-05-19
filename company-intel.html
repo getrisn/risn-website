@@ -374,8 +374,6 @@
   let briefingText = '';
   let briefingData = null;
 
-  let interviewConfirmed = false;
-
   function toggleInterviewSection(show) {
     interviewConfirmed = show;
     document.getElementById('interviewerFields').style.display = show ? 'block' : 'none';
@@ -399,16 +397,7 @@
   }
 
   function getLinkedInHandles() {
-    const handles = [];
-    ['li1', 'li2', 'li3'].forEach(id => {
-      const val = document.getElementById(id).value.trim();
-      if (val) {
-        // Normalize — extract just the handle
-        const clean = val.replace(/https?:\/\/(www\.)?linkedin\.com\/in\//i, '').replace(/\/$/, '').trim();
-        if (clean) handles.push(clean);
-      }
-    });
-    return handles;
+    return []; // LinkedIn research moved to standalone Interviewer Profiles tool
   }
 
   function buildCompanyPrompt() {
@@ -483,10 +472,7 @@ CRITICAL: Only report what you actually find. Never fabricate. If you cannot fin
     document.getElementById('backLink').classList.add('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Check both the confirmed flag AND whether handles were actually entered
-    const rawHandles = getLinkedInHandles();
-    const handles = (interviewConfirmed || rawHandles.length > 0) ? rawHandles : [];
-    console.log('Interview confirmed:', interviewConfirmed, 'Handles found:', handles);
+    const handles = []; // LinkedIn research available via Interviewer Profiles tool
     const risn_email = (function(){ try { return localStorage.getItem('risn_user_email') || ''; } catch(e) { return ''; } })();
     const risn_unlimited = (function(){ try { const s = sessionStorage.getItem('risn_access'); if(!s) return false; const d = JSON.parse(s); return d && d.type === 'unlimited'; } catch(e) { return false; } })();
 
