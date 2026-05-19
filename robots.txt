@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://getrisn.com/sitemap.xml
+
+# Block API endpoints from crawling
+Disallow: /api/
