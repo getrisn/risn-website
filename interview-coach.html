@@ -537,7 +537,7 @@ Return ONLY a raw JSON array. Start your response with [ and end with ]. No code
       newQuestions.forEach(q => allAskedQuestions.push(q.question));
       questions = newQuestions;
       answeredCount = 0;
-      feedbackCount = 0; // Reset feedback count each round
+      // Note: feedbackCount intentionally NOT reset here — persists across all rounds in a session
 
       document.getElementById('generating').classList.add('hidden');
       renderSession(job, company);
