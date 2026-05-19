@@ -519,8 +519,16 @@ Return only the JSON array, no other text, no markdown code blocks.`;
       const data = await response.json();
       if (data.error) throw new Error(data.error.message);
 
-      let text = data.content[0].text.trim();
-      text = text.replace(/```json|```/g, '').trim();
+      let rawText = data.content[0].text.trim();
+      // Handle Claude wrapping JSON in code fences or adding preamble text
+      let text = rawText;
+      const fenceMatch = rawText.match(/```(?:json)?\s*([\s\S]*?)```/);
+      if (fenceMatch) {
+        text = fenceMatch[1].trim();
+      } else {
+        const jsonMatch = rawText.match(/\[[\s\S]*\]/);
+        if (jsonMatch) text = jsonMatch[0];
+      }
       const newQuestions = JSON.parse(text);
 
       // Track all asked questions to prevent future repeats
