@@ -216,7 +216,7 @@
     <h1>Rise.<br><span>Don't just<br>apply.</span></h1>
     <p class="hero-sub">AI-powered resumes, cover letters, interview coaching, and company research — everything you need to land the job, in one place.</p>
     <div class="hero-actions">
-      <a href="#pricing" class="btn-primary">Start for $4.99</a>
+      <button onclick="openRisnModalFromPage('single')" class="btn-primary">Start for $4.99</button>
       <a href="#how-it-works" class="btn-ghost">See how it works</a>
     </div>
     <p class="hero-social">Follow us <a href="https://tiktok.com/@risewithrisn" target="_blank">@risewithrisn</a></p>
@@ -395,7 +395,7 @@
           <li><span class="check">✓</span> Choose from all 5 RISN tools</li>
           <li><span class="check">✓</span> Download your results</li>
         </ul>
-        <a href="https://buy.stripe.com/14A7sKeIG0eY6sv02s2sM00" target="_blank" class="price-btn">Get started</a>
+        <button onclick="openRisnModalFromPage('single')" class="price-btn">Get started</button>
       </div>
       <div class="price-card featured">
         <span class="price-badge">Most popular</span>
@@ -407,7 +407,7 @@
           <li><span class="check">✓</span> All 5 RISN tools available</li>
           <li><span class="check">✓</span> Download your results</li>
         </ul>
-        <a href="https://buy.stripe.com/8x228qasqf9SaIL7uU2sM01" target="_blank" class="price-btn purple">Get started</a>
+        <button onclick="openRisnModalFromPage('starter')" class="price-btn purple">Get started</button>
       </div>
       <div class="price-card">
         <p class="price-name">Unlimited</p>
@@ -418,7 +418,7 @@
           <li><span class="check">✓</span> All 5 RISN tools included</li>
           <li><span class="check">✓</span> 10 interviewer profiles per month</li>
         </ul>
-        <a href="https://buy.stripe.com/cNidR87ge6DmeZ1bLa2sM02" target="_blank" class="price-btn">Get started</a>
+        <button onclick="openRisnModalFromPage('unlimited')" class="price-btn">Get started</button>
       </div>
     </div>
   </section>
@@ -527,10 +527,31 @@
 
   <div class="sticky-cta" id="stickyCta">
     <p class="sticky-cta-text"><strong>RISN AI</strong> — Build your resume in minutes</p>
-    <a href="https://buy.stripe.com/14A7sKeIG0eY6sv02s2sM00" target="_blank" class="sticky-btn">Start for $4.99</a>
+    <button onclick="openRisnModalFromPage('single')" class="sticky-btn">Start for $4.99</button>
   </div>
 
+  <script src="/risn-access.js"></script>
   <script>
+    function openRisnModalFromPage(tier) {
+      // Pre-select the right tier in the modal, then open it
+      if (typeof openRisnModal === 'function') {
+        // Set a flag so modal knows which tier was selected
+        window._risnSelectedTier = tier;
+        openRisnModal(function() {
+          // After successful code entry, redirect to first tool
+          window.location.href = '/resume-builder.html';
+        });
+        // Pre-click the pay tab and scroll to the right tier
+        setTimeout(() => {
+          if (tier === 'unlimited') {
+            document.getElementById('payBtnUnlimited')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          } else if (tier === 'starter') {
+            document.getElementById('payBtn3')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 200);
+      }
+    }
+
     function toggleFaq(btn) {
       const answer = btn.nextElementSibling;
       const icon = btn.querySelector('.faq-icon');
