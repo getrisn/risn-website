@@ -185,10 +185,16 @@ export default async function handler(req, res) {
     return res.status(429).json({ error: 'Too many requests. Please slow down.' });
   }
 
-  // ── Layer 3: Feedback cap (server-side) ───────────────────────────────────
+  // ── Layer 3: Feedback cap (server-side, plan-aware) ──────────────────────
   if (risn_tool === 'interview_feedback') {
     const feedbackCount = parseInt(risn_feedback_count) || 0;
-    if (feedbackCount >= FEEDBACK_PER_SESSION_CAP) {
+    // Cap based on plan:
+    // paid = 6, promo_month = 3, week/sessions = 2
+    const feedbackCap = (risn_plan === 'paid') ? 6
+      : (risn_plan === 'promo_month') ? 3
+      : 2; // week, sessions, or unknown = 2
+
+    if (feedbackCount >= feedbackCap) {
       return res.status(429).json({
         error: `You've reached the feedback limit for this session. Start a new session for more feedback.`
       });
