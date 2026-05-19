@@ -330,7 +330,7 @@
   <div id="formCard" class="card">
     <p class="card-step">Interview Coach</p>
     <h1 class="card-title">Prepare to Ace It</h1>
-    <p class="card-sub">Tell us about the role and we'll generate up to 18 tailored interview questions across 3 free rounds — each with detailed AI coaching on exactly how to answer it. Practice your answers and get instant AI feedback.</p>
+    <p class="card-sub">Tell us about the role and we'll generate up to 18 tailored interview questions across 3 free rounds — each with detailed AI coaching on exactly how to answer it. Practice your answers and get AI feedback on up to 3 answers per round.</p>
 
     <div class="field-row">
       <div class="field-group">
@@ -377,8 +377,8 @@
     </div>
 
     <div class="field-group">
-      <label for="jobDesc">Job description <span class="label-optional">(optional — generates more targeted questions)</span></label>
-      <textarea id="jobDesc" style="min-height:90px;" placeholder="Paste the job posting here for hyper-targeted questions specific to this exact role..."></textarea>
+      <label for="jobDesc">Job description <span style="font-size:12px;background:#7C3AFF;color:white;padding:2px 8px;border-radius:10px;margin-left:4px;font-weight:500;">Key for best results</span></label>
+      <textarea id="jobDesc" style="min-height:90px;" placeholder="Paste the full job description here — this is what transforms generic interview questions into questions YOU will actually be asked in this specific interview."></textarea>
     </div>
 
     <button class="btn-generate" onclick="risnGate(startSession)">Start My Interview Session ✦</button>
@@ -420,6 +420,14 @@
   let allAskedQuestions = []; // tracks all questions across rounds to prevent repeats
   let answeredCount = 0;
   let roundNumber = 0; // 0 = not started, 1 = first round, 2 = second (free), 3+ = paid
+  let feedbackCount = 0; // tracks feedback requests per session
+
+  // Read plan caps — set at code validation time
+  function getPlanCaps() {
+    return window.getRisnPlanCaps ? window.getRisnPlanCaps() : { feedbackCap: 3, questionCap: null };
+  }
+  function FEEDBACK_CAP() { return getPlanCaps().feedbackCap || 3; }
+  function QUESTION_CAP() { return getPlanCaps().questionCap || null; } // null = use default 6
 
   function selectType(el, type) {
     document.querySelectorAll('.type-option').forEach(o => o.classList.remove('selected'));
@@ -438,7 +446,8 @@
       ? '\n\nDO NOT repeat any of these previously asked questions:\n' + excludeQuestions.map((q, i) => (i+1) + '. ' + q).join('\n')
       : '';
 
-    return `You are an expert interview coach. Generate exactly 6 interview questions for the following candidate, along with detailed coaching tips for each.
+    const qCap = QUESTION_CAP() || 6;
+    return `You are an expert interview coach. Generate exactly ${qCap} interview questions for the following candidate, along with detailed coaching tips for each.
 
 ROLE: ${job} at ${company}
 EXPERIENCE LEVEL: ${exp}
@@ -446,7 +455,7 @@ INTERVIEW TYPE: ${selectedType}
 ${bg ? 'CANDIDATE BACKGROUND: ' + bg : ''}
 ${jd ? 'JOB DESCRIPTION: ' + jd : ''}${excludeSection}
 
-Return your response as a valid JSON array with exactly 6 objects. Each object must have these exact keys:
+Return your response as a valid JSON array with exactly ${qCap} objects. Each object must have these exact keys:
 - "question": the interview question (string)
 - "type": one of "Behavioral", "Technical", "Situational", or "Culture Fit" (string)
 - "tip": 2-3 sentences of coaching advice on how to answer this specific question well (string)
@@ -518,6 +527,7 @@ Return only the JSON array, no other text, no markdown code blocks.`;
       newQuestions.forEach(q => allAskedQuestions.push(q.question));
       questions = newQuestions;
       answeredCount = 0;
+      feedbackCount = 0; // Reset feedback count each round
 
       document.getElementById('generating').classList.add('hidden');
       renderSession(job, company);
@@ -617,6 +627,19 @@ Return only the JSON array, no other text, no markdown code blocks.`;
       return;
     }
 
+    if (feedbackCount >= FEEDBACK_CAP()) {
+      const btn = document.getElementById('fbtn' + i);
+      btn.textContent = 'Feedback limit reached';
+      btn.disabled = true;
+      const feedbackDiv = document.getElementById('feedback' + i);
+      feedbackDiv.classList.remove('hidden');
+      feedbackDiv.className = 'feedback-box';
+      feedbackDiv.style.background = '#FFFBEB';
+      feedbackDiv.style.borderColor = '#FDE68A';
+      feedbackDiv.innerHTML = '<p class="feedback-label" style="color:#F59E0B;">Session limit reached</p><p class="feedback-text" style="color:#92400E;">You've used all 3 feedback requests for this session. Start a new round to get more feedback.</p>';
+      return;
+    }
+
     const btn = document.getElementById('fbtn' + i);
     const feedbackDiv = document.getElementById('feedback' + i);
     btn.disabled = true;
@@ -661,12 +684,15 @@ Give specific, constructive feedback in 3-4 sentences. Be direct and honest. Poi
         <p class="feedback-label">AI Coach Feedback</p>
         <p class="feedback-text">${data.content[0].text}</p>`;
 
+      feedbackCount++;
       document.getElementById('qnum' + i).classList.add('answered');
       answeredCount++;
       updateProgress();
 
-      btn.textContent = 'Get feedback again ↺';
-      btn.disabled = false;
+      // Update feedback button to show remaining count
+      const remaining = FEEDBACK_CAP() - feedbackCount;
+      btn.textContent = remaining > 0 ? `Get feedback again ↺ (${remaining} left)` : 'Feedback limit reached';
+      btn.disabled = feedbackCount >= FEEDBACK_CAP();
 
     } catch (err) {
       feedbackDiv.innerHTML = `<p class="feedback-text" style="color:#791F1F;">Something went wrong. Please try again.</p>`;
@@ -690,6 +716,7 @@ Give specific, constructive feedback in 3-4 sentences. Be direct and honest. Poi
     allAskedQuestions = [];
     answeredCount = 0;
     roundNumber = 0;
+    feedbackCount = 0;
     document.getElementById('session').classList.add('hidden');
     document.getElementById('questionsWrap').innerHTML = '';
     document.getElementById('formCard').classList.remove('hidden');
