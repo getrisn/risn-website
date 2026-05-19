@@ -135,7 +135,7 @@ function injectModal() {
             <div style="border:0.5px solid #e8e8e8;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;">
               <div>
                 <p style="font-size:14px;font-weight:700;color:#0a0a0a;">Single use</p>
-                <p style="font-size:12px;color:#888;">1 session — any tool</p>
+                <p style="font-size:12px;color:#888;">1 session — any of our 5 tools</p>
               </div>
               <a href="https://buy.stripe.com/14A7sKeIG0eY6sv02s2sM00" id="payBtn1" target="_blank" style="background:#7C3AFF;color:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 18px;border-radius:6px;text-decoration:none;white-space:nowrap;">$4.99</a>
             </div>
@@ -150,7 +150,7 @@ function injectModal() {
             <div style="border:0.5px solid #e8e8e8;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;">
               <div>
                 <p style="font-size:14px;font-weight:700;color:#0a0a0a;">Unlimited</p>
-                <p style="font-size:12px;color:#888;">All tools, all month</p>
+                <p style="font-size:12px;color:#888;">All 5 tools — up to 15 sessions/day</p>
               </div>
               <a href="https://buy.stripe.com/cNidR87ge6DmeZ1bLa2sM02" id="payBtnUnlimited" target="_blank" style="background:#7C3AFF;color:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 18px;border-radius:6px;text-decoration:none;white-space:nowrap;">$19.99/mo</a>
             </div>
