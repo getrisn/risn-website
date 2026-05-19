@@ -636,7 +636,7 @@ Return only the JSON array, no other text, no markdown code blocks.`;
       feedbackDiv.className = 'feedback-box';
       feedbackDiv.style.background = '#FFFBEB';
       feedbackDiv.style.borderColor = '#FDE68A';
-      feedbackDiv.innerHTML = '<p class="feedback-label" style="color:#F59E0B;">Session limit reached</p><p class="feedback-text" style="color:#92400E;">You've used all 3 feedback requests for this session. Start a new round to get more feedback.</p>';
+      feedbackDiv.innerHTML = `<p class="feedback-label" style="color:#F59E0B;">Session limit reached</p><p class="feedback-text" style="color:#92400E;">You've used all ${FEEDBACK_CAP()} feedback requests for this round. Start a new round to get more feedback.</p>`;
       return;
     }
 
