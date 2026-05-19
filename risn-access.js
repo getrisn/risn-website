@@ -137,7 +137,7 @@ function injectModal() {
                 <p style="font-size:14px;font-weight:700;color:#0a0a0a;">Single use</p>
                 <p style="font-size:12px;color:#888;">1 session — any tool</p>
               </div>
-              <a href="#" id="payBtn1" style="background:#7C3AFF;color:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 18px;border-radius:6px;text-decoration:none;white-space:nowrap;">$4.99</a>
+              <a href="https://buy.stripe.com/14A7sKeIG0eY6sv02s2sM00" id="payBtn1" target="_blank" style="background:#7C3AFF;color:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 18px;border-radius:6px;text-decoration:none;white-space:nowrap;">$4.99</a>
             </div>
             <div style="border:2px solid #7C3AFF;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;position:relative;">
               <div style="position:absolute;top:-10px;left:12px;background:#7C3AFF;color:white;font-size:10px;font-weight:700;padding:2px 10px;border-radius:20px;">MOST POPULAR</div>
@@ -145,14 +145,14 @@ function injectModal() {
                 <p style="font-size:14px;font-weight:700;color:#0a0a0a;">Starter pack</p>
                 <p style="font-size:12px;color:#888;">5 sessions — mix any tools</p>
               </div>
-              <a href="#" id="payBtn3" style="background:#7C3AFF;color:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 18px;border-radius:6px;text-decoration:none;white-space:nowrap;">$9.99</a>
+              <a href="https://buy.stripe.com/8x228qasqf9SaIL7uU2sM01" id="payBtn3" target="_blank" style="background:#7C3AFF;color:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 18px;border-radius:6px;text-decoration:none;white-space:nowrap;">$9.99</a>
             </div>
             <div style="border:0.5px solid #e8e8e8;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;">
               <div>
                 <p style="font-size:14px;font-weight:700;color:#0a0a0a;">Unlimited</p>
                 <p style="font-size:12px;color:#888;">All tools, all month</p>
               </div>
-              <a href="#" id="payBtnUnlimited" style="background:#7C3AFF;color:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 18px;border-radius:6px;text-decoration:none;white-space:nowrap;">$19.99/mo</a>
+              <a href="https://buy.stripe.com/cNidR87ge6DmeZ1bLa2sM02" id="payBtnUnlimited" target="_blank" style="background:#7C3AFF;color:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:9px 18px;border-radius:6px;text-decoration:none;white-space:nowrap;">$19.99/mo</a>
             </div>
           </div>
           <p style="font-size:11px;color:#bbb;text-align:center;">Secured by Stripe · SSL encrypted · No account required</p>
