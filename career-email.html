@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ESZ2G28T51"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ESZ2G28T51');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Career Email Generator — RISN</title>
+  <meta name="description" content="Generate pre-interview, post-recruiter, post-interview, and post-final round emails that get you hired. The emails most candidates never send." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://getrisn.com/career-email.html" />
+  <meta property="og:title" content="Career Email Generator — RISN" />
+  <meta property="og:description" content="The emails that get you hired — before, during, and after every interview. Four types, one tool." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0a0a0a;
+      --purple: #7C3AFF;
+      --purple-pale: #F5F0FF;
+      --white: #ffffff;
+      --gray: #f7f7f7;
+      --muted: #888;
+      --border: #e8e8e8;
+      --dark-border: #222;
+      --success: #10B981;
+      --success-pale: #D1FAE5;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--gray); color: var(--black); min-height: 100vh; }
+
+    nav {
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 56px;
+      border-bottom: 0.5px solid var(--dark-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo { text-decoration: none; display: flex; flex-direction: column; }
+    .nav-wordmark { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--white); letter-spacing: 2px; line-height: 1; }
+    .nav-underbar { height: 2px; background: var(--purple); border-radius: 1px; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-tool-name { font-size: 13px; color: var(--muted); }
+    .nav-back { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .nav-back:hover { color: var(--white); }
+
+    .main { max-width: 780px; margin: 0 auto; padding: 2rem; }
+
+    /* INTRO BANNER */
+    .intro-banner {
+      background: var(--black);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 1rem;
+      border: 0.5px solid var(--dark-border);
+    }
+    .intro-banner h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      color: var(--white);
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .intro-banner p { font-size: 14px; color: #888; line-height: 1.7; margin-bottom: 1.25rem; }
+    .email-types-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .email-type-info {
+      background: #111;
+      border-radius: 10px;
+      padding: 12px 14px;
+      border: 0.5px solid #222;
+    }
+    .email-type-info-name { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .email-type-info-when { font-size: 11px; color: var(--purple); margin-bottom: 6px; font-weight: 500; }
+    .email-type-info-desc { font-size: 12px; color: #666; line-height: 1.5; }
+
+    /* FORM CARD */
+    .card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 0.5px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 1rem;
+    }
+    .card-step { font-size: 11px; color: var(--purple); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 6px; }
+    .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; color: var(--black); margin-bottom: 6px; }
+    .card-sub { font-size: 14px; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
+
+    .field-group { margin-bottom: 1.25rem; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    label { display: block; font-size: 13px; font-weight: 500; color: var(--black); margin-bottom: 6px; }
+    .label-optional { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 4px; }
+    input[type="text"], textarea, select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--black);
+      background: var(--white);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--purple); }
+    textarea { resize: vertical; line-height: 1.6; }
+    .field-hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* EMAIL TYPE SELECTOR */
+    .type-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 6px; }
+    .type-option {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .type-option:hover { border-color: var(--purple); background: var(--purple-pale); }
+    .type-option.selected { border-color: var(--purple); background: var(--purple-pale); }
+    .type-name { font-size: 13px; font-weight: 700; color: var(--black); margin-bottom: 2px; }
+    .type-when { font-size: 11px; color: var(--purple); font-weight: 500; margin-bottom: 4px; }
+    .type-desc { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+    /* TONE SELECTOR */
+    .tone-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 6px; }
+    .tone-option {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--black);
+    }
+    .tone-option:hover { border-color: var(--purple); background: var(--purple-pale); }
+    .tone-option.selected { border-color: var(--purple); background: var(--purple-pale); color: var(--purple); }
+
+    /* USES COUNTER */
+    .uses-counter {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 1rem;
+      padding: 8px 14px;
+      background: var(--gray);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .uses-dots { display: flex; gap: 4px; }
+    .use-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+    .use-dot.used { background: var(--purple); }
+
+    .btn-generate {
+      width: 100%;
+      padding: 14px;
+      background: var(--purple);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-top: 0.5rem;
+    }
+    .btn-generate:hover { opacity: 0.85; }
+    .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* GENERATING */
+    .generating-card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 0.5px solid var(--border);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--purple-pale);
+      border-top-color: var(--purple);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .generating-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; color: var(--black); margin-bottom: 8px; }
+    .generating-sub { font-size: 14px; color: var(--muted); }
+
+    /* RESULT */
+    .result-card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 0.5px solid var(--border);
+      overflow: hidden;
+    }
+    .result-toolbar {
+      background: var(--black);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .result-label { font-size: 13px; color: #555; }
+    .result-label span { color: var(--white); font-weight: 500; }
+    .toolbar-btns { display: flex; gap: 8px; }
+    .tool-btn {
+      padding: 7px 16px;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid #333;
+      background: transparent;
+      color: var(--white);
+      transition: background 0.2s;
+    }
+    .tool-btn:hover { background: #1a1a1a; }
+    .tool-btn.purple { background: var(--purple); border-color: var(--purple); }
+    .tool-btn.purple:hover { opacity: 0.85; }
+
+    .email-preview {
+      padding: 2rem;
+      font-size: 14px;
+      color: #333;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      min-height: 200px;
+    }
+
+    .result-footer {
+      padding: 1rem 1.5rem;
+      border-top: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .regen-note { font-size: 12px; color: var(--muted); }
+    .regen-btn {
+      padding: 8px 20px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--white);
+      color: var(--black);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .regen-btn:hover { background: var(--gray); }
+
+    .limit-box {
+      background: #FFFBEB;
+      border: 0.5px solid #FDE68A;
+      border-radius: 10px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+    .limit-box p { font-size: 14px; color: #92400E; margin-bottom: 10px; }
+
+    .error-box {
+      background: #FCEBEB;
+      border: 1px solid #F09595;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-size: 14px;
+      color: #791F1F;
+      margin-top: 1rem;
+    }
+    .hidden { display: none !important; }
+
+    @media (max-width: 600px) {
+      .field-row { grid-template-columns: 1fr; }
+      .type-grid { grid-template-columns: 1fr; }
+      .tone-grid { grid-template-columns: repeat(2, 1fr); }
+      .email-types-grid { grid-template-columns: 1fr; }
+      .main { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="nav-wordmark">RISN</span>
+    <span class="nav-underbar"></span>
+  </a>
+  <div class="nav-right">
+    <span class="nav-tool-name">Career Email Generator</span>
+    <a href="/" class="nav-back">← Home</a>
+  </div>
+</nav>
+
+<div class="main">
+
+  <!-- INTRO BANNER -->
+  <div class="intro-banner">
+    <h2>The Emails That Get You Hired</h2>
+    <p>Most candidates nail the interview then disappear into the void. The ones who actually get hired communicate differently — before the call, after every conversation, and all the way to the offer. RISN writes all four emails for you.</p>
+    <div class="email-types-grid">
+      <div class="email-type-info">
+        <p class="email-type-info-name">Pre-Interview Intro</p>
+        <p class="email-type-info-when">Send 24-48 hours before your interview</p>
+        <p class="email-type-info-desc">Set the tone before you say a word. Candidates who reach out first consistently report warmer, more collaborative interviews.</p>
+      </div>
+      <div class="email-type-info">
+        <p class="email-type-info-name">Post-Recruiter Follow-Up</p>
+        <p class="email-type-info-when">Send within 24 hours of a recruiter call</p>
+        <p class="email-type-info-desc">The recruiter is your advocate — or your gatekeeper. A thoughtful follow-up keeps you human in a sea of résumés.</p>
+      </div>
+      <div class="email-type-info">
+        <p class="email-type-info-name">Post-Interview Thank You</p>
+        <p class="email-type-info-when">Send within 2 hours of any interview</p>
+        <p class="email-type-info-desc">Generic thank-you emails go nowhere. Reference something specific from the conversation and remind them why you're the one.</p>
+      </div>
+      <div class="email-type-info">
+        <p class="email-type-info-name">Post-Final Round Close</p>
+        <p class="email-type-info-when">Send after your last interview round</p>
+        <p class="email-type-info-desc">Close the deal. A confident, specific close email after your final round keeps you top of mind while they deliberate.</p>
+      </div>
+    </div>
+    <p style="font-size:12px;color:#555;margin-top:1rem;padding-top:1rem;border-top:0.5px solid #222;">💡 Pro tip: Use RISN's Company Intel and Interviewer Profiles tools first — then paste what you learned below. Emails that reference real specifics get real responses.</p>
+  </div>
+
+  <!-- FORM -->
+  <div id="formCard" class="card">
+    <p class="card-step">Career Email Generator</p>
+    <h1 class="card-title">Write the Email</h1>
+    <p class="card-sub">Each session includes 4 emails — use them however you want across any email type. Regenerate as many times as you need within each use.</p>
+
+    <!-- USES COUNTER -->
+    <div class="uses-counter" id="usesCounter">
+      <div class="uses-dots" id="usesDots">
+        <div class="use-dot" id="dot1"></div>
+        <div class="use-dot" id="dot2"></div>
+        <div class="use-dot" id="dot3"></div>
+        <div class="use-dot" id="dot4"></div>
+      </div>
+      <span id="usesText">4 emails remaining this session</span>
+    </div>
+
+    <!-- EMAIL TYPE -->
+    <div class="field-group">
+      <label>What type of email do you need?</label>
+      <div class="type-grid">
+        <div class="type-option selected" onclick="selectType(this, 'pre-interview')">
+          <p class="type-name">Pre-Interview Intro</p>
+          <p class="type-when">Send before your interview</p>
+          <p class="type-desc">Warm introduction that sets a collaborative tone before you meet</p>
+        </div>
+        <div class="type-option" onclick="selectType(this, 'post-recruiter')">
+          <p class="type-name">Post-Recruiter Follow-Up</p>
+          <p class="type-when">After a recruiter screening call</p>
+          <p class="type-desc">Keep yourself top of mind with your recruiter advocate</p>
+        </div>
+        <div class="type-option" onclick="selectType(this, 'post-interview')">
+          <p class="type-name">Post-Interview Thank You</p>
+          <p class="type-when">Within 2 hours of any interview</p>
+          <p class="type-desc">Specific, memorable follow-up that reinforces your fit</p>
+        </div>
+        <div class="type-option" onclick="selectType(this, 'post-final')">
+          <p class="type-name">Post-Final Round Close</p>
+          <p class="type-when">After your last interview round</p>
+          <p class="type-desc">Confident close that keeps you present during deliberation</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BASIC INFO -->
+    <div class="field-row">
+      <div class="field-group">
+        <label for="yourName">Your name</label>
+        <input type="text" id="yourName" placeholder="e.g. Jordan Mitchell" />
+      </div>
+      <div class="field-group">
+        <label for="recipientName">Recipient's name</label>
+        <input type="text" id="recipientName" placeholder="e.g. Sarah Johnson" />
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label for="recipientRole">Recipient's role <span class="label-optional">(optional)</span></label>
+        <input type="text" id="recipientRole" placeholder="e.g. Senior Recruiter, Engineering Manager" />
+      </div>
+      <div class="field-group">
+        <label for="companyName">Company</label>
+        <input type="text" id="companyName" placeholder="e.g. Google, Dell, local startup" />
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label for="jobTitle">Role you're interviewing for</label>
+      <input type="text" id="jobTitle" placeholder="e.g. Senior Software Engineer" />
+    </div>
+
+    <!-- CONTEXT FIELDS -->
+    <div class="field-group">
+      <label for="interviewerContext">What do you know about this person? <span class="label-optional">(optional — paste from Interviewer Profiles)</span></label>
+      <textarea id="interviewerContext" style="min-height:80px;" placeholder="e.g. 'Previously at Salesforce, UT Austin grad, posts about distributed systems, likely technical interviewer focused on systems design...'"></textarea>
+      <p class="field-hint">Paste insights from RISN's Interviewer Profiles tool for a personalized email.</p>
+    </div>
+
+    <div class="field-group">
+      <label for="companyContext">What do you know about the company? <span class="label-optional">(optional — paste from Company Intel)</span></label>
+      <textarea id="companyContext" style="min-height:80px;" placeholder="e.g. 'Recently launched AI infrastructure division, culture values ownership and speed, known for strong 401k matching...'"></textarea>
+      <p class="field-hint">Paste insights from RISN's Company Intel tool for specifics that show genuine research.</p>
+    </div>
+
+    <div class="field-group" id="conversationSummaryGroup" style="display:none;">
+      <label for="conversationSummary">Summary of your conversation <span style="font-size:12px;background:#7C3AFF;color:white;padding:2px 8px;border-radius:10px;margin-left:4px;font-weight:500;">Key for best results</span></label>
+      <textarea id="conversationSummary" style="min-height:100px;" placeholder="Brief summary of what was discussed — key topics, things that went well, anything you want to reference or reinforce..."></textarea>
+      <p class="field-hint">The more specific you are, the more memorable the email.</p>
+    </div>
+
+    <!-- TONE -->
+    <div class="field-group">
+      <label>Tone</label>
+      <div class="tone-grid">
+        <div class="tone-option selected" onclick="selectTone(this, 'professional')">Professional</div>
+        <div class="tone-option" onclick="selectTone(this, 'warm')">Warm</div>
+        <div class="tone-option" onclick="selectTone(this, 'confident')">Confident</div>
+        <div class="tone-option" onclick="selectTone(this, 'concise')">Concise</div>
+      </div>
+    </div>
+
+    <button class="btn-generate" id="generateBtn" onclick="risnGate(generateEmail)">Generate My Email ✦</button>
+    <div id="errorBox" class="error-box hidden"></div>
+  </div>
+
+  <!-- GENERATING -->
+  <div id="generating" class="generating-card hidden">
+    <div class="spinner"></div>
+    <h2 class="generating-title">Writing Your Email</h2>
+    <p class="generating-sub">RISN AI is crafting your career email...</p>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="result-card hidden">
+    <div class="result-toolbar">
+      <div class="result-label"><span id="resultLabel">Your email is ready</span></div>
+      <div class="toolbar-btns">
+        <button class="tool-btn" onclick="copyEmail()">Copy</button>
+        <button class="tool-btn purple" onclick="openInMail()">Open in Mail</button>
+      </div>
+    </div>
+    <div class="email-preview" id="emailOutput"></div>
+    <div class="result-footer">
+      <p class="regen-note">Not quite right? Regenerate for a fresh version — free within this use.</p>
+      <button class="regen-btn" onclick="regenerate()">Regenerate ↺</button>
+    </div>
+  </div>
+
+  <!-- SESSION LIMIT REACHED -->
+  <div id="limitReached" class="limit-box hidden">
+    <p>You've used all 4 emails in this session. Start a new session to continue.</p>
+    <button onclick="resetSession()" style="padding:10px 24px;background:var(--purple);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Start new session →</button>
+  </div>
+
+  <div id="backLink" class="hidden" style="margin-top:1rem;text-align:center;">
+    <p style="font-size:13px;color:var(--muted);">Try another tool — <a href="/" style="color:var(--purple);">back to home →</a></p>
+  </div>
+
+</div>
+
+<script>
+  const SESSION_KEY = 'risn_email_uses';
+  const MAX_USES = 4;
+
+  let selectedType = 'pre-interview';
+  let selectedTone = 'professional';
+  let generatedEmail = '';
+  let sessionUses = 0;
+
+  // ── Session tracking ────────────────────────────────────────────────────────
+  function loadUses() {
+    try {
+      const data = JSON.parse(sessionStorage.getItem(SESSION_KEY) || '{"uses":0}');
+      sessionUses = data.uses || 0;
+    } catch { sessionUses = 0; }
+    updateCounter();
+  }
+
+  function saveUse() {
+    sessionUses++;
+    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify({ uses: sessionUses })); } catch {}
+    updateCounter();
+  }
+
+  function updateCounter() {
+    const remaining = MAX_USES - sessionUses;
+    document.getElementById('usesText').textContent =
+      remaining === 0 ? 'No emails remaining — start a new session'
+      : remaining === 1 ? '1 email remaining this session'
+      : `${remaining} emails remaining this session`;
+
+    for (let i = 1; i <= MAX_USES; i++) {
+      const dot = document.getElementById('dot' + i);
+      if (dot) dot.className = 'use-dot' + (i <= sessionUses ? ' used' : '');
+    }
+
+    const btn = document.getElementById('generateBtn');
+    if (btn) {
+      btn.disabled = sessionUses >= MAX_USES;
+      if (sessionUses >= MAX_USES) btn.textContent = 'Session limit reached';
+    }
+  }
+
+  function resetSession() {
+    sessionUses = 0;
+    try { sessionStorage.removeItem(SESSION_KEY); } catch {}
+    document.getElementById('limitReached').classList.add('hidden');
+    document.getElementById('result').classList.add('hidden');
+    document.getElementById('backLink').classList.add('hidden');
+    document.getElementById('formCard').classList.remove('hidden');
+    updateCounter();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Type and tone selectors ─────────────────────────────────────────────────
+  function selectType(el, type) {
+    document.querySelectorAll('.type-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedType = type;
+
+    // Show conversation summary for post-interview types
+    const summaryGroup = document.getElementById('conversationSummaryGroup');
+    summaryGroup.style.display = ['post-recruiter', 'post-interview', 'post-final'].includes(type) ? 'block' : 'none';
+  }
+
+  function selectTone(el, tone) {
+    document.querySelectorAll('.tone-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedTone = tone;
+  }
+
+  // ── Prompt builder ──────────────────────────────────────────────────────────
+  function buildPrompt() {
+    const yourName = document.getElementById('yourName').value;
+    const recipientName = document.getElementById('recipientName').value;
+    const recipientRole = document.getElementById('recipientRole').value;
+    const company = document.getElementById('companyName').value;
+    const jobTitle = document.getElementById('jobTitle').value;
+    const interviewerContext = document.getElementById('interviewerContext').value;
+    const companyContext = document.getElementById('companyContext').value;
+    const conversationSummary = document.getElementById('conversationSummary').value;
+
+    const typeDescriptions = {
+      'pre-interview': 'a warm, professional pre-interview introduction email sent 24-48 hours before a scheduled interview. The goal is to set a collaborative tone, signal genuine preparation, and make the recipient look forward to the conversation. Do NOT be overly enthusiastic or sycophantic.',
+      'post-recruiter': 'a post-recruiter screening follow-up email sent within 24 hours of a recruiter call. The goal is to thank them specifically, recap genuine interest, and keep the candidate top of mind as the recruiter advocates internally.',
+      'post-interview': 'a post-interview thank you email sent within 2 hours of an interview. The goal is to reference something specific from the conversation, reinforce the candidate\'s fit with a concrete point, and leave a memorable impression. Generic thank-you emails fail — this one should not.',
+      'post-final': 'a post-final round close email sent after the last interview round before a hiring decision. The goal is to confidently and professionally close — express commitment, summarize fit in one strong sentence, and stay top of mind during deliberation. Confident but not pushy.'
+    };
+
+    return `You are an expert career communications writer. Write ${typeDescriptions[selectedType]}
+
+CANDIDATE: ${yourName || 'the candidate'}
+RECIPIENT: ${recipientName || 'the interviewer'}${recipientRole ? ' (' + recipientRole + ')' : ''}
+COMPANY: ${company || 'the company'}
+ROLE: ${jobTitle || 'the position'}
+TONE: ${selectedTone}
+${interviewerContext ? 'WHAT WE KNOW ABOUT THE RECIPIENT: ' + interviewerContext : ''}
+${companyContext ? 'WHAT WE KNOW ABOUT THE COMPANY: ' + companyContext : ''}
+${conversationSummary ? 'CONVERSATION SUMMARY: ' + conversationSummary : ''}
+
+Write a complete email including subject line and body. Format it exactly like this:
+Subject: [subject line here]
+
+[email body here]
+
+RULES:
+- Keep it under 200 words — brevity is a sign of respect for their time
+- Be specific — reference real details from the context provided, not generic platitudes
+- Sound human, not AI-generated — avoid "I hope this email finds you well" and similar clichés
+- Do NOT use the words "thrilled", "excited", "passionate", "humbled", or "reaching out"
+- One clear purpose per email — don't try to do too much
+- End with a natural, confident close — not "please let me know if you have any questions"
+
+Output only the email. No commentary before or after.`;
+  }
+
+  // ── Generate ────────────────────────────────────────────────────────────────
+  async function generateEmail() {
+    if (sessionUses >= MAX_USES) {
+      document.getElementById('formCard').classList.add('hidden');
+      document.getElementById('limitReached').classList.remove('hidden');
+      return;
+    }
+
+    const company = document.getElementById('companyName').value.trim();
+    const jobTitle = document.getElementById('jobTitle').value.trim();
+    if (!company || !jobTitle) {
+      const eb = document.getElementById('errorBox');
+      eb.classList.remove('hidden');
+      eb.textContent = 'Please enter the company name and role to continue.';
+      return;
+    }
+
+    document.getElementById('errorBox').classList.add('hidden');
+    document.getElementById('formCard').classList.add('hidden');
+    document.getElementById('result').classList.add('hidden');
+    document.getElementById('generating').classList.remove('hidden');
+    document.getElementById('backLink').classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    const risn_email = (function(){ try { return localStorage.getItem('risn_user_email') || ''; } catch(e) { return ''; } })();
+    const risn_unlimited = (function(){ try { const s = sessionStorage.getItem('risn_access'); if(!s) return false; const d = JSON.parse(s); return d && d.type === 'unlimited'; } catch(e) { return false; } })();
+    const risn_plan = (function(){ try { const c = JSON.parse(sessionStorage.getItem('risn_plan_caps') || '{}'); return c.plan || 'paid'; } catch(e) { return 'paid'; } })();
+    const _risnToken = window.getRisnToken ? await window.getRisnToken() : null;
+
+    try {
+      const response = await fetch('/api/claude', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          risn_secret: _risnToken,
+          risn_tool: 'career_email',
+          risn_plan,
+          model: 'claude-haiku-4-5-20251001',
+          risn_email,
+          risn_unlimited,
+          max_tokens: 600,
+          messages: [{ role: 'user', content: buildPrompt() }]
+        })
+      });
+
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+
+      generatedEmail = data.content[0].text.trim();
+      saveUse();
+
+      const typeLabels = {
+        'pre-interview': 'Pre-Interview Introduction',
+        'post-recruiter': 'Post-Recruiter Follow-Up',
+        'post-interview': 'Post-Interview Thank You',
+        'post-final': 'Post-Final Round Close'
+      };
+
+      document.getElementById('resultLabel').textContent = typeLabels[selectedType];
+      document.getElementById('emailOutput').textContent = generatedEmail;
+      document.getElementById('generating').classList.add('hidden');
+      document.getElementById('result').classList.remove('hidden');
+      document.getElementById('backLink').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    } catch (err) {
+      console.error('Email generator error:', err);
+      document.getElementById('generating').classList.add('hidden');
+      document.getElementById('formCard').classList.remove('hidden');
+      const eb = document.getElementById('errorBox');
+      eb.classList.remove('hidden');
+      eb.textContent = 'Something went wrong: ' + err.message + '. Please try again or contact risewithrisn@gmail.com';
+    }
+  }
+
+  function copyEmail() {
+    navigator.clipboard.writeText(generatedEmail).then(() => {
+      const btn = event.target;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+
+  function openInMail() {
+    const lines = generatedEmail.split('\n');
+    let subject = '';
+    let body = generatedEmail;
+
+    if (lines[0].startsWith('Subject:')) {
+      subject = lines[0].replace('Subject:', '').trim();
+      body = lines.slice(2).join('\n').trim();
+    }
+
+    const recipient = document.getElementById('recipientName').value.trim();
+    window.location.href = `mailto:${encodeURIComponent(recipient)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
+
+  function regenerate() {
+    document.getElementById('result').classList.add('hidden');
+    document.getElementById('formCard').classList.remove('hidden');
+    document.getElementById('backLink').classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Init ────────────────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    loadUses();
+  });
+</script>
+
+<script src="/risn-access.js"></script>
+</body>
+</html>
