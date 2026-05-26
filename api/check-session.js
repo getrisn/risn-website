@@ -58,13 +58,29 @@ export default async function handler(req, res) {
       : isPaidPlan ? 'paid'
       : 'sessions';
 
+    // Heartbeat — keeps Supabase free tier active by logging timestamp
+    fetch(`${SUPABASE_URL}/rest/v1/usage_log`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        email: 'heartbeat@getrisn.com',
+        date: new Date().toISOString().split('T')[0],
+        count: 1,
+        tool: 'heartbeat'
+      })
+    }).catch(() => {}); // Silent — never block on heartbeat failure
+
     return res.status(200).json({
       valid: true,
       type: session.type,
       sessionsRemaining: session.sessions_remaining,
       expiresAt: session.expires_at,
       sessionId: session.id,
-      // Return plan caps from session or derive from code type
       feedbackCap: session.feedback_cap ?? (isPaidPlan ? 6 : 3),
       questionCap: session.question_cap ?? (isPaidPlan ? null : 2),
       interviewerCap: session.interviewer_cap ?? (isPaidPlan ? 10 : 4),
