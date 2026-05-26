@@ -61,34 +61,39 @@
 
     /* INTRO BANNER */
     .intro-banner {
-      background: var(--black);
+      background: var(--white);
       border-radius: 16px;
-      padding: 2rem;
       margin-bottom: 1rem;
-      border: 0.5px solid var(--dark-border);
+      border: 0.5px solid #CECBF6;
+      overflow: hidden;
+    }
+    .intro-banner-top {
+      background: #7C3AFF;
+      padding: 1.5rem 2rem;
     }
     .intro-banner h2 {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 28px;
       color: var(--white);
       letter-spacing: 1px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
-    .intro-banner p { font-size: 14px; color: #888; line-height: 1.7; margin-bottom: 1.25rem; }
+    .intro-banner-top p { font-size: 13px; color: #CECBF6; line-height: 1.7; margin: 0; }
+    .intro-banner-body { padding: 1.25rem 2rem 1.5rem; }
     .email-types-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
     .email-type-info {
-      background: #111;
+      background: #EEEDFE;
       border-radius: 10px;
       padding: 12px 14px;
-      border: 0.5px solid #222;
+      border: 0.5px solid #CECBF6;
     }
-    .email-type-info-name { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
-    .email-type-info-when { font-size: 11px; color: var(--purple); margin-bottom: 6px; font-weight: 500; }
-    .email-type-info-desc { font-size: 12px; color: #666; line-height: 1.5; }
+    .email-type-info-name { font-size: 13px; font-weight: 700; color: #26215C; margin-bottom: 4px; }
+    .email-type-info-when { font-size: 11px; color: #7f77dd; margin-bottom: 6px; font-weight: 500; }
+    .email-type-info-desc { font-size: 12px; color: #534AB7; line-height: 1.5; }
 
     /* FORM CARD */
     .card {
@@ -324,8 +329,11 @@
 
   <!-- INTRO BANNER -->
   <div class="intro-banner">
-    <h2>The Emails That Get You Hired</h2>
-    <p>Most candidates nail the interview then disappear into the void. The ones who actually get hired communicate differently — before the call, after every conversation, and all the way to the offer. RISN writes all four emails for you.</p>
+    <div class="intro-banner-top">
+      <h2>The Emails That Get You Hired</h2>
+      <p>Most candidates nail the interview then disappear into the void. The ones who actually get hired communicate differently — before the call, after every conversation, and all the way to the offer. RISN writes all four emails for you.</p>
+    </div>
+    <div class="intro-banner-body">
     <div class="email-types-grid">
       <div class="email-type-info">
         <p class="email-type-info-name">Pre-Interview Intro</p>
@@ -348,7 +356,9 @@
         <p class="email-type-info-desc">Close the deal. A confident, specific close email after your final round keeps you top of mind while they deliberate.</p>
       </div>
     </div>
-    <p style="font-size:12px;color:#555;margin-top:1rem;padding-top:1rem;border-top:0.5px solid #222;">💡 Pro tip: Use RISN's Company Intel and Interviewer Profiles tools first — then paste what you learned below. Emails that reference real specifics get real responses.</p>
+    </div>
+    <p style="font-size:12px;color:#534AB7;margin-top:1rem;padding:10px 14px;background:#EEEDFE;border-radius:8px;border:0.5px solid #CECBF6;">💡 Pro tip: Use RISN's Company Intel and Interviewer Profiles tools first — then paste what you learned below. Emails that reference real specifics get real responses.</p>
+    </div>
   </div>
 
   <!-- FORM -->
