@@ -12,6 +12,7 @@ const DEFAULT_MODEL = 'claude-sonnet-4-5';
 // PAID UNLIMITED PLAN
 const PAID_DAILY_CAP = 15;
 const PAID_COACH_MONTHLY_CAP = 25;
+const PAID_EMAIL_MONTHLY_CAP = 50; // 4 per session × ~12 sessions — generous
 const PAID_INTERVIEWER_MONTHLY_CAP = 10;
 const PAID_FEEDBACK_CAP = 6;
 
@@ -49,6 +50,27 @@ async function checkAndLogUsage(email, tool, plan) {
     const emailKey = email.toLowerCase().trim();
     const monthStart = today.substring(0, 7) + '-01';
     const monthEnd = today.substring(0, 7) + '-31';
+
+    // ── Monthly cap: Career Email ─────────────────────────────────────────────
+    if (tool === 'career_email') {
+      const monthRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/usage_log?email=eq.${encodeURIComponent(emailKey)}&tool=eq.career_email&date=gte.${monthStart}&date=lte.${monthEnd}&select=count`,
+        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+      );
+      const monthRows = await monthRes.json();
+      const monthTotal = monthRows.reduce((sum, r) => sum + (r.count || 0), 0);
+
+      const emailCap = (plan === 'promo_month') ? 20
+        : (plan === 'week') ? 8
+        : PAID_EMAIL_MONTHLY_CAP;
+
+      if (monthTotal >= emailCap) {
+        return {
+          allowed: false,
+          message: `You've reached your Career Email limit for this period. Your limit resets on the 1st.`
+        };
+      }
+    }
 
     // ── Monthly cap: Interview Coach ──────────────────────────────────────────
     if (tool === 'interview') {
