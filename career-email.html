@@ -364,7 +364,7 @@
   <div id="formCard" class="card">
     <p class="card-step">Career Email Generator</p>
     <h1 class="card-title">Write the Email</h1>
-    <p class="card-sub">Each session includes 4 generations — use them on any email type. Each generation, including regenerates, counts as 1 use. Adjust your inputs before regenerating for best results.</p>
+    <p class="card-sub">Each application gets 4 emails — one for each stage of the interview process. Your count persists across days so you never lose track of where you are in the cycle. Enter a new company and role to start a fresh application.</p>
 
     <!-- USES COUNTER -->
     <div class="uses-counter" id="usesCounter">
@@ -499,8 +499,8 @@
 
   <!-- SESSION LIMIT REACHED -->
   <div id="limitReached" class="limit-box hidden">
-    <p style="font-size:14px;color:#92400E;margin-bottom:12px;">You've used all 4 emails this session.</p>
-    <button onclick="resetSession()" style="padding:10px 24px;background:var(--purple);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Start new session →</button>
+    <p style="font-size:14px;color:#92400E;margin-bottom:8px;">You've sent all 4 emails for this application.</p><p style="font-size:12px;color:#B45309;margin-bottom:12px;">Interviewing somewhere else? Start a new application below.</p>
+    <button onclick="resetSession()" style="padding:10px 24px;background:var(--purple);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Start new application →</button>
   </div>
 
   <div id="backLink" class="hidden" style="margin-top:1rem;text-align:center;">
@@ -510,35 +510,66 @@
 </div>
 
 <script>
-  const SESSION_KEY = 'risn_email_uses';
+  const SESSION_KEY = 'risn_email_app';
   const MAX_USES = 4;
 
   let selectedType = 'pre-interview';
   let selectedTone = 'professional';
   let generatedEmail = '';
   let sessionUses = 0;
+  let currentAppKey = null;
 
-  // ── Session tracking ────────────────────────────────────────────────────────
+  // ── Application-based tracking ──────────────────────────────────────────────
+  // Each unique company+role gets its own 4-email pool
+  // Persists indefinitely — matches real interview lifecycle (weeks/months)
+
+  function getAppKey() {
+    const company = (document.getElementById('companyName').value || 'unknown').trim().toLowerCase().replace(/\s+/g, '_');
+    const role = (document.getElementById('jobTitle').value || 'unknown').trim().toLowerCase().replace(/\s+/g, '_');
+    return SESSION_KEY + '_' + company + '_' + role;
+  }
+
   function loadUses() {
+    // Load based on current company+role if filled in, otherwise show full count
     try {
-      const data = JSON.parse(sessionStorage.getItem(SESSION_KEY) || '{"uses":0}');
-      sessionUses = data.uses || 0;
+      const key = getAppKey();
+      currentAppKey = key;
+      const stored = localStorage.getItem(key);
+      sessionUses = stored ? parseInt(stored) || 0 : 0;
     } catch { sessionUses = 0; }
     updateCounter();
   }
 
   function saveUse() {
     sessionUses++;
-    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify({ uses: sessionUses })); } catch {}
+    try {
+      const key = getAppKey();
+      currentAppKey = key;
+      localStorage.setItem(key, sessionUses.toString());
+    } catch {}
     updateCounter();
+  }
+
+  function getStoredApps() {
+    const apps = [];
+    try {
+      Object.keys(localStorage).forEach(k => {
+        if (k.startsWith(SESSION_KEY + '_')) {
+          const uses = parseInt(localStorage.getItem(k)) || 0;
+          const parts = k.replace(SESSION_KEY + '_', '').split('_');
+          apps.push({ key: k, label: parts.join(' '), uses });
+        }
+      });
+    } catch {}
+    return apps;
   }
 
   function updateCounter() {
     const remaining = MAX_USES - sessionUses;
     document.getElementById('usesText').textContent =
-      remaining === 0 ? 'No emails remaining this session'
-      : remaining === 1 ? '1 email remaining this session'
-      : `${remaining} emails remaining this session`;
+      remaining === 0 ? 'All 4 emails used for this application'
+      : remaining === 1 ? '1 email remaining for this application'
+      : `${remaining} emails remaining for this application`;
 
     for (let i = 1; i <= MAX_USES; i++) {
       const dot = document.getElementById('dot' + i);
@@ -564,10 +595,14 @@
   }
 
   function resetSession() {
+    // Start a new application — clear current app key so user can enter new company/role
     sessionUses = 0;
-    try { sessionStorage.removeItem(SESSION_KEY); } catch {}
+    currentAppKey = null;
+    document.getElementById('companyName').value = '';
+    document.getElementById('jobTitle').value = '';
     document.getElementById('limitReached').classList.add('hidden');
     document.getElementById('result').classList.add('hidden');
+    document.getElementById('questionsSection').classList.add('hidden');
     document.getElementById('backLink').classList.add('hidden');
     document.getElementById('formCard').classList.remove('hidden');
     updateCounter();
@@ -764,6 +799,10 @@ Output only the email. No commentary before or after.`;
   // ── Init ────────────────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
     loadUses();
+    // Reload count when company or role changes
+    ['companyName', 'jobTitle'].forEach(id => {
+      document.getElementById(id).addEventListener('blur', loadUses);
+    });
   });
 </script>
 
