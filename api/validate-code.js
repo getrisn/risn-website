@@ -210,6 +210,7 @@ export default async function handler(req, res) {
       questionCap: access.questionCap || null,
       feedbackCap: access.feedbackCap || 3,
       isPaidPlan: false,
+      planType: access.sessions === 5 ? 'sessions5' : access.days === 7 ? 'week' : access.days === 30 ? 'promo_month' : 'sessions1',
       message: access.type === 'sessions'
         ? `Code accepted! You have ${access.sessions} session${access.sessions > 1 ? 's' : ''} to use.`
         : access.days === 7
