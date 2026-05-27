@@ -491,7 +491,7 @@
 
   <!-- SESSION LIMIT REACHED -->
   <div id="limitReached" class="limit-box hidden">
-    <p>You've used all 4 emails in this session. Start a new session to continue.</p>
+    <p style="font-size:14px;color:#92400E;margin-bottom:12px;">You've used all 4 emails this session.</p>
     <button onclick="resetSession()" style="padding:10px 24px;background:var(--purple);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Start new session →</button>
   </div>
 
@@ -528,7 +528,7 @@
   function updateCounter() {
     const remaining = MAX_USES - sessionUses;
     document.getElementById('usesText').textContent =
-      remaining === 0 ? 'No emails remaining — start a new session'
+      remaining === 0 ? 'No emails remaining this session'
       : remaining === 1 ? '1 email remaining this session'
       : `${remaining} emails remaining this session`;
 
@@ -541,6 +541,17 @@
     if (btn) {
       btn.disabled = sessionUses >= MAX_USES;
       if (sessionUses >= MAX_USES) btn.textContent = 'Session limit reached';
+    }
+
+    // Show start new session button automatically when limit reached
+    const limitBox = document.getElementById('limitReached');
+    const counter = document.getElementById('usesCounter');
+    if (sessionUses >= MAX_USES) {
+      limitBox.classList.remove('hidden');
+      if (counter) counter.style.background = '#FEF2F2';
+    } else {
+      limitBox.classList.add('hidden');
+      if (counter) counter.style.background = '';
     }
   }
 
