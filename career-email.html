@@ -720,11 +720,28 @@ Output only the email. No commentary before or after.`;
       if (data.error) throw new Error(data.error);
 
       const rawResponse = data.content[0].text.trim();
-      // Parse email and questions sections
-      const emailMatch = rawResponse.match(/===EMAIL===[\s\S]*?(?====QUESTIONS===|$)/);
-      const questionsMatch = rawResponse.match(/===QUESTIONS===([\s\S]*?)$/);
-      generatedEmail = emailMatch ? emailMatch[0].replace('===EMAIL===', '').trim() : rawResponse;
-      const questionsText = questionsMatch ? questionsMatch[1].trim() : '';
+      console.log('Raw response:', rawResponse.substring(0, 200));
+      console.log('Has EMAIL marker:', rawResponse.includes('===EMAIL==='));
+      console.log('Has QUESTIONS marker:', rawResponse.includes('===QUESTIONS==='));
+      // Parse email and questions — robust extraction
+      let generatedEmailLocal = rawResponse;
+      let questionsText = '';
+
+      if (rawResponse.includes('===EMAIL===') && rawResponse.includes('===QUESTIONS===')) {
+        const emailStart = rawResponse.indexOf('===EMAIL===') + '===EMAIL==='.length;
+        const questionsStart = rawResponse.indexOf('===QUESTIONS===');
+        const questionsContentStart = questionsStart + '===QUESTIONS==='.length;
+        generatedEmailLocal = rawResponse.substring(emailStart, questionsStart).trim();
+        questionsText = rawResponse.substring(questionsContentStart).trim();
+      } else if (rawResponse.includes('===QUESTIONS===')) {
+        const questionsStart = rawResponse.indexOf('===QUESTIONS===');
+        generatedEmailLocal = rawResponse.substring(0, questionsStart).trim();
+        questionsText = rawResponse.substring(questionsStart + '===QUESTIONS==='.length).trim();
+      } else {
+        // Claude didn't use markers — show full response as email
+        generatedEmailLocal = rawResponse;
+      }
+      generatedEmail = generatedEmailLocal;
       saveUse();
 
       const typeLabels = {
@@ -738,9 +755,13 @@ Output only the email. No commentary before or after.`;
       document.getElementById('emailOutput').textContent = generatedEmail;
 
       // Show questions if generated
-      if (questionsText) {
-        document.getElementById('questionsOutput').textContent = questionsText;
-        document.getElementById('questionsSection').classList.remove('hidden');
+      const qSection = document.getElementById('questionsSection');
+      const qOutput = document.getElementById('questionsOutput');
+      if (questionsText && qSection && qOutput) {
+        qOutput.textContent = questionsText;
+        qSection.classList.remove('hidden');
+      } else if (qSection) {
+        qSection.classList.add('hidden');
       }
 
       document.getElementById('generating').classList.add('hidden');
