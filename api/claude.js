@@ -12,10 +12,13 @@ const DEFAULT_MODEL = 'claude-sonnet-4-5';
 // PAID UNLIMITED PLAN
 const PAID_DAILY_CAP = 15;
 const PAID_COACH_MONTHLY_CAP = 25;
-const PAID_EMAIL_MONTHLY_CAP = 50;     // Career email — 4 per session
+const PAID_EMAIL_MONTHLY_CAP = 50;      // Career email — 4 per session
 const PAID_SELFEVAL_MONTHLY_CAP = 10;   // Self-eval — quarterly use case
 const PAID_SALARYNEG_MONTHLY_CAP = 10;  // Salary negotiation
 const PAID_PROMOTION_MONTHLY_CAP = 5;   // Promotion case — once or twice a year
+const PAID_RESUME_MONTHLY_CAP = 30;     // Resume builder
+const PAID_COVERLETTER_MONTHLY_CAP = 75; // Cover letter
+const PAID_INTEL_MONTHLY_CAP = 50;      // Company intel
 const PAID_INTERVIEWER_MONTHLY_CAP = 10;
 const PAID_FEEDBACK_CAP = 6;
 
@@ -54,14 +57,27 @@ async function checkAndLogUsage(email, tool, plan) {
     const monthStart = today.substring(0, 7) + '-01';
     const monthEnd = today.substring(0, 7) + '-31';
 
-    // ── Monthly cap: Professional tools ─────────────────────────────────────────
-    if (['self_eval', 'salary_negotiation', 'promotion_case'].includes(tool)) {
-      const capMap = {
-        'self_eval': plan === 'promo_month' ? 4 : plan === 'week' ? 2 : PAID_SELFEVAL_MONTHLY_CAP,
-        'salary_negotiation': plan === 'promo_month' ? 4 : plan === 'week' ? 2 : PAID_SALARYNEG_MONTHLY_CAP,
-        'promotion_case': plan === 'promo_month' ? 2 : plan === 'week' ? 1 : PAID_PROMOTION_MONTHLY_CAP,
-      };
-      const toolCap = capMap[tool];
+    // ── Monthly caps: All tools by plan ─────────────────────────────────────────
+    // Cap map: { tool: [week_cap, promo_month_cap, sessions5_cap, paid_cap] }
+    const ALL_TOOL_CAPS = {
+      'resume':              { week: 5,  promo_month: 10, sessions5: 1,  paid: PAID_RESUME_MONTHLY_CAP },
+      'cover_letter':        { week: 8,  promo_month: 20, sessions5: 1,  paid: PAID_COVERLETTER_MONTHLY_CAP },
+      'company_intel':       { week: 5,  promo_month: 15, sessions5: 1,  paid: PAID_INTEL_MONTHLY_CAP },
+      'career_email':        { week: 4,  promo_month: 8,  sessions5: 1,  paid: PAID_EMAIL_MONTHLY_CAP },
+      'interview':           { week: 3,  promo_month: 8,  sessions5: 1,  paid: PAID_COACH_MONTHLY_CAP },
+      'interviewer_profiles':{ week: 2,  promo_month: 4,  sessions5: 1,  paid: PAID_INTERVIEWER_MONTHLY_CAP },
+      'self_eval':           { week: 2,  promo_month: 4,  sessions5: 1,  paid: PAID_SELFEVAL_MONTHLY_CAP },
+      'salary_negotiation':  { week: 2,  promo_month: 4,  sessions5: 1,  paid: PAID_SALARYNEG_MONTHLY_CAP },
+      'promotion_case':      { week: 1,  promo_month: 2,  sessions5: 1,  paid: PAID_PROMOTION_MONTHLY_CAP },
+    };
+
+    if (ALL_TOOL_CAPS[tool]) {
+      const caps = ALL_TOOL_CAPS[tool];
+      const toolCap = plan === 'week' ? caps.week
+        : plan === 'promo_month' ? caps.promo_month
+        : plan === 'sessions5' ? caps.sessions5
+        : caps.paid;
+
       const monthRes = await fetch(
         `${SUPABASE_URL}/rest/v1/usage_log?email=eq.${encodeURIComponent(emailKey)}&tool=eq.${tool}&date=gte.${monthStart}&date=lte.${monthEnd}&select=count`,
         { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
@@ -71,10 +87,12 @@ async function checkAndLogUsage(email, tool, plan) {
       if (monthTotal >= toolCap) {
         return {
           allowed: false,
-          message: `You've reached your limit for this tool this month. Your limit resets on the 1st.`
+          message: `You've reached your limit for this tool. Your limit resets on the 1st.`
         };
       }
     }
+
+    // Professional tool caps handled by ALL_TOOL_CAPS above
 
     // ── Monthly cap: Career Email ─────────────────────────────────────────────
     if (tool === 'career_email') {
