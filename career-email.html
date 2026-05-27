@@ -626,6 +626,37 @@
     selectedTone = tone;
   }
 
+  // ── Questions prompt builder ────────────────────────────────────────────────
+  function buildQuestionsPrompt() {
+    const company = document.getElementById('companyName').value || 'the company';
+    const jobTitle = document.getElementById('jobTitle').value || 'the position';
+    const interviewerContext = document.getElementById('interviewerContext').value;
+    const companyContext = document.getElementById('companyContext').value;
+
+    const typeContext = {
+      'pre-interview': 'questions to ask on an upcoming interview call',
+      'post-recruiter': 'questions to ask on the next call with the hiring team',
+      'post-interview': 'questions for any follow-up conversations',
+      'post-final': 'questions to ask if given the opportunity before a decision'
+    };
+
+    return `Generate 5-7 thoughtful questions a candidate should ask when interviewing for a ${jobTitle} role at ${company}.
+
+Email type context: ${typeContext[selectedType]}
+${interviewerContext ? 'Interviewer context: ' + interviewerContext : ''}
+${companyContext ? 'Company context: ' + companyContext : ''}
+
+RULES:
+- Questions must be specific to this role, company, and interviewer — not generic
+- Mix strategic questions (team direction, challenges, culture) with role-specific ones
+- Make questions that show the candidate has done real research
+- Each question should make the interviewer think, not just recall facts
+- Never include: "What does a typical day look like?", "What are the biggest challenges?", or other overused questions
+- Format as a numbered list, one question per line
+
+Output only the numbered list. No intro text, no commentary.`;
+  }
+
   // ── Prompt builder ──────────────────────────────────────────────────────────
   function buildPrompt() {
     const yourName = document.getElementById('yourName').value;
@@ -701,7 +732,8 @@ Output only the email. No commentary before or after.`;
     const _risnToken = window.getRisnToken ? await window.getRisnToken() : null;
 
     try {
-      const response = await fetch('/api/claude', {
+      // CALL 1: Generate the email
+      const emailResponse = await fetch('/api/claude', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -711,37 +743,34 @@ Output only the email. No commentary before or after.`;
           model: 'claude-haiku-4-5-20251001',
           risn_email,
           risn_unlimited,
-          max_tokens: 600,
+          max_tokens: 500,
           messages: [{ role: 'user', content: buildPrompt() }]
         })
       });
 
-      const data = await response.json();
-      if (data.error) throw new Error(data.error);
+      const emailData = await emailResponse.json();
+      if (emailData.error) throw new Error(emailData.error);
+      generatedEmail = emailData.content[0].text.trim();
 
-      const rawResponse = data.content[0].text.trim();
-      console.log('Raw response:', rawResponse.substring(0, 200));
-      console.log('Has EMAIL marker:', rawResponse.includes('===EMAIL==='));
-      console.log('Has QUESTIONS marker:', rawResponse.includes('===QUESTIONS==='));
-      // Parse email and questions — robust extraction
-      let generatedEmailLocal = rawResponse;
-      let questionsText = '';
+      // CALL 2: Generate questions (doesn't consume a session — different tool flag)
+      const qPrompt = buildQuestionsPrompt();
+      const qResponse = await fetch('/api/claude', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          risn_secret: _risnToken,
+          risn_tool: 'career_email_questions',
+          risn_plan,
+          model: 'claude-haiku-4-5-20251001',
+          risn_email: '', // don't track against user cap
+          risn_unlimited: false,
+          max_tokens: 400,
+          messages: [{ role: 'user', content: qPrompt }]
+        })
+      });
 
-      if (rawResponse.includes('===EMAIL===') && rawResponse.includes('===QUESTIONS===')) {
-        const emailStart = rawResponse.indexOf('===EMAIL===') + '===EMAIL==='.length;
-        const questionsStart = rawResponse.indexOf('===QUESTIONS===');
-        const questionsContentStart = questionsStart + '===QUESTIONS==='.length;
-        generatedEmailLocal = rawResponse.substring(emailStart, questionsStart).trim();
-        questionsText = rawResponse.substring(questionsContentStart).trim();
-      } else if (rawResponse.includes('===QUESTIONS===')) {
-        const questionsStart = rawResponse.indexOf('===QUESTIONS===');
-        generatedEmailLocal = rawResponse.substring(0, questionsStart).trim();
-        questionsText = rawResponse.substring(questionsStart + '===QUESTIONS==='.length).trim();
-      } else {
-        // Claude didn't use markers — show full response as email
-        generatedEmailLocal = rawResponse;
-      }
-      generatedEmail = generatedEmailLocal;
+      const qData = await qResponse.json();
+      const questionsText = (!qData.error && qData.content?.[0]?.text) ? qData.content[0].text.trim() : '';
       saveUse();
 
       const typeLabels = {
