@@ -489,6 +489,14 @@
     </div>
   </div>
 
+  <!-- QUESTIONS TO ASK -->
+  <div id="questionsSection" class="hidden" style="background:#F5F0FF;border:0.5px solid #CECBF6;border-radius:16px;padding:1.5rem;margin-bottom:1rem;">
+    <p style="font-size:14px;font-weight:700;color:#26215C;margin-bottom:4px;">💬 Questions to ask in this conversation</p>
+    <p style="font-size:12px;color:#534AB7;margin-bottom:1rem;">Tailored to your role, company, and interviewer — these are the questions that make conversations memorable.</p>
+    <div id="questionsOutput" style="font-size:14px;color:#26215C;line-height:1.8;white-space:pre-wrap;"></div>
+    <button onclick="copyQuestions()" style="margin-top:1rem;padding:7px 16px;border:1px solid #CECBF6;border-radius:6px;background:white;color:#534AB7;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;">Copy questions</button>
+  </div>
+
   <!-- SESSION LIMIT REACHED -->
   <div id="limitReached" class="limit-box hidden">
     <p style="font-size:14px;color:#92400E;margin-bottom:12px;">You've used all 4 emails this session.</p>
@@ -676,7 +684,12 @@ Output only the email. No commentary before or after.`;
       const data = await response.json();
       if (data.error) throw new Error(data.error);
 
-      generatedEmail = data.content[0].text.trim();
+      const rawResponse = data.content[0].text.trim();
+      // Parse email and questions sections
+      const emailMatch = rawResponse.match(/===EMAIL===[\s\S]*?(?====QUESTIONS===|$)/);
+      const questionsMatch = rawResponse.match(/===QUESTIONS===([\s\S]*?)$/);
+      generatedEmail = emailMatch ? emailMatch[0].replace('===EMAIL===', '').trim() : rawResponse;
+      const questionsText = questionsMatch ? questionsMatch[1].trim() : '';
       saveUse();
 
       const typeLabels = {
@@ -688,6 +701,13 @@ Output only the email. No commentary before or after.`;
 
       document.getElementById('resultLabel').textContent = typeLabels[selectedType];
       document.getElementById('emailOutput').textContent = generatedEmail;
+
+      // Show questions if generated
+      if (questionsText) {
+        document.getElementById('questionsOutput').textContent = questionsText;
+        document.getElementById('questionsSection').classList.remove('hidden');
+      }
+
       document.getElementById('generating').classList.add('hidden');
       document.getElementById('result').classList.remove('hidden');
       document.getElementById('backLink').classList.remove('hidden');
@@ -701,6 +721,14 @@ Output only the email. No commentary before or after.`;
       eb.classList.remove('hidden');
       eb.textContent = 'Something went wrong: ' + err.message + '. Please try again or contact risewithrisn@gmail.com';
     }
+  }
+
+  function copyQuestions() {
+    const text = document.getElementById('questionsOutput').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      event.target.textContent = 'Copied!';
+      setTimeout(() => event.target.textContent = 'Copy questions', 2000);
+    });
   }
 
   function copyEmail() {
@@ -727,6 +755,7 @@ Output only the email. No commentary before or after.`;
 
   function regenerate() {
     document.getElementById('result').classList.add('hidden');
+    document.getElementById('questionsSection').classList.add('hidden');
     document.getElementById('formCard').classList.remove('hidden');
     document.getElementById('backLink').classList.add('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
