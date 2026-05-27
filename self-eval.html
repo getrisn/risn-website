@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ESZ2G28T51"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ESZ2G28T51');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Self-Evaluation Generator — RISN for Professionals</title>
+  <meta name="description" content="Generate a polished, confident self-evaluation that lands. RISN produces the written eval plus a verbal prep guide for the actual review conversation." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://getrisn.com/self-eval.html" />
+  <meta property="og:title" content="Self-Evaluation Generator — RISN for Professionals" />
+  <meta property="og:description" content="Most people undersell themselves in reviews. RISN finds the confident, specific middle ground — and gives you the script to back it up in the room." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0a0a0a;
+      --green: #059669;
+      --green-dark: #065f46;
+      --green-pale: #f0fdf8;
+      --green-border: #6ee7b7;
+      --white: #ffffff;
+      --gray: #f7f7f7;
+      --muted: #888;
+      --border: #e8e8e8;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--gray); color: var(--black); min-height: 100vh; }
+    nav { background: var(--black); display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 56px; border-bottom: 0.5px solid #222; position: sticky; top: 0; z-index: 100; }
+    .nav-logo { text-decoration: none; display: flex; flex-direction: column; }
+    .nav-wordmark { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--white); letter-spacing: 2px; line-height: 1; }
+    .nav-underbar { height: 2px; background: var(--green); border-radius: 1px; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-tool-name { font-size: 13px; color: var(--muted); }
+    .nav-back { font-size: 13px; color: var(--muted); text-decoration: none; }
+    .nav-back:hover { color: var(--white); }
+    .main { max-width: 780px; margin: 0 auto; padding: 2rem; }
+
+    /* BANNER */
+    .intro-banner { background: var(--white); border-radius: 16px; margin-bottom: 1rem; border: 0.5px solid var(--green-border); overflow: hidden; }
+    .intro-banner-top { background: var(--green); padding: 1.5rem 2rem; }
+    .intro-banner-top h2 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--white); letter-spacing: 1px; margin-bottom: 8px; }
+    .intro-banner-top p { font-size: 13px; color: #a7f3d0; line-height: 1.7; margin: 0; }
+    .intro-banner-body { padding: 1.25rem 2rem 1.5rem; }
+    .value-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+    .value-item { background: var(--green-pale); border: 0.5px solid var(--green-border); border-radius: 10px; padding: 12px 14px; }
+    .value-item-title { font-size: 12px; font-weight: 700; color: var(--green-dark); margin-bottom: 4px; }
+    .value-item-desc { font-size: 11px; color: #047857; line-height: 1.5; }
+
+    /* FORM */
+    .card { background: var(--white); border-radius: 16px; border: 0.5px solid var(--border); padding: 2rem; margin-bottom: 1rem; }
+    .card-step { font-size: 11px; color: var(--green); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 6px; }
+    .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; color: var(--black); margin-bottom: 6px; }
+    .card-sub { font-size: 14px; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.6; }
+    .field-group { margin-bottom: 1.25rem; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    label { display: block; font-size: 13px; font-weight: 500; color: var(--black); margin-bottom: 6px; }
+    .label-key { font-size:12px; background: var(--green); color: white; padding: 2px 8px; border-radius: 10px; margin-left: 4px; font-weight: 500; }
+    .label-optional { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 4px; }
+    input[type="text"], textarea, select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--black); background: var(--white); transition: border-color 0.2s; outline: none; }
+    input:focus, textarea:focus, select:focus { border-color: var(--green); }
+    textarea { resize: vertical; line-height: 1.6; }
+    .field-hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* GOAL SELECTOR */
+    .goal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 6px; }
+    .goal-option { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .goal-option:hover { border-color: var(--green); background: var(--green-pale); }
+    .goal-option.selected { border-color: var(--green); background: var(--green-pale); }
+    .goal-option .goal-icon { font-size: 20px; margin-bottom: 4px; }
+    .goal-option .goal-name { font-size: 12px; font-weight: 700; color: var(--black); }
+    .goal-option .goal-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .btn-generate { width: 100%; padding: 14px; background: var(--green); color: var(--white); border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; margin-top: 0.5rem; }
+    .btn-generate:hover { opacity: 0.85; }
+    .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* GENERATING */
+    .generating-card { background: var(--white); border-radius: 16px; border: 0.5px solid var(--border); padding: 3rem 2rem; text-align: center; }
+    .spinner { width: 48px; height: 48px; border: 3px solid var(--green-pale); border-top-color: var(--green); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1.5rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .generating-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; color: var(--black); margin-bottom: 8px; }
+    .generating-sub { font-size: 14px; color: var(--muted); }
+
+    /* RESULTS */
+    .result-section { background: var(--white); border-radius: 16px; border: 0.5px solid var(--border); overflow: hidden; margin-bottom: 1rem; }
+    .result-header { padding: 1rem 1.5rem; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .result-header-title { font-size: 14px; font-weight: 700; color: var(--black); }
+    .result-header-badge { font-size: 11px; background: var(--green-pale); color: var(--green); padding: 3px 10px; border-radius: 20px; font-weight: 500; border: 0.5px solid var(--green-border); }
+    .result-body { padding: 1.5rem; font-size: 14px; color: #333; line-height: 1.8; white-space: pre-wrap; }
+    .result-footer { padding: 1rem 1.5rem; border-top: 0.5px solid var(--border); display: flex; gap: 8px; }
+    .tool-btn { padding: 8px 18px; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--white); color: var(--black); transition: background 0.2s; }
+    .tool-btn:hover { background: var(--gray); }
+    .tool-btn.green { background: var(--green); border-color: var(--green); color: var(--white); }
+    .tool-btn.green:hover { opacity: 0.85; }
+
+    .verbal-section { background: var(--green-pale); border-radius: 16px; border: 0.5px solid var(--green-border); padding: 1.5rem; margin-bottom: 1rem; }
+    .verbal-title { font-size: 14px; font-weight: 700; color: var(--green-dark); margin-bottom: 4px; }
+    .verbal-sub { font-size: 12px; color: #047857; margin-bottom: 1rem; }
+    .verbal-body { font-size: 14px; color: var(--green-dark); line-height: 1.8; white-space: pre-wrap; }
+
+    .error-box { background: #FCEBEB; border: 1px solid #F09595; border-radius: 8px; padding: 1rem 1.25rem; font-size: 14px; color: #791F1F; margin-top: 1rem; }
+    .hidden { display: none !important; }
+
+    @media (max-width: 600px) {
+      .field-row { grid-template-columns: 1fr; }
+      .goal-grid { grid-template-columns: 1fr; }
+      .value-grid { grid-template-columns: 1fr; }
+      .main { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="nav-wordmark">RISN</span>
+    <span class="nav-underbar"></span>
+  </a>
+  <div class="nav-right">
+    <span class="nav-tool-name">Self-Evaluation Generator</span>
+    <a href="/" class="nav-back">← Home</a>
+  </div>
+</nav>
+
+<div class="main">
+
+  <div class="intro-banner">
+    <div class="intro-banner-top">
+      <h2>Write the Self-Eval That Actually Lands</h2>
+      <p>Most people either undersell themselves (too humble, too vague) or oversell themselves (sounds arrogant, no specifics). The sweet spot — confident, specific, outcome-focused — is what RISN delivers. Plus the verbal script to back it up in the room.</p>
+    </div>
+    <div class="intro-banner-body">
+      <div class="value-grid">
+        <div class="value-item">
+          <p class="value-item-title">📝 The written evaluation</p>
+          <p class="value-item-desc">Polished, specific, and calibrated to your goal — whether that's a raise, a promotion, or a strong review.</p>
+        </div>
+        <div class="value-item">
+          <p class="value-item-title">🎤 The verbal prep guide</p>
+          <p class="value-item-desc">What to say when you walk into the room, how to open, what to emphasize, and the one sentence that should land last.</p>
+        </div>
+        <div class="value-item">
+          <p class="value-item-title">🛡️ The pushback handler</p>
+          <p class="value-item-desc">What to say if your manager challenges you — specific responses to the most common objections.</p>
+        </div>
+        <div class="value-item">
+          <p class="value-item-title">📧 The follow-up email</p>
+          <p class="value-item-desc">A professional follow-up to send after the review meeting that keeps the conversation moving forward.</p>
+        </div>
+      </div>
+      <p style="font-size:12px;color:#047857;padding:10px 14px;background:#d1fae5;border-radius:8px;border:0.5px solid var(--green-border);">💡 The more specific your inputs, the more powerful the output. Vague inputs produce generic evals. Real numbers, real accomplishments, real impact.</p>
+    </div>
+  </div>
+
+  <div id="formCard" class="card">
+    <p class="card-step">RISN for Professionals</p>
+    <h1 class="card-title">Self-Evaluation Generator</h1>
+    <p class="card-sub">Answer the questions below. RISN produces your complete self-evaluation package — written eval, verbal prep, pushback handler, and follow-up email.</p>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label for="yourName">Your name</label>
+        <input type="text" id="yourName" placeholder="e.g. Jordan Mitchell" />
+      </div>
+      <div class="field-group">
+        <label for="jobTitle">Your role / title</label>
+        <input type="text" id="jobTitle" placeholder="e.g. Senior Product Manager" />
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label for="company">Company</label>
+        <input type="text" id="company" placeholder="e.g. Dell Technologies" />
+      </div>
+      <div class="field-group">
+        <label for="reviewPeriod">Review period</label>
+        <input type="text" id="reviewPeriod" placeholder="e.g. Q1 2026, Annual 2025" />
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>What's your goal for this review? <span class="label-key">Key for best results</span></label>
+      <div class="goal-grid">
+        <div class="goal-option selected" onclick="selectGoal(this, 'raise')">
+          <div class="goal-icon">💰</div>
+          <p class="goal-name">Get a raise</p>
+          <p class="goal-desc">Justify higher compensation</p>
+        </div>
+        <div class="goal-option" onclick="selectGoal(this, 'promotion')">
+          <div class="goal-icon">🚀</div>
+          <p class="goal-name">Get promoted</p>
+          <p class="goal-desc">Make the case for next level</p>
+        </div>
+        <div class="goal-option" onclick="selectGoal(this, 'recognition')">
+          <div class="goal-icon">⭐</div>
+          <p class="goal-name">Strong review</p>
+          <p class="goal-desc">Excel rating, no specific ask</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label for="accomplishments">Your top accomplishments this period <span class="label-key">Key for best results</span></label>
+      <textarea id="accomplishments" style="min-height:120px;" placeholder="List your 3-5 biggest wins. Be specific — include numbers, percentages, dollar amounts, time saved, projects shipped, teams led. e.g. 'Led migration of 40TB data warehouse, reducing query time by 60% and saving ~$180K annually'"></textarea>
+      <p class="field-hint">Specificity is everything. Vague inputs produce vague output.</p>
+    </div>
+
+    <div class="field-group">
+      <label for="challenges">Challenges you overcame <span class="label-optional">(optional but powerful)</span></label>
+      <textarea id="challenges" style="min-height:80px;" placeholder="What obstacles did you navigate? What did you do when things didn't go as planned? This shows resilience and self-awareness."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label for="teamImpact">Impact on your team or others <span class="label-optional">(optional)</span></label>
+      <textarea id="teamImpact" style="min-height:80px;" placeholder="Did you mentor someone? Unblock a team? Lead a cross-functional initiative? Managers notice candidates who make others better."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label for="managerValues">What does your manager value most? <span class="label-key">Key for best results</span></label>
+      <input type="text" id="managerValues" placeholder="e.g. 'Shipping fast, clear communication, data-driven decisions, team collaboration'" />
+      <p class="field-hint">This shapes the language and emphasis of your entire evaluation.</p>
+    </div>
+
+    <div class="field-group">
+      <label for="goals">Goals for the next period <span class="label-optional">(optional)</span></label>
+      <textarea id="goals" style="min-height:80px;" placeholder="What are you aiming for next? Showing forward momentum is as important as past performance."></textarea>
+    </div>
+
+    <div class="field-group">
+      <label for="additionalContext">Anything else RISN should know? <span class="label-optional">(optional)</span></label>
+      <textarea id="additionalContext" style="min-height:60px;" placeholder="Industry context, company situation, anything that shaped your work this period..."></textarea>
+    </div>
+
+    <button class="btn-generate" onclick="risnGate(generateEval)">Generate My Self-Evaluation Package ✦</button>
+    <div id="errorBox" class="error-box hidden"></div>
+  </div>
+
+  <div id="generating" class="generating-card hidden">
+    <div class="spinner"></div>
+    <h2 class="generating-title">Building Your Package</h2>
+    <p class="generating-sub" id="genSub">Analyzing your accomplishments...</p>
+  </div>
+
+  <div id="results" class="hidden">
+
+    <div class="result-section">
+      <div class="result-header">
+        <p class="result-header-title">📝 Your Self-Evaluation</p>
+        <span class="result-header-badge">Ready to submit</span>
+      </div>
+      <div class="result-body" id="evalOutput"></div>
+      <div class="result-footer">
+        <button class="tool-btn" onclick="copySection('evalOutput')">Copy</button>
+        <button class="tool-btn green" onclick="downloadPackage()">Download Package</button>
+      </div>
+    </div>
+
+    <div class="verbal-section">
+      <p class="verbal-title">🎤 Verbal Prep Guide — What to Say in the Room</p>
+      <p class="verbal-sub">Read this before your review meeting. Do not bring it with you.</p>
+      <div class="verbal-body" id="verbalOutput"></div>
+    </div>
+
+    <div class="result-section">
+      <div class="result-header">
+        <p class="result-header-title">🛡️ Pushback Handler</p>
+        <span class="result-header-badge">If they push back</span>
+      </div>
+      <div class="result-body" id="pushbackOutput"></div>
+      <div class="result-footer">
+        <button class="tool-btn" onclick="copySection('pushbackOutput')">Copy</button>
+      </div>
+    </div>
+
+    <div class="result-section">
+      <div class="result-header">
+        <p class="result-header-title">📧 Post-Review Follow-Up Email</p>
+        <span class="result-header-badge">Send after the meeting</span>
+      </div>
+      <div class="result-body" id="followupOutput"></div>
+      <div class="result-footer">
+        <button class="tool-btn" onclick="copySection('followupOutput')">Copy</button>
+        <button class="tool-btn green" onclick="openFollowupInMail()">Open in Mail</button>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:1rem;">
+      <button onclick="resetForm()" style="padding:10px 24px;border:1px solid var(--border);border-radius:8px;background:var(--white);color:var(--black);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;">Start over ↺</button>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  let selectedGoal = 'raise';
+  let packageData = {};
+
+  function selectGoal(el, goal) {
+    document.querySelectorAll('.goal-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedGoal = goal;
+  }
+
+  function buildPrompt() {
+    const name = document.getElementById('yourName').value;
+    const title = document.getElementById('jobTitle').value;
+    const company = document.getElementById('company').value;
+    const period = document.getElementById('reviewPeriod').value;
+    const accomplishments = document.getElementById('accomplishments').value;
+    const challenges = document.getElementById('challenges').value;
+    const teamImpact = document.getElementById('teamImpact').value;
+    const managerValues = document.getElementById('managerValues').value;
+    const goals = document.getElementById('goals').value;
+    const context = document.getElementById('additionalContext').value;
+
+    const goalDesc = {
+      'raise': 'justify a salary increase — frame accomplishments in terms of value delivered and market worth',
+      'promotion': 'make the case for promotion to the next level — frame accomplishments in terms of scope, leadership, and readiness',
+      'recognition': 'achieve an excellent performance rating — frame accomplishments in terms of impact and exceeding expectations'
+    };
+
+    return `You are an expert career coach and professional writer. Generate a complete self-evaluation package for the following professional.
+
+NAME: ${name || 'the employee'}
+TITLE: ${title || 'the role'}
+COMPANY: ${company || 'the company'}
+REVIEW PERIOD: ${period || 'this period'}
+GOAL: ${goalDesc[selectedGoal]}
+ACCOMPLISHMENTS: ${accomplishments || 'Not provided'}
+CHALLENGES OVERCOME: ${challenges || 'Not provided'}
+TEAM IMPACT: ${teamImpact || 'Not provided'}
+WHAT MANAGER VALUES: ${managerValues || 'Not provided'}
+GOALS FOR NEXT PERIOD: ${goals || 'Not provided'}
+ADDITIONAL CONTEXT: ${context || 'None'}
+
+Produce a complete package in this EXACT format with these EXACT section headers:
+
+===SELF_EVALUATION===
+Write a polished 4-6 paragraph self-evaluation. Be specific, confident, and outcome-focused. Use numbers from the accomplishments wherever possible. Tone should match the goal (${selectedGoal}). Avoid humble-bragging and avoid arrogance — hit the confident, specific middle ground. Do not use the words "passionate", "synergy", "leverage" (as a verb), or "impactful".
+
+===VERBAL_PREP===
+Write a verbal prep guide with these sub-sections:
+- How to open the conversation (2-3 sentences to say first)
+- Your three strongest talking points to emphasize
+- The one sentence that should land last
+- What NOT to say or do in this meeting
+
+===PUSHBACK_HANDLER===
+Write specific responses to these 3 common objections a manager might raise:
+1. "We don't have budget for that right now"
+2. "You're doing great but you're not quite ready for the next level yet"
+3. "Let's revisit this in 6 months"
+For each, provide a calm, professional, specific response that keeps the conversation productive.
+
+===FOLLOWUP_EMAIL===
+Write a professional follow-up email to send within 24 hours of the review meeting. Include a subject line. Keep it under 150 words. Warm, professional, forward-looking.
+
+Use EXACTLY these section markers. Do not add any other text before or after.`;
+  }
+
+  async function generateEval() {
+    const accomplishments = document.getElementById('accomplishments').value.trim();
+    const title = document.getElementById('jobTitle').value.trim();
+
+    if (!accomplishments || !title) {
+      const eb = document.getElementById('errorBox');
+      eb.classList.remove('hidden');
+      eb.textContent = 'Please enter your role and at least one accomplishment to continue.';
+      return;
+    }
+
+    document.getElementById('errorBox').classList.add('hidden');
+    document.getElementById('formCard').classList.add('hidden');
+    document.getElementById('generating').classList.remove('hidden');
+    document.getElementById('results').classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    const subs = ['Analyzing your accomplishments...', 'Calibrating tone and framing...', 'Writing your evaluation...', 'Building verbal prep guide...', 'Finalizing your package...'];
+    let si = 0;
+    const subInterval = setInterval(() => {
+      si = (si + 1) % subs.length;
+      const el = document.getElementById('genSub');
+      if (el) el.textContent = subs[si];
+    }, 3000);
+
+    const risn_email = (function(){ try { return localStorage.getItem('risn_user_email') || ''; } catch(e) { return ''; } })();
+    const risn_unlimited = (function(){ try { const s = sessionStorage.getItem('risn_access'); if(!s) return false; const d = JSON.parse(s); return d && d.type === 'unlimited'; } catch(e) { return false; } })();
+    const risn_plan = (function(){ try { const c = JSON.parse(sessionStorage.getItem('risn_plan_caps') || '{}'); return c.plan || 'paid'; } catch(e) { return 'paid'; } })();
+    const _risnToken = window.getRisnToken ? await window.getRisnToken() : null;
+
+    try {
+      const response = await fetch('/api/claude', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          risn_secret: _risnToken,
+          risn_tool: 'self_eval',
+          risn_plan,
+          model: 'claude-sonnet-4-5',
+          risn_email,
+          risn_unlimited,
+          max_tokens: 2500,
+          messages: [{ role: 'user', content: buildPrompt() }]
+        })
+      });
+
+      clearInterval(subInterval);
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+
+      const text = data.content[0].text;
+      packageData = parsePackage(text);
+
+      document.getElementById('evalOutput').textContent = packageData.eval || 'Could not parse evaluation.';
+      document.getElementById('verbalOutput').textContent = packageData.verbal || 'Could not parse verbal prep.';
+      document.getElementById('pushbackOutput').textContent = packageData.pushback || 'Could not parse pushback handler.';
+      document.getElementById('followupOutput').textContent = packageData.followup || 'Could not parse follow-up email.';
+
+      document.getElementById('generating').classList.add('hidden');
+      document.getElementById('results').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    } catch (err) {
+      clearInterval(subInterval);
+      console.error('Self-eval error:', err);
+      document.getElementById('generating').classList.add('hidden');
+      document.getElementById('formCard').classList.remove('hidden');
+      const eb = document.getElementById('errorBox');
+      eb.classList.remove('hidden');
+      eb.textContent = 'Something went wrong: ' + err.message + '. Please try again or contact risewithrisn@gmail.com';
+    }
+  }
+
+  function parsePackage(text) {
+    const extract = (marker, nextMarker) => {
+      const start = text.indexOf('===' + marker + '===');
+      if (start === -1) return '';
+      const contentStart = start + marker.length + 6;
+      const end = nextMarker ? text.indexOf('===' + nextMarker + '===') : text.length;
+      return text.substring(contentStart, end === -1 ? text.length : end).trim();
+    };
+    return {
+      eval: extract('SELF_EVALUATION', 'VERBAL_PREP'),
+      verbal: extract('VERBAL_PREP', 'PUSHBACK_HANDLER'),
+      pushback: extract('PUSHBACK_HANDLER', 'FOLLOWUP_EMAIL'),
+      followup: extract('FOLLOWUP_EMAIL', null)
+    };
+  }
+
+  function copySection(id) {
+    const text = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      event.target.textContent = 'Copied!';
+      setTimeout(() => event.target.textContent = 'Copy', 2000);
+    });
+  }
+
+  function downloadPackage() {
+    const name = document.getElementById('yourName').value || 'Employee';
+    const period = document.getElementById('reviewPeriod').value || 'Review Period';
+    const full = `SELF-EVALUATION PACKAGE — ${name.toUpperCase()} — ${period.toUpperCase()}\n${'='.repeat(60)}\n\nSELF-EVALUATION\n${'-'.repeat(40)}\n${packageData.eval}\n\n\nVERBAL PREP GUIDE\n${'-'.repeat(40)}\n${packageData.verbal}\n\n\nPUSHBACK HANDLER\n${'-'.repeat(40)}\n${packageData.pushback}\n\n\nPOST-REVIEW FOLLOW-UP EMAIL\n${'-'.repeat(40)}\n${packageData.followup}\n\n\nGenerated by RISN — getrisn.com`;
+    const blob = new Blob([full], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `RISN_SelfEval_${name.replace(/\s+/g, '_')}.txt`;
+    a.click();
+  }
+
+  function openFollowupInMail() {
+    const text = packageData.followup || '';
+    const lines = text.split('\n');
+    let subject = 'Follow-up from our review meeting';
+    let body = text;
+    if (lines[0].startsWith('Subject:')) {
+      subject = lines[0].replace('Subject:', '').trim();
+      body = lines.slice(2).join('\n').trim();
+    }
+    window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
+
+  function resetForm() {
+    document.getElementById('results').classList.add('hidden');
+    document.getElementById('formCard').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+<script src="/risn-access.js"></script>
+</body>
+</html>
