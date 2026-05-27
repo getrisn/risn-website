@@ -418,8 +418,9 @@
 
     <div class="field-row">
       <div class="field-group">
-        <label for="recipientRole">Recipient's role <span class="label-optional">(optional)</span></label>
-        <input type="text" id="recipientRole" placeholder="e.g. Senior Recruiter, Engineering Manager" />
+        <label for="recipientRole">Recipient's role <span class="label-key" style="background:#7C3AFF;">Drives the questions</span></label>
+        <input type="text" id="recipientRole" placeholder="e.g. Senior Recruiter, Engineering Manager, VP of Engineering" />
+      <p class="field-hint">This determines what questions are appropriate — a recruiter gets different questions than a hiring manager or technical interviewer.</p>
       </div>
       <div class="field-group">
         <label for="companyName">Company</label>
@@ -499,8 +500,9 @@
 
   <!-- SESSION LIMIT REACHED -->
   <div id="limitReached" class="limit-box hidden">
-    <p style="font-size:14px;color:#92400E;margin-bottom:8px;">You've sent all 4 emails for this application.</p><p style="font-size:12px;color:#B45309;margin-bottom:12px;">Interviewing somewhere else? Start a new application below.</p>
-    <button onclick="resetSession()" style="padding:10px 24px;background:var(--purple);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Start new application →</button>
+    <p style="font-size:14px;color:#92400E;margin-bottom:8px;">You've sent all 4 emails for this application.</p>
+    <p style="font-size:12px;color:#B45309;margin-bottom:12px;">Interviewing somewhere else? Start a new application — <strong>each new application uses 1 session from your account.</strong></p>
+    <button onclick="confirmNewApplication()" style="padding:10px 24px;background:var(--purple);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Start new application →</button>
   </div>
 
   <div id="backLink" class="hidden" style="margin-top:1rem;text-align:center;">
@@ -591,6 +593,12 @@
     } else {
       limitBox.classList.add('hidden');
       if (counter) counter.style.background = '';
+    }
+  }
+
+  function confirmNewApplication() {
+    if (confirm('Starting a new application uses 1 session from your account and gives you 4 fresh emails for the new role. Continue?')) {
+      resetSession();
     }
   }
 
@@ -712,10 +720,17 @@ Output only the email. No commentary before or after.`;
 
     const company = document.getElementById('companyName').value.trim();
     const jobTitle = document.getElementById('jobTitle').value.trim();
+    const recipientRole = document.getElementById('recipientRole').value.trim();
     if (!company || !jobTitle) {
       const eb = document.getElementById('errorBox');
       eb.classList.remove('hidden');
       eb.textContent = 'Please enter the company name and role to continue.';
+      return;
+    }
+    if (!recipientRole) {
+      const eb = document.getElementById('errorBox');
+      eb.classList.remove('hidden');
+      eb.textContent = "Please enter the recipient's role — it determines what questions are appropriate to ask.";
       return;
     }
 
