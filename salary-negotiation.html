@@ -11,11 +11,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Salary Negotiation Toolkit — RISN for Professionals</title>
-  <meta name="description" content="The negotiation email, a counter-offer response, and a verbal script — because knowing what to say when they push back is the whole game." />
+  <meta name="description" content="Not just the email — the full negotiation toolkit. Personal, specific, and built around your actual situation. Includes market data framing, verbal script, silence strategy, and emotional coaching." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://getrisn.com/salary-negotiation.html" />
   <meta property="og:title" content="Salary Negotiation Toolkit — RISN for Professionals" />
-  <meta property="og:description" content="Most people leave money on the table because they don't know what to say. RISN gives you the email, the counter-offer response, and the verbal script." />
+  <meta property="og:description" content="Most people leave money on the table because they don't know what to say. RISN gives you the full toolkit — personal, specific, and built around your actual situation." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -35,6 +35,7 @@
     .nav-back { font-size: 13px; color: var(--muted); text-decoration: none; }
     .nav-back:hover { color: var(--white); }
     .main { max-width: 780px; margin: 0 auto; padding: 2rem; }
+
     .intro-banner { background: var(--white); border-radius: 16px; margin-bottom: 1rem; border: 0.5px solid var(--green-border); overflow: hidden; }
     .intro-banner-top { background: var(--green); padding: 1.5rem 2rem; }
     .intro-banner-top h2 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--white); letter-spacing: 1px; margin-bottom: 8px; }
@@ -44,6 +45,18 @@
     .value-item { background: var(--green-pale); border: 0.5px solid var(--green-border); border-radius: 10px; padding: 12px 14px; }
     .value-item-title { font-size: 12px; font-weight: 700; color: var(--green-dark); margin-bottom: 4px; }
     .value-item-desc { font-size: 11px; color: #047857; line-height: 1.5; }
+
+    /* KNOW YOUR NUMBER CALCULATOR */
+    .calculator-card { background: var(--white); border-radius: 16px; border: 0.5px solid var(--green-border); padding: 1.75rem; margin-bottom: 1rem; }
+    .calculator-title { font-size: 15px; font-weight: 700; color: var(--green-dark); margin-bottom: 4px; }
+    .calculator-sub { font-size: 13px; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.5; }
+    .calc-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+    .calc-item { background: var(--green-pale); border-radius: 8px; padding: 10px 12px; border: 0.5px solid var(--green-border); text-align: center; }
+    .calc-item-pct { font-size: 11px; color: #047857; margin-bottom: 4px; font-weight: 500; }
+    .calc-item-amount { font-size: 18px; font-weight: 700; color: var(--green-dark); }
+    .calc-item-label { font-size: 10px; color: #6b7280; margin-top: 2px; }
+    .calc-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+
     .card { background: var(--white); border-radius: 16px; border: 0.5px solid var(--border); padding: 2rem; margin-bottom: 1rem; }
     .card-step { font-size: 11px; color: var(--green); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 6px; }
     .card-title { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 1px; color: var(--black); margin-bottom: 6px; }
@@ -53,23 +66,31 @@
     label { display: block; font-size: 13px; font-weight: 500; color: var(--black); margin-bottom: 6px; }
     .label-key { font-size:12px; background: var(--green); color: white; padding: 2px 8px; border-radius: 10px; margin-left: 4px; font-weight: 500; }
     .label-optional { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 4px; }
-    input[type="text"], textarea, select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--black); background: var(--white); transition: border-color 0.2s; outline: none; }
+    input[type="text"], input[type="number"], textarea, select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--black); background: var(--white); transition: border-color 0.2s; outline: none; }
     input:focus, textarea:focus, select:focus { border-color: var(--green); }
     textarea { resize: vertical; line-height: 1.6; }
-    .field-hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .field-hint { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+    .field-hint a { color: var(--green); text-decoration: none; }
+    .field-hint a:hover { text-decoration: underline; }
+
     .scenario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px; }
     .scenario-option { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; cursor: pointer; transition: all 0.2s; }
     .scenario-option:hover { border-color: var(--green); background: var(--green-pale); }
     .scenario-option.selected { border-color: var(--green); background: var(--green-pale); }
     .scenario-name { font-size: 12px; font-weight: 700; color: var(--black); margin-bottom: 2px; }
     .scenario-desc { font-size: 11px; color: var(--muted); }
+
+    .market-hint { background: #FFFBEB; border: 0.5px solid #FDE68A; border-radius: 8px; padding: 10px 14px; margin-top: 8px; font-size: 12px; color: #92400E; line-height: 1.6; }
+
     .btn-generate { width: 100%; padding: 14px; background: var(--green); color: var(--white); border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; margin-top: 0.5rem; }
     .btn-generate:hover { opacity: 0.85; }
+
     .generating-card { background: var(--white); border-radius: 16px; border: 0.5px solid var(--border); padding: 3rem 2rem; text-align: center; }
     .spinner { width: 48px; height: 48px; border: 3px solid var(--green-pale); border-top-color: var(--green); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1.5rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .generating-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; color: var(--black); margin-bottom: 8px; }
     .generating-sub { font-size: 14px; color: var(--muted); }
+
     .result-section { background: var(--white); border-radius: 16px; border: 0.5px solid var(--border); overflow: hidden; margin-bottom: 1rem; }
     .result-header { padding: 1rem 1.5rem; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
     .result-header-title { font-size: 14px; font-weight: 700; color: var(--black); }
@@ -80,13 +101,20 @@
     .tool-btn:hover { background: var(--gray); }
     .tool-btn.green { background: var(--green); border-color: var(--green); color: var(--white); }
     .tool-btn.green:hover { opacity: 0.85; }
+
     .verbal-section { background: var(--green-pale); border-radius: 16px; border: 0.5px solid var(--green-border); padding: 1.5rem; margin-bottom: 1rem; }
     .verbal-title { font-size: 14px; font-weight: 700; color: var(--green-dark); margin-bottom: 4px; }
     .verbal-sub { font-size: 12px; color: #047857; margin-bottom: 1rem; }
     .verbal-body { font-size: 14px; color: var(--green-dark); line-height: 1.8; white-space: pre-wrap; }
+
+    .emotional-section { background: #1a1a2e; border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; border: 0.5px solid #2d2d4a; }
+    .emotional-title { font-size: 14px; font-weight: 700; color: #e2e8ff; margin-bottom: 4px; }
+    .emotional-sub { font-size: 12px; color: #8888aa; margin-bottom: 1rem; }
+    .emotional-body { font-size: 14px; color: #c8d0ff; line-height: 1.8; white-space: pre-wrap; }
+
     .error-box { background: #FCEBEB; border: 1px solid #F09595; border-radius: 8px; padding: 1rem 1.25rem; font-size: 14px; color: #791F1F; margin-top: 1rem; }
     .hidden { display: none !important; }
-    @media (max-width: 600px) { .field-row { grid-template-columns: 1fr; } .scenario-grid { grid-template-columns: 1fr; } .value-grid { grid-template-columns: 1fr; } .main { padding: 1rem; } }
+    @media (max-width: 600px) { .field-row { grid-template-columns: 1fr; } .scenario-grid { grid-template-columns: 1fr; } .calc-row { grid-template-columns: 1fr; } .value-grid { grid-template-columns: 1fr; } .main { padding: 1rem; } }
   </style>
 </head>
 <body>
@@ -106,54 +134,87 @@
   <div class="intro-banner">
     <div class="intro-banner-top">
       <h2>Negotiate Like You Know What You're Worth</h2>
-      <p>Most people leave money on the table not because they don't deserve more — but because they don't know what to say. RISN gives you the negotiation email, the counter-offer response, and the verbal script for when it gets awkward.</p>
+      <p>Most people leave money on the table not because they don't deserve more — but because they don't know what to say, or freeze when it gets uncomfortable. RISN gives you the full toolkit: the email, the verbal script, the silence strategy, and the emotional coaching for the moment your hands start shaking.</p>
     </div>
     <div class="intro-banner-body">
       <div class="value-grid">
         <div class="value-item">
-          <p class="value-item-title">📧 The negotiation email</p>
-          <p class="value-item-desc">Professional, specific, and confident. Makes the ask in a way that opens dialogue rather than closing it.</p>
+          <p class="value-item-title">📧 Personal negotiation email</p>
+          <p class="value-item-desc">Built from your specific accomplishments and situation — not a template anyone could send.</p>
         </div>
         <div class="value-item">
-          <p class="value-item-title">🔄 Counter-offer response</p>
-          <p class="value-item-desc">What to say when they come back lower than you asked — keeps you in the conversation and moving toward yes.</p>
+          <p class="value-item-title">📞 Verbal script + silence strategy</p>
+          <p class="value-item-desc">What to say, when to stop talking, and exactly what to do when they go quiet — which is the moment most people cave.</p>
         </div>
         <div class="value-item">
-          <p class="value-item-title">📞 Verbal script</p>
-          <p class="value-item-desc">Word-for-word guidance for the phone call version — including exactly what to say after they go quiet.</p>
+          <p class="value-item-title">🧠 Emotional coaching</p>
+          <p class="value-item-desc">Negotiation is psychological. RISN acknowledges the fear and gives you the one thing to hold onto when it gets uncomfortable.</p>
         </div>
         <div class="value-item">
-          <p class="value-item-title">✅ Acceptance email</p>
-          <p class="value-item-desc">When you reach a number you can live with — a professional close that sets the right tone going forward.</p>
+          <p class="value-item-title">🔄 Counter-offer + acceptance</p>
+          <p class="value-item-desc">When they come back lower — and they often do — you'll know exactly what to say to keep moving toward yes.</p>
         </div>
       </div>
-      <p style="font-size:12px;color:#047857;padding:10px 14px;background:#d1fae5;border-radius:8px;border:0.5px solid var(--green-border);">💡 The goal isn't to win an argument. It's to reach an agreement both sides feel good about. RISN keeps the tone collaborative throughout.</p>
     </div>
+  </div>
+
+  <!-- KNOW YOUR NUMBER CALCULATOR -->
+  <div class="calculator-card" id="calculatorCard">
+    <p class="calculator-title">💡 Know Your Number First</p>
+    <p class="calculator-sub">Before you negotiate, you need to know what you're actually asking for. Enter your current compensation and see what different increases look like in real dollars.</p>
+    <div class="calc-inputs">
+      <div class="field-group" style="margin:0;">
+        <label for="calcBase">Current base salary</label>
+        <input type="number" id="calcBase" placeholder="e.g. 95000" oninput="updateCalculator()" />
+      </div>
+      <div class="field-group" style="margin:0;">
+        <label for="calcBonus">Annual bonus <span class="label-optional">(if any)</span></label>
+        <input type="number" id="calcBonus" placeholder="e.g. 10000" oninput="updateCalculator()" />
+      </div>
+    </div>
+    <div class="calc-row" id="calcResults" style="display:none;">
+      <div class="calc-item">
+        <p class="calc-item-pct">+10% increase</p>
+        <p class="calc-item-amount" id="calc10">—</p>
+        <p class="calc-item-label">new base salary</p>
+      </div>
+      <div class="calc-item">
+        <p class="calc-item-pct">+15% increase</p>
+        <p class="calc-item-amount" id="calc15">—</p>
+        <p class="calc-item-label">new base salary</p>
+      </div>
+      <div class="calc-item">
+        <p class="calc-item-pct">+20% increase</p>
+        <p class="calc-item-amount" id="calc20">—</p>
+        <p class="calc-item-label">new base salary</p>
+      </div>
+    </div>
+    <p id="calcAdvice" style="font-size:12px;color:#047857;line-height:1.6;display:none;padding:10px 14px;background:#d1fae5;border-radius:8px;border:0.5px solid var(--green-border);"></p>
   </div>
 
   <div id="formCard" class="card">
     <p class="card-step">RISN for Professionals</p>
     <h1 class="card-title">Salary Negotiation Toolkit</h1>
-    <p class="card-sub">Tell RISN about your situation and what you're asking for. The more specific you are, the stronger your negotiation will be.</p>
+    <p class="card-sub">The more honest and specific you are, the more personal and powerful your toolkit will be. These aren't generic questions — your answers are what make this yours.</p>
 
     <div class="field-group">
-      <label>What's your negotiation scenario? <span class="label-key">Key for best results</span></label>
+      <label>What's your situation? <span class="label-key">Sets the strategy</span></label>
       <div class="scenario-grid">
         <div class="scenario-option selected" onclick="selectScenario(this, 'new-offer')">
           <p class="scenario-name">New job offer</p>
-          <p class="scenario-desc">Negotiating before accepting an offer from a new employer</p>
+          <p class="scenario-desc">Negotiating before accepting from a new employer</p>
         </div>
         <div class="scenario-option" onclick="selectScenario(this, 'annual-review')">
           <p class="scenario-name">Annual review / raise</p>
-          <p class="scenario-desc">Asking for a raise at your current job during a review cycle</p>
+          <p class="scenario-desc">Asking for a raise at your current job</p>
         </div>
         <div class="scenario-option" onclick="selectScenario(this, 'promotion-raise')">
           <p class="scenario-name">Promotion raise</p>
-          <p class="scenario-desc">Negotiating compensation alongside a promotion</p>
+          <p class="scenario-desc">Negotiating comp alongside a promotion</p>
         </div>
         <div class="scenario-option" onclick="selectScenario(this, 'counter-offer')">
-          <p class="scenario-name">Counter-offer situation</p>
-          <p class="scenario-desc">You have an outside offer and want to negotiate with current employer</p>
+          <p class="scenario-name">Counter-offer</p>
+          <p class="scenario-desc">Using an outside offer at your current company</p>
         </div>
       </div>
     </div>
@@ -183,34 +244,64 @@
     <div class="field-row">
       <div class="field-group">
         <label for="currentSalary">Current / offered salary <span class="label-key">Key</span></label>
-        <input type="text" id="currentSalary" placeholder="e.g. $95,000 or $95K base + $10K bonus" />
+        <input type="text" id="currentSalary" placeholder="e.g. $95,000 base + $10K bonus" />
       </div>
       <div class="field-group">
         <label for="targetSalary">Your target salary <span class="label-key">Key</span></label>
-        <input type="text" id="targetSalary" placeholder="e.g. $115,000 — be specific" />
+        <input type="text" id="targetSalary" placeholder="e.g. $115,000 — use the calculator above" />
       </div>
     </div>
 
     <div class="field-group">
-      <label for="marketData">Market data / comparable roles <span class="label-optional">(optional but powerful)</span></label>
+      <label for="walkawaySalary">Your walkaway number <span class="label-optional">(private — never appears in output)</span></label>
+      <input type="text" id="walkawaySalary" placeholder="e.g. $105,000 — the minimum you'd accept" />
+      <p class="field-hint">This is never included in any email or script. It only helps RISN calibrate the counter-offer response and how firm to sound.</p>
+    </div>
+
+    <!-- PERSONAL QUESTIONS - the ones that make this feel real -->
+    <div style="background:#f8f9fa;border-radius:12px;padding:1.25rem;margin-bottom:1.25rem;border:0.5px solid var(--border);">
+      <p style="font-size:13px;font-weight:700;color:var(--black);margin-bottom:4px;">Make it personal — this is what separates a powerful negotiation from a template</p>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:1rem;line-height:1.5;">These answers are what make your negotiation feel specific and earned — not generic. Be honest.</p>
+
+      <div class="field-group">
+        <label for="proudMoment">What's the one thing you've done that nobody else on your team could have done? <span class="label-key">Most important</span></label>
+        <textarea id="proudMoment" style="min-height:80px;" placeholder="Be specific — a project, a problem you solved, a result only you delivered. This becomes the anchor of your entire negotiation."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label for="undervaluedMoment">What moment in the last year made you feel most undervalued?</label>
+        <textarea id="undervaluedMoment" style="min-height:70px;" placeholder="A specific instance — not general frustration. This context shapes the emotional tone of your negotiation without ever being said out loud."></textarea>
+        <p class="field-hint">This won't appear in your email. It helps RISN understand where you're coming from.</p>
+      </div>
+
+      <div class="field-group">
+        <label for="managerWords">What has your manager said about your performance recently — their exact words if you remember? <span class="label-optional">(optional)</span></label>
+        <textarea id="managerWords" style="min-height:70px;" placeholder="e.g. 'You told me my work on the migration was the reason we hit Q1 targets' — specific praise quoted back in negotiations is powerful."></textarea>
+      </div>
+
+      <div class="field-group" style="margin:0;">
+        <label for="walkawayFeeling">If they said no today — what would you actually do?</label>
+        <input type="text" id="walkawayFeeling" placeholder="e.g. 'Start looking elsewhere', 'Accept but feel resentful', 'Ask for a timeline'" />
+        <p class="field-hint">Knowing your emotional walkaway — not just your number — changes how you negotiate. Be honest with yourself.</p>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label for="accomplishments">Your strongest accomplishments with impact <span class="label-key">Key for best results</span></label>
+      <textarea id="accomplishments" style="min-height:100px;" placeholder="Specific wins with numbers — revenue impacted, time saved, costs reduced, systems built, teams led. e.g. 'Led migration of 40TB warehouse, reduced query time 60%, saved $180K annually'"></textarea>
+    </div>
+
+    <div class="field-group">
+      <label for="marketData">Market data <span class="label-optional">(optional — but powerful)</span></label>
       <input type="text" id="marketData" placeholder="e.g. 'Glassdoor shows $110-120K for this role in Austin' or 'competing offer of $118K'" />
-      <p class="field-hint">Market data is your strongest negotiating tool. Include it if you have it.</p>
-    </div>
-
-    <div class="field-group">
-      <label for="whyDeserve">Why you deserve it <span class="label-key">Key for best results</span></label>
-      <textarea id="whyDeserve" style="min-height:100px;" placeholder="Your accomplishments, impact, tenure, unique skills, certifications, anything that justifies the ask. Be specific — numbers are your friend."></textarea>
-    </div>
-
-    <div class="field-group">
-      <label for="walkawaySalary">Your walkaway number <span class="label-optional">(stays private — shapes the counter-offer response)</span></label>
-      <input type="text" id="walkawaySalary" placeholder="e.g. $105,000 minimum — won't appear in emails" />
-      <p class="field-hint">This is never included in generated emails. It only helps RISN calibrate your counter-offer response.</p>
+      <div class="market-hint" id="marketHint">
+        💡 <strong>Don't have market data?</strong> That's OK — RISN will frame your ask around your value and impact instead. If you want data, check <a href="https://www.levels.fyi" target="_blank">levels.fyi</a>, <a href="https://www.glassdoor.com" target="_blank">Glassdoor</a>, or <a href="https://www.linkedin.com/salary" target="_blank">LinkedIn Salary</a> for your role and city. Even a range is enough.
+      </div>
     </div>
 
     <div class="field-group">
       <label for="additionalContext">Anything else that matters? <span class="label-optional">(optional)</span></label>
-      <textarea id="additionalContext" style="min-height:60px;" placeholder="Outside offer details, relocation, equity, benefits tradeoffs, relationship with manager..."></textarea>
+      <textarea id="additionalContext" style="min-height:60px;" placeholder="Relocation, equity, competing offers, relationship with your manager, company financial situation, recent performance review..."></textarea>
     </div>
 
     <button class="btn-generate" onclick="risnGate(generateNegotiation)">Build My Negotiation Toolkit ✦</button>
@@ -227,7 +318,7 @@
 
     <div class="result-section">
       <div class="result-header">
-        <p class="result-header-title">📧 Negotiation Email</p>
+        <p class="result-header-title">📧 Your Negotiation Email</p>
         <span class="result-header-badge">Send first</span>
       </div>
       <div class="result-body" id="emailOutput"></div>
@@ -239,8 +330,14 @@
 
     <div class="verbal-section">
       <p class="verbal-title">📞 Verbal Script — What to Say on the Call</p>
-      <p class="verbal-sub">Use this if the negotiation moves to a phone call. Includes what to say after they go quiet.</p>
+      <p class="verbal-sub">Including the silence strategy — what to do when they go quiet, which is the moment most people cave.</p>
       <div class="verbal-body" id="verbalOutput"></div>
+    </div>
+
+    <div class="emotional-section">
+      <p class="emotional-title">🧠 Before You Hit Send — Read This</p>
+      <p class="emotional-sub">The psychological side of negotiation that nobody talks about.</p>
+      <div class="emotional-body" id="emotionalOutput"></div>
     </div>
 
     <div class="result-section">
@@ -277,6 +374,42 @@
   let selectedScenario = 'new-offer';
   let packageData = {};
 
+  // ── Calculator ──────────────────────────────────────────────────────────────
+  function updateCalculator() {
+    const base = parseFloat(document.getElementById('calcBase').value) || 0;
+    const bonus = parseFloat(document.getElementById('calcBonus').value) || 0;
+    const total = base + bonus;
+
+    if (base < 1000) {
+      document.getElementById('calcResults').style.display = 'none';
+      document.getElementById('calcAdvice').style.display = 'none';
+      return;
+    }
+
+    const fmt = n => '$' + Math.round(n).toLocaleString();
+    document.getElementById('calc10').textContent = fmt(base * 1.10);
+    document.getElementById('calc15').textContent = fmt(base * 1.15);
+    document.getElementById('calc20').textContent = fmt(base * 1.20);
+    document.getElementById('calcResults').style.display = 'grid';
+
+    // Auto-populate target salary if empty
+    const targetField = document.getElementById('targetSalary');
+    if (!targetField.value) {
+      targetField.value = fmt(base * 1.15);
+    }
+
+    // Contextual advice
+    const advice = document.getElementById('calcAdvice');
+    advice.style.display = 'block';
+    if (base < 60000) {
+      advice.textContent = `Your total comp is ${fmt(total)}/year. A 15% increase adds ${fmt(base * 0.15)} to your base — ${fmt(base * 0.15 / 12)}/month. Ask for 15-20% on a new offer. For an annual review, 8-12% is strong.`;
+    } else if (base < 120000) {
+      advice.textContent = `Your total comp is ${fmt(total)}/year. A 15% increase adds ${fmt(base * 0.15)} to your base. For new offers, asking 15-20% above the offer is standard. For annual reviews, 8-15% is the typical range for strong performers.`;
+    } else {
+      advice.textContent = `Your total comp is ${fmt(total)}/year. At this level, equity and bonus structure matter as much as base. Make sure you're comparing total comp — not just base salary — against market data.`;
+    }
+  }
+
   function selectScenario(el, scenario) {
     document.querySelectorAll('.scenario-option').forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
@@ -290,61 +423,123 @@
     const recipient = document.getElementById('recipientName').value;
     const current = document.getElementById('currentSalary').value;
     const target = document.getElementById('targetSalary').value;
-    const market = document.getElementById('marketData').value;
-    const whyDeserve = document.getElementById('whyDeserve').value;
     const walkaway = document.getElementById('walkawaySalary').value;
+    const accomplishments = document.getElementById('accomplishments').value;
+    const marketData = document.getElementById('marketData').value;
+    const proudMoment = document.getElementById('proudMoment').value;
+    const undervalued = document.getElementById('undervaluedMoment').value;
+    const managerWords = document.getElementById('managerWords').value;
+    const walkawayFeeling = document.getElementById('walkawayFeeling').value;
     const context = document.getElementById('additionalContext').value;
 
     const scenarioDesc = {
       'new-offer': 'negotiating a new job offer before acceptance',
-      'annual-review': 'requesting a raise during an annual review cycle',
+      'annual-review': 'requesting a raise during an annual review',
       'promotion-raise': 'negotiating compensation alongside a promotion',
       'counter-offer': 'using an outside offer to negotiate with current employer'
     };
 
-    return `You are an expert salary negotiation coach. Generate a complete salary negotiation toolkit.
+    const hasMarketData = marketData && marketData.trim().length > 0;
 
-NAME: ${name || 'the professional'}
+    return `You are an expert salary negotiation coach who combines psychological insight with practical communication strategy. Generate a complete, deeply personal salary negotiation toolkit.
+
+CANDIDATE: ${name || 'the professional'}
 ROLE: ${title || 'the position'}
 COMPANY: ${company || 'the company'}
 RECIPIENT: ${recipient || 'the appropriate contact'}
 SCENARIO: ${scenarioDesc[selectedScenario]}
 CURRENT/OFFERED SALARY: ${current || 'not specified'}
 TARGET SALARY: ${target || 'not specified'}
-MARKET DATA: ${market || 'not provided'}
-WHY THEY DESERVE IT: ${whyDeserve || 'not specified'}
-WALKAWAY NUMBER (private, do NOT include in emails): ${walkaway || 'not specified'}
+WALKAWAY NUMBER (private — do NOT include in any output): ${walkaway || 'not specified'}
+ACCOMPLISHMENTS: ${accomplishments || 'not specified'}
+MARKET DATA: ${hasMarketData ? marketData : 'NOT PROVIDED — frame the ask around value and impact instead of market comparison'}
+WHAT ONLY THEY COULD HAVE DONE: ${proudMoment || 'not specified'}
+WHAT MADE THEM FEEL UNDERVALUED: ${undervalued || 'not specified — use to understand emotional context only'}
+MANAGER'S EXACT WORDS (if provided): ${managerWords || 'not provided'}
+WHAT THEY'D DO IF THE ANSWER IS NO: ${walkawayFeeling || 'not specified'}
 ADDITIONAL CONTEXT: ${context || 'none'}
 
-Produce the complete toolkit in this EXACT format:
+CRITICAL INSTRUCTION: This must feel personal — written specifically for ${name || 'this person'} at ${company || 'this company'} in this specific situation. Reference their actual accomplishments. If their manager praised them, quote it back. If they have a "only I could have done this" moment, anchor the email to it. Generic negotiation emails fail. Specific ones land.
+
+Produce the complete toolkit with these EXACT section markers:
 
 ===NEGOTIATION_EMAIL===
-Write the primary negotiation email. Include a subject line. Professional, warm, specific, and confident. Frame the ask in terms of value delivered and market positioning. Under 200 words. Never use "I feel" or "I think" — use "I've demonstrated" and "the data shows". Do not mention the walkaway number.
+Write a personal, specific negotiation email. Include subject line. Under 220 words.
+- Open with something specific — their accomplishment, the manager's words if provided, or a concrete win
+- State the ask clearly and confidently — not apologetically
+- ${hasMarketData ? 'Reference the market data provided to anchor the ask externally' : 'Anchor the ask in their value and impact — not market comparison since no data was provided'}
+- Close with collaborative confidence — not desperation
+- Sound like a real person who knows their worth wrote this — not a template
+- NEVER use: "I wanted to reach out", "I hope this finds you well", "I am writing to", "touch base", "passionate", "excited about this opportunity"
+- Do NOT include the walkaway number
 
 ===VERBAL_SCRIPT===
-Write a verbal script for the phone call version with these sections:
-- Opening line (exactly what to say first)
-- How to present the ask (2-3 sentences)
-- What to say after they go quiet (this is crucial — most people cave here)
-- How to handle "we need to check with HR"
-- Closing line regardless of outcome
+Write a verbal script in distinct sections:
+
+OPENING LINE (exact words to say first):
+[specific opening — not "Hi, thanks for taking my call"]
+
+THE ASK (2-3 sentences):
+[how to present the number — confident, not apologetic]
+
+THE SILENCE STRATEGY:
+After you state your number — stop talking. Do not fill the silence. Count to 10 in your head if you have to. Here is exactly what to do in each scenario:
+- If they go quiet for 5-10 seconds: [specific guidance]
+- If they say "let me think about it": [exact response]
+- If they put you on hold: [what to do while waiting]
+- If they come back with a lower number immediately: [exact response]
+Most people cave here. The silence feels unbearable. It isn't. Whoever speaks first after the ask usually loses.
+
+HANDLING "WE DON'T HAVE BUDGET":
+[specific, calm, professional response that keeps the conversation moving]
+
+HANDLING "YOU'RE NOT QUITE AT THAT LEVEL YET":
+[specific response — especially relevant for promotion scenarios]
+
+CLOSING LINE (regardless of outcome):
+[exact words to close the conversation professionally whether yes or no]
+
+===EMOTIONAL_COACHING===
+Write a personal emotional coaching section. This should feel like advice from someone who has been through this — not a corporate script.
+
+Address:
+- The physical sensations they'll feel (heart racing, voice wavering, the urge to apologize) — normalize them
+- The psychological trap most people fall into ("I should be grateful I have this job") — name it and dismantle it
+- The one thing to hold onto when the conversation gets uncomfortable — make it specific and memorable
+- What to do the night before — one concrete action
+- The reframe: this is not confrontation, it is a business conversation between two professionals
+${walkawayFeeling ? `- Address their specific concern about what happens if the answer is no: "${walkawayFeeling}"` : ''}
+
+Make this section feel human. This is the section nobody else provides.
 
 ===COUNTER_OFFER===
-Write a counter-offer response email for when they come back lower than requested. Include subject line. Acknowledge their response, hold firm but collaborative, propose a middle ground informed by the walkaway number without revealing it. Under 150 words.
+Write a counter-offer response for when they come back lower. Include subject line. Under 160 words.
+- Acknowledge their response without surrendering
+- Hold firm but collaborative — propose movement toward middle ground
+- Reference the walkaway number implicitly without stating it
+- Keep the door open without sounding desperate
 
 ===ACCEPTANCE_EMAIL===
-Write a professional acceptance email for when agreement is reached. Include subject line. Warm, grateful, forward-looking. Confirms the agreed terms. Under 100 words.
+Write a professional acceptance email. Include subject line. Under 100 words.
+Warm, forward-looking, confirms agreed terms, sets positive tone for the relationship going forward.
 
 Use EXACTLY these section markers. No other text before or after.`;
   }
 
   async function generateNegotiation() {
     const target = document.getElementById('targetSalary').value.trim();
-    const why = document.getElementById('whyDeserve').value.trim();
-    if (!target || !why) {
+    const proudMoment = document.getElementById('proudMoment').value.trim();
+
+    if (!target) {
       const eb = document.getElementById('errorBox');
       eb.classList.remove('hidden');
-      eb.textContent = 'Please enter your target salary and why you deserve it to continue.';
+      eb.textContent = 'Please enter your target salary to continue. Use the calculator above if you need help finding your number.';
+      return;
+    }
+    if (!proudMoment) {
+      const eb = document.getElementById('errorBox');
+      eb.classList.remove('hidden');
+      eb.textContent = 'Please answer the "one thing only you could have done" question — this is what makes your negotiation personal and powerful.';
       return;
     }
 
@@ -354,13 +549,21 @@ Use EXACTLY these section markers. No other text before or after.`;
     document.getElementById('results').classList.add('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    const subs = ['Analyzing your situation...', 'Calibrating negotiation strategy...', 'Writing your emails...', 'Building verbal script...', 'Finalizing toolkit...'];
+    const subs = [
+      'Reading your situation...',
+      'Finding your anchor moment...',
+      'Writing your negotiation email...',
+      'Building the verbal script...',
+      'Writing the silence strategy...',
+      'Adding emotional coaching...',
+      'Finalizing your toolkit...'
+    ];
     let si = 0;
     const subInterval = setInterval(() => {
       si = (si + 1) % subs.length;
       const el = document.getElementById('genSub');
       if (el) el.textContent = subs[si];
-    }, 3000);
+    }, 2500);
 
     const risn_email = (function(){ try { return localStorage.getItem('risn_user_email') || ''; } catch(e) { return ''; } })();
     const risn_unlimited = (function(){ try { const s = sessionStorage.getItem('risn_access'); if(!s) return false; const d = JSON.parse(s); return d && d.type === 'unlimited'; } catch(e) { return false; } })();
@@ -378,7 +581,7 @@ Use EXACTLY these section markers. No other text before or after.`;
           model: 'claude-sonnet-4-5',
           risn_email,
           risn_unlimited,
-          max_tokens: 2000,
+          max_tokens: 3000,
           messages: [{ role: 'user', content: buildPrompt() }]
         })
       });
@@ -392,6 +595,7 @@ Use EXACTLY these section markers. No other text before or after.`;
 
       document.getElementById('emailOutput').textContent = packageData.email || '';
       document.getElementById('verbalOutput').textContent = packageData.verbal || '';
+      document.getElementById('emotionalOutput').textContent = packageData.emotional || '';
       document.getElementById('counterOutput').textContent = packageData.counter || '';
       document.getElementById('acceptanceOutput').textContent = packageData.acceptance || '';
 
@@ -419,7 +623,8 @@ Use EXACTLY these section markers. No other text before or after.`;
     };
     return {
       email: extract('NEGOTIATION_EMAIL', 'VERBAL_SCRIPT'),
-      verbal: extract('VERBAL_SCRIPT', 'COUNTER_OFFER'),
+      verbal: extract('VERBAL_SCRIPT', 'EMOTIONAL_COACHING'),
+      emotional: extract('EMOTIONAL_COACHING', 'COUNTER_OFFER'),
       counter: extract('COUNTER_OFFER', 'ACCEPTANCE_EMAIL'),
       acceptance: extract('ACCEPTANCE_EMAIL', null)
     };
