@@ -796,7 +796,7 @@ Output only the email. No commentary before or after.`;
       };
 
       document.getElementById('resultLabel').textContent = typeLabels[selectedType];
-      document.getElementById('emailOutput').textContent = generatedEmail;
+      document.getElementById('emailOutput').innerHTML = renderMarkdown(generatedEmail);
 
       // Show questions if generated
       const qSection = document.getElementById('questionsSection');
@@ -871,6 +871,36 @@ Output only the email. No commentary before or after.`;
   });
 </script>
 
+<script>
+
+  // ── Markdown renderer ────────────────────────────────────────────────────────
+  function renderMarkdown(text) {
+    if (!text) return '';
+    return text
+      .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*([^*\n]+)\*/g, '<em>$1</em>')
+      .replace(/^### (.+)$/gm, '<p style="font-size:13px;font-weight:700;color:var(--black);margin:1rem 0 4px;">$1</p>')
+      .replace(/^## (.+)$/gm, '<p style="font-size:14px;font-weight:700;color:var(--black);margin:1rem 0 6px;">$1</p>')
+      .replace(/^# (.+)$/gm, '<p style="font-size:15px;font-weight:700;color:var(--black);margin:1rem 0 8px;">$1</p>')
+      .replace(/^- (.+)$/gm, '<div style="display:flex;gap:8px;margin:2px 0;"><span style="flex-shrink:0;color:var(--muted);">•</span><span>$1</span></div>')
+      .replace(/^\d+\. (.+)$/gm, '<div style="margin:2px 0;">$1</div>')
+      .replace(/\n\n/g, '</p><p style="margin:0 0 8px;">')
+      .replace(/\n/g, '<br/>');
+  }
+
+  // Strip markdown for plain text downloads
+  function stripMarkdown(text) {
+    if (!text) return '';
+    return text
+      .replace(/\*\*\*(.+?)\*\*\*/g, '$1')
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/\*([^*\n]+)\*/g, '$1')
+      .replace(/^#{1,3} /gm, '')
+      .replace(/^- /gm, '• ')
+      .trim();
+  }
+</script>
 <script src="/risn-access.js"></script>
 </body>
 </html>
