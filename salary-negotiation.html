@@ -64,7 +64,7 @@
     .field-group { margin-bottom: 1.25rem; }
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     label { display: block; font-size: 13px; font-weight: 500; color: var(--black); margin-bottom: 6px; }
-    .label-key { font-size:12px; background: var(--green); color: white; padding: 2px 8px; border-radius: 10px; margin-left: 4px; font-weight: 500; }
+    .label-key { font-size:12px; background: var(--green); color: white; padding: 2px 8px; border-radius: 10px; margin-left: 4px; font-weight: 500; white-space: nowrap; vertical-align: middle; }
     .label-optional { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 4px; }
     input[type="text"], input[type="number"], textarea, select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--black); background: var(--white); transition: border-color 0.2s; outline: none; }
     input:focus, textarea:focus, select:focus { border-color: var(--green); }
@@ -198,7 +198,7 @@
     <p class="card-sub">The more honest and specific you are, the more personal and powerful your toolkit will be. These aren't generic questions — your answers are what make this yours.</p>
 
     <div class="field-group">
-      <label>What's your situation? <span class="label-key">Sets the strategy</span></label>
+      <label>What's your situation? <span class="label-key";white-space:nowrap;vertical-align:middle;">Sets the strategy</span></label>
       <div class="scenario-grid">
         <div class="scenario-option selected" onclick="selectScenario(this, 'new-offer')">
           <p class="scenario-name">New job offer</p>
@@ -243,11 +243,11 @@
 
     <div class="field-row">
       <div class="field-group">
-        <label for="currentSalary">Current / offered salary <span class="label-key">Key</span></label>
+        <label style="display:flex;align-items:center;flex-wrap:nowrap;gap:4px;" for="currentSalary">Current / offered salary <span class="label-key";white-space:nowrap;vertical-align:middle;">Key</span></label>
         <input type="text" id="currentSalary" placeholder="e.g. $95,000 base + $10K bonus" />
       </div>
       <div class="field-group">
-        <label for="targetSalary">Your target salary <span class="label-key">Key</span></label>
+        <label style="display:flex;align-items:center;flex-wrap:nowrap;gap:4px;" for="targetSalary">Your target salary <span class="label-key";white-space:nowrap;vertical-align:middle;">Key</span></label>
         <input type="text" id="targetSalary" placeholder="e.g. $115,000 — use the calculator above" />
       </div>
     </div>
@@ -264,7 +264,7 @@
       <p style="font-size:12px;color:var(--muted);margin-bottom:1rem;line-height:1.5;">These answers are what make your negotiation feel specific and earned — not generic. Be honest.</p>
 
       <div class="field-group">
-        <label for="proudMoment">What's the one thing you've done that nobody else on your team could have done? <span class="label-key">Most important</span></label>
+        <label style="display:flex;align-items:center;flex-wrap:nowrap;gap:4px;" for="proudMoment">What's the one thing you've done that nobody else on your team could have done? <span class="label-key";white-space:nowrap;vertical-align:middle;">Most important</span></label>
         <textarea id="proudMoment" style="min-height:80px;" placeholder="Be specific — a project, a problem you solved, a result only you delivered. This becomes the anchor of your entire negotiation."></textarea>
       </div>
 
@@ -287,7 +287,7 @@
     </div>
 
     <div class="field-group">
-      <label for="accomplishments">Your strongest accomplishments with impact <span class="label-key">Key for best results</span></label>
+      <label style="display:flex;align-items:center;flex-wrap:nowrap;gap:4px;" for="accomplishments">Your strongest accomplishments with impact <span class="label-key";white-space:nowrap;vertical-align:middle;">Key for best results</span></label>
       <textarea id="accomplishments" style="min-height:100px;" placeholder="Specific wins with numbers — revenue impacted, time saved, costs reduced, systems built, teams led. e.g. 'Led migration of 40TB warehouse, reduced query time 60%, saved $180K annually'"></textarea>
     </div>
 
