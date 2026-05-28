@@ -51,7 +51,7 @@
     .field-group { margin-bottom: 1.25rem; }
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     label { display: block; font-size: 13px; font-weight: 500; color: var(--black); margin-bottom: 6px; }
-    .label-key { font-size:12px; background: var(--green); color: white; padding: 2px 8px; border-radius: 10px; margin-left: 4px; font-weight: 500; }
+    .label-key { font-size:12px; background: var(--green); color: white; padding: 2px 8px; border-radius: 10px; margin-left: 4px; font-weight: 500; white-space: nowrap; vertical-align: middle; }
     .label-optional { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 4px; }
     input[type="text"], textarea, select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--black); background: var(--white); transition: border-color 0.2s; outline: none; }
     input:focus, textarea:focus, select:focus { border-color: var(--green); }
@@ -155,7 +155,7 @@
 
     <div class="field-row">
       <div class="field-group">
-        <label for="targetTitle">Title you're seeking <span class="label-key">Key</span></label>
+        <label style="display:flex;align-items:center;flex-wrap:nowrap;gap:4px;" for="targetTitle">Title you're seeking <span class="label-key";white-space:nowrap;vertical-align:middle;">Key</span></label>
         <input type="text" id="targetTitle" placeholder="e.g. Senior Software Engineer" />
       </div>
       <div class="field-group">
@@ -176,7 +176,7 @@
     </div>
 
     <div class="field-group">
-      <label>Where are you in the process? <span class="label-key">Shapes the strategy</span></label>
+      <label>Where are you in the process? <span class="label-key";white-space:nowrap;vertical-align:middle;">Shapes the strategy</span></label>
       <div class="timing-grid">
         <div class="timing-option selected" onclick="selectTiming(this, 'planning')">
           <p class="timing-name">Planning ahead</p>
@@ -194,13 +194,13 @@
     </div>
 
     <div class="field-group">
-      <label for="accomplishments">Your strongest accomplishments <span class="label-key">Key</span></label>
+      <label style="display:flex;align-items:center;flex-wrap:nowrap;gap:4px;" for="accomplishments">Your strongest accomplishments <span class="label-key";white-space:nowrap;vertical-align:middle;">Key</span></label>
       <textarea id="accomplishments" style="min-height:120px;" placeholder="Your 3-5 biggest wins with specific impact and numbers. Include things that went beyond your job description. e.g. 'Led architecture redesign that reduced P99 latency by 40%, enabling 3x traffic without infrastructure cost increase'"></textarea>
       <p class="field-hint">Next-level work justifies next-level titles. Show you're already operating there.</p>
     </div>
 
     <div class="field-group">
-      <label for="nextLevelWork">Evidence you're already doing the next-level job <span class="label-key">Most important</span></label>
+      <label style="display:flex;align-items:center;flex-wrap:nowrap;gap:4px;" for="nextLevelWork">Evidence you're already doing the next-level job <span class="label-key";white-space:nowrap;vertical-align:middle;">Most important</span></label>
       <textarea id="nextLevelWork" style="min-height:100px;" placeholder="Specific examples where you operated above your current level — mentoring, leading projects, cross-functional ownership, scope of decisions. The strongest cases show you're already doing the job you're asking for."></textarea>
     </div>
 
@@ -210,7 +210,7 @@
       <p class="personal-box-sub">Don't filter these answers. RISN uses them to build a case that sounds like you — not a template. Some of these inform the psychological coaching and won't appear in your written case.</p>
 
       <div class="field-group">
-        <label for="proofMoment">What's the single moment that proved to you — and maybe to others — that you're ready? <span class="label-key">Anchor this</span></label>
+        <label style="display:flex;align-items:center;flex-wrap:nowrap;gap:4px;" for="proofMoment">What's the single moment that proved to you — and maybe to others — that you're ready? <span class="label-key";white-space:nowrap;vertical-align:middle;">Anchor this</span></label>
         <textarea id="proofMoment" style="min-height:80px;" placeholder="A specific project, decision, crisis you navigated, or result that changed how people see you. This becomes the centerpiece of your entire case."></textarea>
       </div>
 
