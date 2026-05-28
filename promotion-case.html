@@ -11,11 +11,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Promotion Case Builder — RISN for Professionals</title>
-  <meta name="description" content="Build a complete promotion case — the written document, one-page summary, verbal pitch, and a 90-day positioning strategy to plant the seed before the ask." />
+  <meta name="description" content="Build a complete, personal promotion case — the document, the verbal pitch, the 90-day strategy, and the psychological coaching for the conversation you've been putting off." />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://getrisn.com/promotion-case.html" />
   <meta property="og:title" content="Promotion Case Builder — RISN for Professionals" />
-  <meta property="og:description" content="A complete promotion case document, one-page summary, and 90-day positioning strategy. Everything you need to make the ask with confidence." />
+  <meta property="og:description" content="Promotions go to people who make their case clearly. RISN builds the complete package — the document, the pitch, the 90-day strategy, and the coaching for the conversation you've been putting off." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -56,13 +56,16 @@
     input[type="text"], textarea, select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--black); background: var(--white); transition: border-color 0.2s; outline: none; }
     input:focus, textarea:focus, select:focus { border-color: var(--green); }
     textarea { resize: vertical; line-height: 1.6; }
-    .field-hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .field-hint { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
     .timing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 6px; }
     .timing-option { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; cursor: pointer; transition: all 0.2s; text-align: center; }
     .timing-option:hover { border-color: var(--green); background: var(--green-pale); }
     .timing-option.selected { border-color: var(--green); background: var(--green-pale); }
     .timing-name { font-size: 12px; font-weight: 700; color: var(--black); }
     .timing-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .personal-box { background: #f8f9fa; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem; border: 0.5px solid var(--border); }
+    .personal-box-title { font-size: 13px; font-weight: 700; color: var(--black); margin-bottom: 4px; }
+    .personal-box-sub { font-size: 12px; color: var(--muted); margin-bottom: 1rem; line-height: 1.5; }
     .btn-generate { width: 100%; padding: 14px; background: var(--green); color: var(--white); border: none; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; margin-top: 0.5rem; }
     .btn-generate:hover { opacity: 0.85; }
     .generating-card { background: var(--white); border-radius: 16px; border: 0.5px solid var(--border); padding: 3rem 2rem; text-align: center; }
@@ -84,6 +87,10 @@
     .verbal-title { font-size: 14px; font-weight: 700; color: var(--green-dark); margin-bottom: 4px; }
     .verbal-sub { font-size: 12px; color: #047857; margin-bottom: 1rem; }
     .verbal-body { font-size: 14px; color: var(--green-dark); line-height: 1.8; white-space: pre-wrap; }
+    .emotional-section { background: #1a1a2e; border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; border: 0.5px solid #2d2d4a; }
+    .emotional-title { font-size: 14px; font-weight: 700; color: #e2e8ff; margin-bottom: 4px; }
+    .emotional-sub { font-size: 12px; color: #8888aa; margin-bottom: 1rem; }
+    .emotional-body { font-size: 14px; color: #c8d0ff; line-height: 1.8; white-space: pre-wrap; }
     .error-box { background: #FCEBEB; border: 1px solid #F09595; border-radius: 8px; padding: 1rem 1.25rem; font-size: 14px; color: #791F1F; margin-top: 1rem; }
     .hidden { display: none !important; }
     @media (max-width: 600px) { .field-row { grid-template-columns: 1fr; } .timing-grid { grid-template-columns: 1fr; } .value-grid { grid-template-columns: 1fr; } .main { padding: 1rem; } }
@@ -106,35 +113,34 @@
   <div class="intro-banner">
     <div class="intro-banner-top">
       <h2>Make the Case. Get the Title.</h2>
-      <p>Promotions don't go to the hardest workers. They go to the people who make their case clearly, at the right time, in the right way. RISN builds the complete package — the document, the pitch, and the 90-day strategy to set it up before you ever ask.</p>
+      <p>Promotions don't go to the hardest workers. They go to the people who make their case clearly, at the right time, in the right way — and who had the courage to actually ask. RISN builds your complete package: the written case, the verbal pitch, the psychological coaching for the fear of hearing "not yet," and the 90-day strategy to make yes the only reasonable answer.</p>
     </div>
     <div class="intro-banner-body">
       <div class="value-grid">
         <div class="value-item">
           <p class="value-item-title">📄 The promotion case document</p>
-          <p class="value-item-desc">A structured, evidence-based case for your promotion — accomplishments, scope, readiness, and next-level impact.</p>
+          <p class="value-item-desc">Evidence-based, specific to you, and written to land — not a template your manager has seen before.</p>
         </div>
         <div class="value-item">
-          <p class="value-item-title">📋 One-page summary</p>
-          <p class="value-item-desc">The version for quick conversations and informal asks — everything that matters in a single page.</p>
+          <p class="value-item-title">🎤 Verbal pitch + objection handling</p>
+          <p class="value-item-desc">What to say, how to open, and exactly how to respond to "not yet" without losing momentum.</p>
         </div>
         <div class="value-item">
-          <p class="value-item-title">🎤 The verbal pitch</p>
-          <p class="value-item-desc">What to say in the meeting — how to open, how to frame your ask, and how to handle "not yet."</p>
+          <p class="value-item-title">🧠 Psychological coaching</p>
+          <p class="value-item-desc">The imposter syndrome trap, the loyalty trap, the visibility trap — named and dismantled before you walk in.</p>
         </div>
         <div class="value-item">
           <p class="value-item-title">📅 90-day positioning strategy</p>
-          <p class="value-item-desc">How to plant the seed and build the case in the 90 days before you formally ask — so the answer is already yes by the time you ask.</p>
+          <p class="value-item-desc">Week-by-week actions to plant the seed so the answer is already yes before you formally ask.</p>
         </div>
       </div>
-      <p style="font-size:12px;color:#047857;padding:10px 14px;background:#d1fae5;border-radius:8px;border:0.5px solid var(--green-border);">💡 The best promotion conversations are ones where the manager already saw it coming. The 90-day strategy is how you make that happen.</p>
     </div>
   </div>
 
   <div id="formCard" class="card">
     <p class="card-step">RISN for Professionals</p>
     <h1 class="card-title">Promotion Case Builder</h1>
-    <p class="card-sub">Tell RISN about your role, your case, and where you want to go. We'll build the complete package to get you there.</p>
+    <p class="card-sub">Be honest — especially with the personal questions. The more real your answers, the more powerful your case. RISN is your strategist, not your audience.</p>
 
     <div class="field-row">
       <div class="field-group">
@@ -170,54 +176,81 @@
     </div>
 
     <div class="field-group">
-      <label>Where are you in the process? <span class="label-key">Key for best results</span></label>
+      <label>Where are you in the process? <span class="label-key">Shapes the strategy</span></label>
       <div class="timing-grid">
         <div class="timing-option selected" onclick="selectTiming(this, 'planning')">
           <p class="timing-name">Planning ahead</p>
-          <p class="timing-desc">Not ready to ask yet — want to prepare</p>
+          <p class="timing-desc">Not ready to ask yet</p>
         </div>
         <div class="timing-option" onclick="selectTiming(this, 'soon')">
           <p class="timing-name">Asking soon</p>
-          <p class="timing-desc">Review coming up in weeks or months</p>
+          <p class="timing-desc">Review in weeks or months</p>
         </div>
         <div class="timing-option" onclick="selectTiming(this, 'now')">
           <p class="timing-name">Asking now</p>
-          <p class="timing-desc">Meeting scheduled or happening soon</p>
+          <p class="timing-desc">Meeting imminent</p>
         </div>
       </div>
     </div>
 
     <div class="field-group">
-      <label for="accomplishments">Your strongest accomplishments <span class="label-key">Key for best results</span></label>
-      <textarea id="accomplishments" style="min-height:120px;" placeholder="Your 3-5 biggest wins — with specific numbers, impact, and scope. Include things that went beyond your current job description. e.g. 'Led architecture redesign that reduced P99 latency by 40%, enabling product to handle 3x traffic without infrastructure cost increase'"></textarea>
-      <p class="field-hint">Next-level work is what justifies next-level titles. Show you're already operating there.</p>
+      <label for="accomplishments">Your strongest accomplishments <span class="label-key">Key</span></label>
+      <textarea id="accomplishments" style="min-height:120px;" placeholder="Your 3-5 biggest wins with specific impact and numbers. Include things that went beyond your job description. e.g. 'Led architecture redesign that reduced P99 latency by 40%, enabling 3x traffic without infrastructure cost increase'"></textarea>
+      <p class="field-hint">Next-level work justifies next-level titles. Show you're already operating there.</p>
     </div>
 
     <div class="field-group">
-      <label for="nextLevelWork">Evidence you're already doing the next-level job <span class="label-key">Key</span></label>
-      <textarea id="nextLevelWork" style="min-height:100px;" placeholder="Specific examples where you operated above your current level — mentoring, leading projects, cross-functional ownership, decision-making scope, etc. The strongest promotion cases show you're already doing the job you're asking for."></textarea>
+      <label for="nextLevelWork">Evidence you're already doing the next-level job <span class="label-key">Most important</span></label>
+      <textarea id="nextLevelWork" style="min-height:100px;" placeholder="Specific examples where you operated above your current level — mentoring, leading projects, cross-functional ownership, scope of decisions. The strongest cases show you're already doing the job you're asking for."></textarea>
     </div>
 
-    <div class="field-group">
-      <label for="managerRelationship">Your relationship with your manager <span class="label-optional">(optional)</span></label>
-      <input type="text" id="managerRelationship" placeholder="e.g. 'Supportive, has hinted I'm close', 'New manager, unknown', 'Skeptical, needs convincing'" />
-      <p class="field-hint">Shapes the tone and strategy of your verbal pitch and 90-day plan.</p>
+    <!-- PERSONAL QUESTIONS -->
+    <div class="personal-box">
+      <p class="personal-box-title">The honest questions — this is what makes your case personal</p>
+      <p class="personal-box-sub">Don't filter these answers. RISN uses them to build a case that sounds like you — not a template. Some of these inform the psychological coaching and won't appear in your written case.</p>
+
+      <div class="field-group">
+        <label for="proofMoment">What's the single moment that proved to you — and maybe to others — that you're ready? <span class="label-key">Anchor this</span></label>
+        <textarea id="proofMoment" style="min-height:80px;" placeholder="A specific project, decision, crisis you navigated, or result that changed how people see you. This becomes the centerpiece of your entire case."></textarea>
+      </div>
+
+      <div class="field-group">
+        <label for="managerOpinion">What does your manager actually think of you — be honest, not optimistic</label>
+        <input type="text" id="managerOpinion" placeholder="e.g. 'Supportive, has hinted I&apos;m close', 'Positive but non-committal', 'New manager, unknown', 'I think I&apos;m underestimated'" />
+        <p class="field-hint">This shapes the tone and strategy more than almost anything else.</p>
+      </div>
+
+      <div class="field-group">
+        <label for="managerWords">Has anyone told you that you're already doing the next-level job? Their exact words if you remember. <span class="label-optional">(optional)</span></label>
+        <textarea id="managerWords" style="min-height:60px;" placeholder="e.g. 'My skip-level told me I operate like a senior already' or 'My manager said I&apos;m the informal tech lead for the team'"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label for="fearObjection">What are you most afraid they'll say?</label>
+        <input type="text" id="fearObjection" placeholder="e.g. 'You&apos;re not quite ready', 'We don&apos;t have headcount', 'Let&apos;s revisit in 6 months'" />
+        <p class="field-hint">Naming your fear is the first step to handling it. RISN will prepare you for exactly this.</p>
+      </div>
+
+      <div class="field-group" style="margin:0;">
+        <label for="whyNow">Why now? What changed that makes this the right moment to ask?</label>
+        <textarea id="whyNow" style="min-height:70px;" placeholder="A completed project, a performance review, a team change, a new manager, a competing offer, or simply that you've been at this level long enough. Timing context shapes the entire strategy."></textarea>
+      </div>
     </div>
 
     <div class="field-group">
       <label for="companyContext">Company context <span class="label-optional">(optional)</span></label>
-      <input type="text" id="companyContext" placeholder="e.g. 'Headcount freeze', 'Growing fast', 'Just went through layoffs', 'Strong Q1 results'" />
-      <p class="field-hint">Company situation significantly affects timing and framing strategy.</p>
+      <input type="text" id="companyContext" placeholder="e.g. 'Headcount freeze', 'Growing fast', 'Recent layoffs', 'Strong quarter', 'New leadership'" />
+      <p class="field-hint">Company situation significantly affects timing, framing, and the 90-day strategy.</p>
     </div>
 
     <div class="field-group">
       <label for="peerComparison">How do you compare to peers at the target level? <span class="label-optional">(optional)</span></label>
-      <textarea id="peerComparison" style="min-height:80px;" placeholder="Do you see colleagues at the target level doing similar or less impactful work? Have you been told you're performing above your level? Any context that supports your readiness."></textarea>
+      <textarea id="peerComparison" style="min-height:70px;" placeholder="Are colleagues at the target level doing similar or less impactful work? Have you been explicitly told you're performing above your level? Any context that supports your readiness."></textarea>
     </div>
 
     <div class="field-group">
-      <label for="additionalContext">Anything else that matters? <span class="label-optional">(optional)</span></label>
-      <textarea id="additionalContext" style="min-height:60px;" placeholder="Previous feedback on promotion timeline, competing offers, personal circumstances, anything that shapes the ask..."></textarea>
+      <label for="additionalContext">Anything else? <span class="label-optional">(optional)</span></label>
+      <textarea id="additionalContext" style="min-height:60px;" placeholder="Previous feedback on timeline, competing offers, personal circumstances, anything that shapes this ask..."></textarea>
     </div>
 
     <button class="btn-generate" onclick="risnGate(generatePromotion)">Build My Promotion Case ✦</button>
@@ -227,7 +260,7 @@
   <div id="generating" class="generating-card hidden">
     <div class="spinner"></div>
     <h2 class="generating-title">Building Your Case</h2>
-    <p class="generating-sub" id="genSub">Analyzing your accomplishments...</p>
+    <p class="generating-sub" id="genSub">Reading your situation...</p>
   </div>
 
   <div id="results" class="hidden">
@@ -235,12 +268,11 @@
     <div class="result-section">
       <div class="result-header">
         <p class="result-header-title">📄 Promotion Case Document</p>
-        <span class="result-header-badge">Full case</span>
+        <span class="result-header-badge">Your full case</span>
       </div>
       <div class="result-body" id="caseOutput"></div>
       <div class="result-footer">
         <button class="tool-btn" onclick="copySection('caseOutput')">Copy</button>
-        <button class="tool-btn green" onclick="downloadPackage()">Download Package</button>
       </div>
     </div>
 
@@ -257,14 +289,20 @@
 
     <div class="verbal-section">
       <p class="verbal-title">🎤 Verbal Pitch — What to Say in the Meeting</p>
-      <p class="verbal-sub">How to open, how to frame the ask, and how to handle "not yet" without losing momentum.</p>
+      <p class="verbal-sub">How to open, how to frame the ask, how to handle "not yet" without losing momentum, and how to close regardless of outcome.</p>
       <div class="verbal-body" id="verbalOutput"></div>
+    </div>
+
+    <div class="emotional-section">
+      <p class="emotional-title">🧠 Before You Walk In — Read This</p>
+      <p class="emotional-sub">The psychological traps most people fall into. Named and dismantled.</p>
+      <div class="emotional-body" id="emotionalOutput"></div>
     </div>
 
     <div class="result-section">
       <div class="result-header">
         <p class="result-header-title">📅 90-Day Positioning Strategy</p>
-        <span class="result-header-badge">Before you ask</span>
+        <span class="result-header-badge">Make yes the only answer</span>
       </div>
       <div class="result-body" id="strategyOutput"></div>
       <div class="result-footer">
@@ -272,9 +310,11 @@
       </div>
     </div>
 
-    <div style="text-align:center;margin-top:1rem;">
+    <div style="text-align:center;margin-top:1rem;display:flex;gap:10px;justify-content:center;">
+      <button onclick="downloadPackage()" style="padding:10px 24px;background:var(--green);color:white;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Download Full Package</button>
       <button onclick="resetForm()" style="padding:10px 24px;border:1px solid var(--border);border-radius:8px;background:var(--white);color:var(--black);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;">Start over ↺</button>
     </div>
+
   </div>
 </div>
 
@@ -297,18 +337,24 @@
     const tenureCompany = document.getElementById('tenureCompany').value;
     const accomplishments = document.getElementById('accomplishments').value;
     const nextLevel = document.getElementById('nextLevelWork').value;
-    const managerRel = document.getElementById('managerRelationship').value;
+    const proofMoment = document.getElementById('proofMoment').value;
+    const managerOpinion = document.getElementById('managerOpinion').value;
+    const managerWords = document.getElementById('managerWords').value;
+    const fearObjection = document.getElementById('fearObjection').value;
+    const whyNow = document.getElementById('whyNow').value;
     const companyCtx = document.getElementById('companyContext').value;
     const peers = document.getElementById('peerComparison').value;
     const context = document.getElementById('additionalContext').value;
 
     const timingDesc = {
-      'planning': 'planning ahead — not ready to ask yet, wants to prepare a strategy',
+      'planning': 'planning ahead — not ready to ask yet, wants to prepare and execute a positioning strategy',
       'soon': 'asking soon — review coming up in weeks or months',
       'now': 'asking now — conversation imminent'
     };
 
-    return `You are an expert career strategist and executive coach. Build a complete promotion case package.
+    return `You are an expert career strategist and executive coach — calm, direct, and deeply experienced. You have seen hundreds of promotion conversations go well and badly. You know what works.
+
+Build a complete, personal promotion case package for this professional.
 
 NAME: ${name || 'the professional'}
 CURRENT TITLE: ${current || 'current role'}
@@ -319,46 +365,99 @@ TIME AT COMPANY: ${tenureCompany || 'not specified'}
 TIMING: ${timingDesc[selectedTiming]}
 ACCOMPLISHMENTS: ${accomplishments || 'not provided'}
 EVIDENCE OF NEXT-LEVEL WORK: ${nextLevel || 'not provided'}
-MANAGER RELATIONSHIP: ${managerRel || 'not specified'}
+THE SINGLE PROOF MOMENT: ${proofMoment || 'not provided'}
+WHAT MANAGER THINKS OF THEM: ${managerOpinion || 'not specified'}
+MANAGER OR OTHERS EXACT WORDS: ${managerWords || 'not provided'}
+WHAT THEY FEAR THE MANAGER WILL SAY: ${fearObjection || 'not specified'}
+WHY NOW: ${whyNow || 'not specified'}
 COMPANY CONTEXT: ${companyCtx || 'not specified'}
 PEER COMPARISON: ${peers || 'not provided'}
 ADDITIONAL CONTEXT: ${context || 'none'}
 
+CRITICAL: This must feel written for ${name || 'this person'} specifically — not a template. Use their proof moment as the anchor. If their manager or others have said they're already operating at the next level, reference it. If they fear a specific objection, prepare them for exactly that. Generic promotion cases get shelved. Personal ones land.
+
 Produce the complete package with these EXACT section markers:
 
 ===PROMOTION_CASE===
-Write a comprehensive 5-7 paragraph promotion case document. Structure:
-1. Opening statement — who they are and what they're asking for
-2. Evidence of current-level excellence
-3. Evidence of already operating at the next level (most important section)
-4. Business impact and value delivered
-5. Vision for the next-level role — what they'll accomplish if promoted
-6. Closing — confident, specific ask
-Be specific, evidence-based, and outcome-focused. No vague claims.
+Write a compelling 5-7 paragraph promotion case document.
+Structure:
+1. Opening — who they are and what they're asking for, anchored in the proof moment
+2. Current-level excellence with specific accomplishments and numbers
+3. Evidence of already operating at the next level — this is the most important section
+4. Business impact — what happens to the team and company if they're promoted vs not
+5. Vision — what they'll accomplish at the next level in the first 6 months
+6. Closing — confident, specific ask with clear conviction
+
+Be specific, evidence-based, and outcome-focused. Avoid all corporate language. No "leveraging synergies" or "passionate about growth."
 
 ===ONE_PAGE_SUMMARY===
-Distill the case into a one-page summary with these sections:
-- The ask (one sentence)
+Distill to a one-page summary with clear sections:
+- The ask (one sentence, direct)
 - Three strongest evidence points (bullet points with specifics)
-- Next-level readiness (2-3 sentences)
-- The business case for promoting now (1-2 sentences)
+- Already operating at next level (2-3 sentences with concrete examples)
+- The business case for now (1-2 sentences — why waiting costs the company)
 
 ===VERBAL_PITCH===
-Write a verbal pitch guide with:
-- How to start the conversation (exact words)
-- The three-sentence summary of your case
-- How to handle "you're not quite ready yet" (specific response)
-- How to handle "we don't have headcount for that level" (specific response)
-- How to close the conversation if the answer is yes
-- How to close the conversation if the answer is no — and what to ask for instead
+Write a practical verbal pitch guide:
+
+HOW TO OPEN (exact words):
+[specific opening — not "I wanted to talk about my career"]
+
+YOUR THREE-SENTENCE CASE:
+[how to summarize the case verbally — practice this until it's natural]
+
+HANDLING "${fearObjection || 'not yet / not ready'}":
+[specific, confident response to their stated fear — do not be defensive, do not apologize, do redirect to evidence and a concrete next step]
+
+HANDLING "WE DON'T HAVE HEADCOUNT":
+[specific response — separates the conversation about merit from the conversation about timing]
+
+HANDLING "LET'S REVISIT IN 6 MONTHS":
+[how to turn this into a concrete roadmap instead of a polite dismissal — ask for specific milestones, not a timeline]
+
+IF THE ANSWER IS YES:
+[how to close professionally and set the right tone going forward]
+
+IF THE ANSWER IS NO TODAY:
+[how to leave the conversation with dignity, a roadmap, and momentum — not defeat. The no is not the end.]
+
+===EMOTIONAL_COACHING===
+Write a personal, human coaching section. Speak directly to this person. Not corporate. Not clinical. Like someone who has been through this and come out the other side.
+
+Address these specific psychological traps by name:
+- The imposter syndrome trap: "Maybe they're right and I'm not ready" — name it and dismantle it with their specific evidence
+- The loyalty trap: "I should trust the process and wait my turn" — name it and explain why waiting without asking is passive, not loyal
+- The visibility trap: "My work should speak for itself" — name it and explain that in every organization, advocacy is part of the job
+${fearObjection ? `- Their specific fear: "${fearObjection}" — address this directly and personally` : ''}
+
+Then:
+- The one thing to hold onto when the conversation gets hard (make it specific to their situation)
+- What to do the night before — one concrete, calming action
+- The reframe: this is not asking for a favor. This is a business conversation about whether the title matches the work.
+- What "no for now" actually means — and why it is not the end of the story
+
+Make this section feel like a hand on the shoulder, not a pep talk. Calm. Specific. True.
 
 ===POSITIONING_STRATEGY===
-Write a 90-day positioning strategy calibrated for their timing (${selectedTiming}). Include:
-- Week 1-2: Immediate actions to signal readiness
-- Month 1: Visibility and scope expansion moves
-- Month 2: Evidence building and relationship positioning  
-- Month 3: Pre-ask groundwork and conversation setup
-- The one conversation to have before the formal ask
+Write a detailed 90-day positioning strategy calibrated for their timing (${selectedTiming}) and company context.
+
+Structure it as:
+IMMEDIATE (This week):
+[2-3 specific actions to take right now — visibility moves, relationship investments, evidence creation]
+
+MONTH 1 — Build the record:
+[week by week — what to do, what to say, what to document, who to connect with]
+
+MONTH 2 — Expand the scope:
+[how to visibly operate above their level — specific behaviors, conversations, opportunities to take on]
+
+MONTH 3 — Set up the ask:
+[the pre-ask conversation to have, how to plant the seed, the specific moment to make the formal ask]
+
+THE CONVERSATION TO HAVE BEFORE THE FORMAL ASK:
+[One specific, non-threatening conversation with their manager to have 2-4 weeks before the formal ask — what to say, what to listen for, what it tells them about the landscape]
+
+${selectedTiming === 'now' ? 'NOTE: Since they are asking now, compress this into what they can still do in the next 48 hours and what to do after the conversation regardless of outcome.' : ''}
 
 Use EXACTLY these section markers. No other text before or after.`;
   }
@@ -366,10 +465,18 @@ Use EXACTLY these section markers. No other text before or after.`;
   async function generatePromotion() {
     const target = document.getElementById('targetTitle').value.trim();
     const accomplishments = document.getElementById('accomplishments').value.trim();
+    const proofMoment = document.getElementById('proofMoment').value.trim();
+
     if (!target || !accomplishments) {
       const eb = document.getElementById('errorBox');
       eb.classList.remove('hidden');
       eb.textContent = 'Please enter your target title and accomplishments to continue.';
+      return;
+    }
+    if (!proofMoment) {
+      const eb = document.getElementById('errorBox');
+      eb.classList.remove('hidden');
+      eb.textContent = 'Please describe the single moment that proved you are ready — this is the anchor of your entire case.';
       return;
     }
 
@@ -379,13 +486,22 @@ Use EXACTLY these section markers. No other text before or after.`;
     document.getElementById('results').classList.add('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    const subs = ['Analyzing your career trajectory...', 'Building your case...', 'Writing positioning strategy...', 'Crafting verbal pitch...', 'Finalizing your package...'];
+    const subs = [
+      'Reading your situation...',
+      'Finding your anchor moment...',
+      'Building your case document...',
+      'Writing the verbal pitch...',
+      'Addressing your fears...',
+      'Writing psychological coaching...',
+      'Building your 90-day strategy...',
+      'Finalizing your package...'
+    ];
     let si = 0;
     const subInterval = setInterval(() => {
       si = (si + 1) % subs.length;
       const el = document.getElementById('genSub');
       if (el) el.textContent = subs[si];
-    }, 3000);
+    }, 2500);
 
     const risn_email = (function(){ try { return localStorage.getItem('risn_user_email') || ''; } catch(e) { return ''; } })();
     const risn_unlimited = (function(){ try { const s = sessionStorage.getItem('risn_access'); if(!s) return false; const d = JSON.parse(s); return d && d.type === 'unlimited'; } catch(e) { return false; } })();
@@ -403,7 +519,7 @@ Use EXACTLY these section markers. No other text before or after.`;
           model: 'claude-sonnet-4-5',
           risn_email,
           risn_unlimited,
-          max_tokens: 3000,
+          max_tokens: 4000,
           messages: [{ role: 'user', content: buildPrompt() }]
         })
       });
@@ -418,6 +534,7 @@ Use EXACTLY these section markers. No other text before or after.`;
       document.getElementById('caseOutput').textContent = packageData.case || '';
       document.getElementById('summaryOutput').textContent = packageData.summary || '';
       document.getElementById('verbalOutput').textContent = packageData.verbal || '';
+      document.getElementById('emotionalOutput').textContent = packageData.emotional || '';
       document.getElementById('strategyOutput').textContent = packageData.strategy || '';
 
       document.getElementById('generating').classList.add('hidden');
@@ -445,7 +562,8 @@ Use EXACTLY these section markers. No other text before or after.`;
     return {
       case: extract('PROMOTION_CASE', 'ONE_PAGE_SUMMARY'),
       summary: extract('ONE_PAGE_SUMMARY', 'VERBAL_PITCH'),
-      verbal: extract('VERBAL_PITCH', 'POSITIONING_STRATEGY'),
+      verbal: extract('VERBAL_PITCH', 'EMOTIONAL_COACHING'),
+      emotional: extract('EMOTIONAL_COACHING', 'POSITIONING_STRATEGY'),
       strategy: extract('POSITIONING_STRATEGY', null)
     };
   }
@@ -459,12 +577,55 @@ Use EXACTLY these section markers. No other text before or after.`;
 
   function downloadPackage() {
     const name = document.getElementById('yourName').value || 'Professional';
+    const current = document.getElementById('currentTitle').value || 'Current Role';
     const target = document.getElementById('targetTitle').value || 'Target Role';
-    const full = `PROMOTION CASE PACKAGE — ${name.toUpperCase()}\nTarget: ${target}\n${'='.repeat(60)}\n\nPROMOTION CASE DOCUMENT\n${'-'.repeat(40)}\n${packageData.case}\n\n\nONE-PAGE SUMMARY\n${'-'.repeat(40)}\n${packageData.summary}\n\n\nVERBAL PITCH GUIDE\n${'-'.repeat(40)}\n${packageData.verbal}\n\n\n90-DAY POSITIONING STRATEGY\n${'-'.repeat(40)}\n${packageData.strategy}\n\n\nGenerated by RISN — getrisn.com`;
+    const company = document.getElementById('company').value || 'Company';
+
+    const divider = '='.repeat(60);
+    const subDivider = '-'.repeat(40);
+
+    const full = [
+      `PROMOTION CASE PACKAGE`,
+      `${name.toUpperCase()} — ${current} → ${target} at ${company}`,
+      divider,
+      ``,
+      `This package contains everything you need for your promotion conversation.`,
+      `Read the emotional coaching and verbal pitch BEFORE your meeting.`,
+      `Use the 90-day strategy to position yourself before you ask.`,
+      ``,
+      divider,
+      `PROMOTION CASE DOCUMENT`,
+      subDivider,
+      packageData.case || '',
+      ``,
+      divider,
+      `ONE-PAGE SUMMARY`,
+      subDivider,
+      packageData.summary || '',
+      ``,
+      divider,
+      `VERBAL PITCH — What to say in the meeting`,
+      subDivider,
+      packageData.verbal || '',
+      ``,
+      divider,
+      `PSYCHOLOGICAL COACHING — Read before you walk in`,
+      subDivider,
+      packageData.emotional || '',
+      ``,
+      divider,
+      `90-DAY POSITIONING STRATEGY`,
+      subDivider,
+      packageData.strategy || '',
+      ``,
+      divider,
+      `Generated by RISN — getrisn.com`,
+    ].join("\n");
+
     const blob = new Blob([full], { type: 'text/plain' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `RISN_PromotionCase_${name.replace(/\s+/g, '_')}.txt`;
+    a.download = `RISN_PromotionCase_${name.replace(/\s+/g, '_')}_${target.replace(/\s+/g, '_')}.txt`;
     a.click();
   }
 
