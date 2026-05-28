@@ -62,7 +62,7 @@
     .field-group { margin-bottom: 1.25rem; }
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     label { display: block; font-size: 13px; font-weight: 500; color: var(--black); margin-bottom: 6px; }
-    .label-key { font-size:12px; background: var(--green); color: white; padding: 2px 8px; border-radius: 10px; margin-left: 4px; font-weight: 500; white-space: nowrap; vertical-align: middle; }
+    .label-key { font-size:12px; background: var(--green); color: white; padding: 2px 8px; border-radius: 10px; margin-left: 4px; font-weight: 500; white-space: nowrap; vertical-align: middle; display: inline-block; }
     .label-optional { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 4px; }
     input[type="text"], textarea, select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--black); background: var(--white); transition: border-color 0.2s; outline: none; }
     input:focus, textarea:focus, select:focus { border-color: var(--green); }
@@ -209,7 +209,7 @@
     </div>
 
     <div class="field-group">
-      <label style="display:flex;align-items:center;flex-wrap:nowrap;gap:4px;" for="accomplishments">Your top accomplishments this period <span class="label-key";white-space:nowrap;vertical-align:middle;">Key for best results</span></label>
+      <label for="accomplishments">Your top accomplishments this period <span class="label-key";white-space:nowrap;vertical-align:middle;">Key for best results</span></label>
       <textarea id="accomplishments" style="min-height:120px;" placeholder="List your 3-5 biggest wins. Be specific — include numbers, percentages, dollar amounts, time saved, projects shipped, teams led. e.g. 'Led migration of 40TB data warehouse, reducing query time by 60% and saving ~$180K annually'"></textarea>
       <p class="field-hint">Specificity is everything. Vague inputs produce vague output.</p>
     </div>
@@ -225,7 +225,7 @@
     </div>
 
     <div class="field-group">
-      <label style="display:flex;align-items:center;flex-wrap:nowrap;gap:4px;" for="managerValues">What does your manager value most? <span class="label-key";white-space:nowrap;vertical-align:middle;">Key for best results</span></label>
+      <label for="managerValues">What does your manager value most? <span class="label-key";white-space:nowrap;vertical-align:middle;">Key for best results</span></label>
       <input type="text" id="managerValues" placeholder="e.g. 'Shipping fast, clear communication, data-driven decisions, team collaboration'" />
       <p class="field-hint">This shapes the language and emphasis of your entire evaluation.</p>
     </div>
