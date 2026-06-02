@@ -213,40 +213,81 @@
     }
   </style>
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "RISN",
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web",
-    "description": "AI-powered career platform with resume builder, cover letter generator, interview coach, company research, and interviewer profiles.",
-    "url": "https://getrisn.com",
-    "offers": [
-      {
-        "@type": "Offer",
-        "name": "Single Use",
-        "price": "4.99",
-        "priceCurrency": "USD"
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://getrisn.com/#organization",
+      "name": "RISN",
+      "url": "https://getrisn.com",
+      "logo": "https://getrisn.com/logo.png",
+      "description": "RISN is an AI career platform with nine tools for job seekers and working professionals \u2014 resume builder, cover letter generator, interview coach, company intel, interviewer profiles, career email generator, self-evaluation generator, salary negotiation toolkit, and promotion case builder.",
+      "slogan": "Rise. Don't just apply.",
+      "foundingDate": "2026",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "risewithrisn@gmail.com",
+        "contactType": "customer support"
       },
-      {
-        "@type": "Offer",
-        "name": "Starter Pack",
-        "price": "9.99",
-        "priceCurrency": "USD"
-      },
-      {
-        "@type": "Offer",
-        "name": "Unlimited",
-        "price": "19.99",
-        "priceCurrency": "USD",
-        "priceSpecification": {
-          "@type": "UnitPriceSpecification",
-          "billingDuration": "P1M"
-        }
+      "sameAs": [
+        "https://getrisn.com"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://getrisn.com/#website",
+      "url": "https://getrisn.com",
+      "name": "RISN",
+      "description": "AI career tools for job seekers and professionals",
+      "publisher": {
+        "@id": "https://getrisn.com/#organization"
       }
-    ]
-  }
-  </script>
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "RISN",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "url": "https://getrisn.com",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Single Use",
+          "price": "4.99",
+          "priceCurrency": "USD",
+          "description": "One session \u2014 any tool"
+        },
+        {
+          "@type": "Offer",
+          "name": "Starter Pack",
+          "price": "9.99",
+          "priceCurrency": "USD",
+          "description": "5 sessions \u2014 mix any tools"
+        },
+        {
+          "@type": "Offer",
+          "name": "Unlimited",
+          "price": "19.99",
+          "priceCurrency": "USD",
+          "description": "Up to 15 sessions per day, cancel anytime"
+        }
+      ],
+      "featureList": [
+        "ATS-optimized resume builder",
+        "AI cover letter generator",
+        "Interview coach with AI feedback",
+        "Company intelligence briefing",
+        "Private interviewer profiling",
+        "Career email generator",
+        "Self-evaluation generator",
+        "Salary negotiation toolkit",
+        "Promotion case builder"
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
