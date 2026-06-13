@@ -527,7 +527,7 @@ Keep it to one page (around 300-400 words). Make it feel genuinely human and spe
   function downloadLetter() {
     const name = document.getElementById('yourName').value || 'Cover_Letter';
     const company = document.getElementById('companyName').value || 'Application';
-    const blob = new Blob([generatedLetter], { type: 'text/plain' });
+    const blob = new Blob([generatedLetter + '\n\n────────────────────────\nBuilt with RISN — getrisn.com\nNine AI career tools to get hired and get ahead.\n────────────────────────'], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
