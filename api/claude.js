@@ -29,18 +29,76 @@ const PAID_FEEDBACK_CAP = 6;
 // FEEDBACK CAP (server-side enforcement)
 const FEEDBACK_PER_SESSION_CAP = 6; // Max for paid — promo codes enforce their own via client
 
-// ─── IP Rate Limiter ──────────────────────────────────────────────────────────
-const ipRequests = new Map();
+// ─── IP Rate Limiter (Supabase-backed) ─────────────────────────────────────────
+// Works across serverless instances and survives deploys.
+// Falls back to an in-memory limiter only if Supabase is unreachable, so a DB
+// blip can never make the endpoint fully unprotected.
+const MAX_REQUESTS_PER_MIN = 30;
 
-function checkIPLimit(ip) {
+// In-memory fallback (per-instance) — only used if Supabase call fails.
+const ipRequestsFallback = new Map();
+function checkIPLimitFallback(ip) {
   const now = Date.now();
   const windowMs = 60 * 1000;
-  const maxRequests = 30;
-  if (!ipRequests.has(ip)) ipRequests.set(ip, []);
-  const requests = ipRequests.get(ip).filter(t => now - t < windowMs);
+  if (!ipRequestsFallback.has(ip)) ipRequestsFallback.set(ip, []);
+  const requests = ipRequestsFallback.get(ip).filter(t => now - t < windowMs);
   requests.push(now);
-  ipRequests.set(ip, requests);
-  return requests.length <= maxRequests;
+  ipRequestsFallback.set(ip, requests);
+  return requests.length <= MAX_REQUESTS_PER_MIN;
+}
+
+async function checkIPLimit(ip) {
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_KEY = process.env.SUPABASE_SECRET_KEY;
+
+  // If Supabase isn't configured, fall back to the in-memory limiter.
+  if (!SUPABASE_URL || !SUPABASE_KEY || ip === 'unknown') {
+    return checkIPLimitFallback(ip);
+  }
+
+  try {
+    const now = Date.now();
+    const windowStart = new Date(now - 60 * 1000).toISOString();
+    const ipKey = ip.replace(/[^a-zA-Z0-9.:_-]/g, '').slice(0, 64);
+
+    // Count this IP's hits in the last 60 seconds.
+    const countRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/rate_limits?ip=eq.${encodeURIComponent(ipKey)}&ts=gte.${encodeURIComponent(windowStart)}&select=id`,
+      {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Prefer': 'count=exact'
+        }
+      }
+    );
+
+    // Supabase returns the exact count in the content-range header.
+    const contentRange = countRes.headers.get('content-range') || '';
+    const recentCount = parseInt(contentRange.split('/')[1]) || 0;
+
+    if (recentCount >= MAX_REQUESTS_PER_MIN) {
+      return false; // Over the limit.
+    }
+
+    // Log this request (fire-and-forget — don't block on the insert).
+    fetch(`${SUPABASE_URL}/rest/v1/rate_limits`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ ip: ipKey, ts: new Date(now).toISOString() })
+    }).catch(() => {});
+
+    return true;
+  } catch (err) {
+    console.error('Rate limit check error (using fallback):', err);
+    // On error, fall back to in-memory — never leave the endpoint unprotected.
+    return checkIPLimitFallback(ip);
+  }
 }
 
 // ─── Usage Tracking + Monthly Cap Enforcement ─────────────────────────────────
@@ -244,9 +302,9 @@ export default async function handler(req, res) {
     return res.status(403).json({ error: 'Unauthorized' });
   }
 
-  // ── Layer 2: IP rate limiting ─────────────────────────────────────────────
+  // ── Layer 2: IP rate limiting (Supabase-backed, cross-instance) ───────────
   const clientIP = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || 'unknown';
-  if (!checkIPLimit(clientIP)) {
+  if (!(await checkIPLimit(clientIP))) {
     return res.status(429).json({ error: 'Too many requests. Please slow down.' });
   }
 
