@@ -755,7 +755,7 @@ CRITICAL: Only report what you actually find. Never fabricate. If you cannot fin
 
   function downloadBriefing() {
     const company = document.getElementById('companyName').value.replace(/\s+/g, '_');
-    const blob = new Blob([briefingText], { type: 'text/plain' });
+    const blob = new Blob([briefingText + '\n\n────────────────────────\nBuilt with RISN — getrisn.com\nNine AI career tools to get hired and get ahead.\n────────────────────────'], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
