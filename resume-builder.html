@@ -708,6 +708,7 @@
 
   <!-- RESULT -->
   <div id="result" class="hidden">
+    <div id="atsScore" class="hidden"></div>
     <div class="result-card">
       <div class="result-toolbar">
         <div class="result-toolbar-left">
@@ -1031,6 +1032,8 @@ Output only the resume markdown. No commentary. No code blocks.`;
     document.getElementById('result').classList.add('hidden');
     document.getElementById('generating').classList.remove('hidden');
     document.getElementById('errorBox').classList.add('hidden');
+    const _atsEl = document.getElementById('atsScore');
+    if (_atsEl) { _atsEl.classList.add('hidden'); _atsEl.innerHTML = ''; }
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     const prompt = buildPrompt(data);
@@ -1060,6 +1063,15 @@ Output only the resume markdown. No commentary. No code blocks.`;
       document.getElementById('generating').classList.add('hidden');
       document.getElementById('result').classList.remove('hidden');
       document.getElementById('resumeOutput').innerHTML = marked.parse(generatedResume);
+
+      // ── ATS Match Score ───────────────────────────────────────────────
+      // If a job description was provided, compute keyword overlap between
+      // the generated resume and the JD. This is instant, client-side, and free.
+      const jd = document.getElementById('jobDescription').value.trim();
+      if (jd.length > 40) {
+        renderAtsScore(jd, generatedResume);
+      }
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
     } catch (err) {
@@ -1069,6 +1081,74 @@ Output only the resume markdown. No commentary. No code blocks.`;
       const errorBox = document.getElementById('errorBox');
       errorBox.classList.remove('hidden');
       errorBox.textContent = 'Something went wrong generating your resume. Please try again. If the problem persists, contact us at risewithrisn@gmail.com';
+    }
+  }
+
+  // ── ATS Match Score engine ──────────────────────────────────────────
+  // Extracts meaningful keywords from the job description and measures how
+  // many appear in the resume. Shows a score plus the top missing keywords.
+  const ATS_STOPWORDS = new Set(['the','and','for','are','but','not','you','your','with','this','that','from','have','has','had','was','were','will','would','can','our','their','they','them','its','about','into','over','than','then','more','most','some','such','also','who','what','when','where','which','while','able','across','all','any','been','being','both','each','either','every','here','how','must','need','only','other','out','per','plus','very','via','etc','role','team','work','working','company','position','candidate','ideal','strong','excellent','good','great','plus','years','year','experience']);
+
+  function extractKeywords(text) {
+    const words = (text.toLowerCase().match(/[a-z][a-z+.#-]{2,}/g) || []);
+    const freq = {};
+    for (const w of words) {
+      const clean = w.replace(/[.]+$/,'');
+      if (clean.length < 3 || ATS_STOPWORDS.has(clean)) continue;
+      freq[clean] = (freq[clean] || 0) + 1;
+    }
+    // Return unique keywords sorted by frequency in the JD (most important first)
+    return Object.keys(freq).sort((a,b) => freq[b]-freq[a]);
+  }
+
+  function renderAtsScore(jd, resume) {
+    const jdKeywords = extractKeywords(jd).slice(0, 40); // top 40 JD terms
+    if (jdKeywords.length === 0) return;
+
+    const resumeLower = resume.toLowerCase();
+    const matched = [];
+    const missing = [];
+    for (const kw of jdKeywords) {
+      if (resumeLower.includes(kw)) matched.push(kw);
+      else missing.push(kw);
+    }
+
+    const score = Math.round((matched.length / jdKeywords.length) * 100);
+    const scoreColor = score >= 80 ? '#059669' : score >= 60 ? '#D97706' : '#DC2626';
+    const scoreLabel = score >= 80 ? 'Strong match' : score >= 60 ? 'Good match' : 'Needs work';
+
+    const missingTop = missing.slice(0, 8);
+    const missingHtml = missingTop.length
+      ? `<div style="margin-top:14px;"><p style="font-size:12px;color:#888;margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;">Top keywords from the job description still worth adding:</p><div style="display:flex;flex-wrap:wrap;gap:6px;">${missingTop.map(k => `<span style="font-size:12px;background:#FEF2F2;color:#B91C1C;padding:3px 10px;border-radius:12px;border:0.5px solid #FCA5A5;">${k}</span>`).join('')}</div></div>`
+      : `<p style="margin-top:12px;font-size:13px;color:#059669;">✓ Your resume covers all the key terms from this job description.</p>`;
+
+    const html = `
+      <div style="background:#fff;border:0.5px solid #e8e8e8;border-radius:16px;padding:1.5rem;margin-bottom:1rem;">
+        <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;">
+          <div style="position:relative;width:88px;height:88px;flex-shrink:0;">
+            <svg viewBox="0 0 100 100" style="transform:rotate(-90deg);width:88px;height:88px;">
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#eee" stroke-width="10"/>
+              <circle cx="50" cy="50" r="42" fill="none" stroke="${scoreColor}" stroke-width="10"
+                stroke-dasharray="${2*Math.PI*42}" stroke-dashoffset="${2*Math.PI*42*(1-score/100)}"
+                stroke-linecap="round" style="transition:stroke-dashoffset 1s ease;"/>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;">
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:${scoreColor};line-height:1;">${score}%</span>
+            </div>
+          </div>
+          <div style="flex:1;min-width:200px;">
+            <p style="font-size:11px;font-weight:700;color:#7C3AFF;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">ATS Match Score</p>
+            <p style="font-size:18px;font-weight:700;color:${scoreColor};margin-bottom:4px;">${scoreLabel}</p>
+            <p style="font-size:13px;color:#666;line-height:1.5;">Your resume matches <strong>${matched.length} of ${jdKeywords.length}</strong> key terms from this job description. ATS systems rank resumes partly on keyword overlap — the closer to 100%, the better your odds of reaching a human.</p>
+          </div>
+        </div>
+        ${missingHtml}
+      </div>`;
+
+    const scoreContainer = document.getElementById('atsScore');
+    if (scoreContainer) {
+      scoreContainer.innerHTML = html;
+      scoreContainer.classList.remove('hidden');
     }
   }
 
