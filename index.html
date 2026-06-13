@@ -97,6 +97,9 @@
     .hero-social { font-size: 13px; color: #444; animation: fadeUp 0.6s 0.4s ease both; }
     .hero-social a { color: var(--purple); text-decoration: none; }
     .hero-proof { font-size: 14px; color: #777; max-width: 540px; margin: 0 auto 1.5rem; line-height: 1.6; animation: fadeUp 0.6s 0.35s ease both; }
+    .hero-subscription { font-size: 13px; color: #666; margin: -1.5rem auto 1.5rem; animation: fadeUp 0.6s 0.32s ease both; }
+    .hero-subscription a { color: var(--purple-light); font-weight: 700; text-decoration: none; }
+    .hero-subscription a:hover { text-decoration: underline; }
     .hero-proof em { color: var(--purple-light); font-style: normal; font-weight: 700; }
     .hero-pro-teaser { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; margin-bottom: 2.5rem; animation: fadeUp 0.6s 0.4s ease both; }
     .pro-pill { display: inline-flex; align-items: center; gap: 6px; background: #1a1030; border: 0.5px solid #3a2a5c; border-radius: 20px; padding: 7px 16px; font-size: 13px; font-weight: 500; color: #C4B5FD; text-decoration: none; transition: border-color 0.2s, background 0.2s; }
@@ -322,6 +325,7 @@
       <button onclick="openRisnModalFromPage('single')" class="btn-primary">Start for $4.99</button>
       <a href="#tools" class="btn-ghost">See all 9 tools</a>
     </div>
+    <p class="hero-subscription">or go <a href="#pricing">Unlimited for $19.99/mo</a> — all 9 tools, cancel anytime</p>
     <p class="hero-proof">Built for job seekers <em>and</em> professionals who refuse to leave money on the table.</p>
     <div class="hero-pro-teaser">
       <a href="/salary-negotiation.html" class="pro-pill">💰 Salary Negotiation Toolkit</a>
@@ -637,7 +641,7 @@
 <section class="section" id="pricing">
     <p class="section-label">Pricing</p>
     <h2 class="section-title">Pay for what you need</h2>
-    <p class="section-sub">No subscriptions required. Start with a single use.</p>
+    <p class="section-sub">Start with a single use, or get unlimited access to all 9 tools.</p>
     <div class="pricing-grid">
       <div class="price-card">
         <p class="price-name">Single use</p>
@@ -651,7 +655,20 @@
         <button onclick="openRisnModalFromPage('single')" class="price-btn">Get started</button>
       </div>
       <div class="price-card featured">
-        <span class="price-badge">Most popular</span>
+        <span class="price-badge">Best value</span>
+        <p class="price-name">Unlimited</p>
+        <p class="price-amount">$19.99</p>
+        <p class="price-period">per month · cancel anytime</p>
+        <ul class="price-features">
+          <li><span class="check">✓</span> All 9 RISN tools included</li>
+          <li><span class="check">✓</span> Up to 15 sessions per day</li>
+          <li><span class="check">✓</span> 25 interview coach sessions / month</li>
+          <li><span class="check">✓</span> 10 interviewer profiles / month</li>
+          <li><span class="check">✓</span> Best for an active job search or review season</li>
+        </ul>
+        <button onclick="openRisnModalFromPage('unlimited')" class="price-btn purple">Get started</button>
+      </div>
+      <div class="price-card">
         <p class="price-name">Starter pack</p>
         <p class="price-amount">$9.99</p>
         <p class="price-period">one time · 5 sessions</p>
@@ -660,19 +677,7 @@
           <li><span class="check">✓</span> All 9 RISN tools available</li>
           <li><span class="check">✓</span> Download your results</li>
         </ul>
-        <button onclick="openRisnModalFromPage('starter')" class="price-btn purple">Get started</button>
-      </div>
-      <div class="price-card">
-        <p class="price-name">Unlimited</p>
-        <p class="price-amount">$19.99</p>
-        <p class="price-period">per month · cancel anytime</p>
-        <ul class="price-features">
-          <li><span class="check">✓</span> Up to 15 sessions per day</li>
-          <li><span class="check">✓</span> 25 interview coach sessions per month</li>
-          <li><span class="check">✓</span> All 9 RISN tools included</li>
-          <li><span class="check">✓</span> 10 interviewer profiles per month</li>
-        </ul>
-        <button onclick="openRisnModalFromPage('unlimited')" class="price-btn">Get started</button>
+        <button onclick="openRisnModalFromPage('starter')" class="price-btn">Get started</button>
       </div>
     </div>
   </section>
