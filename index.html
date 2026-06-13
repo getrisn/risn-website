@@ -35,7 +35,7 @@
   <meta property="og:image" content="https://getrisn.com/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="RISN — AI Career Tools That Actually Work" />
-  <meta name="twitter:description" content="Five AI-powered career tools in one platform. Start for $4.99." />
+  <meta name="twitter:description" content="Nine AI-powered career tools in one platform. Start for $4.99." />
   <meta property="og:description" content="AI-powered career tools built for the next generation of job seekers." />
   <meta property="og:url" content="https://getrisn.com" />
   <meta property="og:type" content="website" />
@@ -96,6 +96,12 @@
     .btn-ghost:hover { border-color: #555; }
     .hero-social { font-size: 13px; color: #444; animation: fadeUp 0.6s 0.4s ease both; }
     .hero-social a { color: var(--purple); text-decoration: none; }
+    .hero-proof { font-size: 14px; color: #777; max-width: 540px; margin: 0 auto 1.5rem; line-height: 1.6; animation: fadeUp 0.6s 0.35s ease both; }
+    .hero-proof em { color: var(--purple-light); font-style: normal; font-weight: 700; }
+    .hero-pro-teaser { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; margin-bottom: 2.5rem; animation: fadeUp 0.6s 0.4s ease both; }
+    .pro-pill { display: inline-flex; align-items: center; gap: 6px; background: #1a1030; border: 0.5px solid #3a2a5c; border-radius: 20px; padding: 7px 16px; font-size: 13px; font-weight: 500; color: #C4B5FD; text-decoration: none; transition: border-color 0.2s, background 0.2s; }
+    .pro-pill:hover { border-color: var(--purple); background: #221542; }
+    .pro-pill-note { font-size: 12px; color: #555; font-style: italic; }
 
     .trust-bar { background: #111; border-top: 0.5px solid var(--dark-border); border-bottom: 0.5px solid var(--dark-border); padding: 1rem 2.5rem; display: flex; align-items: center; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
     .trust-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #555; }
@@ -308,13 +314,19 @@
   <section class="hero">
     <div class="hero-badge">
       <span class="badge-dot"></span>
-      <span class="badge-text">AI-powered career tools — built for what's next</span>
+      <span class="badge-text">Nine AI tools to get hired — and get ahead</span>
     </div>
     <h1>Rise.<br><span>Don't just<br>apply.</span></h1>
-    <p class="hero-sub">AI-powered resumes, cover letters, interview coaching, and company research — everything you need to land the job, in one place.</p>
+    <p class="hero-sub">Nine AI career tools in one platform — resume, cover letter, interview coach, salary negotiation, self-evaluation, and promotion case builder. The full playbook, not just a template.</p>
     <div class="hero-actions">
       <button onclick="openRisnModalFromPage('single')" class="btn-primary">Start for $4.99</button>
-      <a href="#how-it-works" class="btn-ghost">See how it works</a>
+      <a href="#tools" class="btn-ghost">See all 9 tools</a>
+    </div>
+    <p class="hero-proof">Built for job seekers <em>and</em> professionals who refuse to leave money on the table.</p>
+    <div class="hero-pro-teaser">
+      <a href="/salary-negotiation.html" class="pro-pill">💰 Salary Negotiation Toolkit</a>
+      <a href="/promotion-case.html" class="pro-pill">📈 Promotion Case Builder</a>
+      <span class="pro-pill-note">The tools ChatGPT can't replace</span>
     </div>
     <p class="hero-social">Follow us <a href="https://tiktok.com/@risewithrisn" target="_blank">@risewithrisn</a></p>
   </section>
@@ -324,7 +336,7 @@
     <div class="trust-item"><span class="trust-dot"></span>Payments secured by Stripe</div>
     <div class="trust-item"><span class="trust-dot"></span>SSL encrypted</div>
     <div class="trust-item"><span class="trust-dot"></span>Your data never sold</div>
-    <div class="trust-item"><span class="trust-dot"></span>Used by thousands of job seekers</div>
+    <div class="trust-item"><span class="trust-dot"></span>9 tools, one platform</div>
   </div>
 
   <section class="section section-gray" id="how-it-works">
@@ -568,6 +580,16 @@
     </div>
     <h2 style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;color:var(--white);margin-bottom:8px;text-align:center;">Everything you need to know. On us.</h2>
     <p style="font-size:14px;color:#555;margin-bottom:1.5rem;text-align:center;">Detailed guides on every part of the job search and career advancement process — free, no signup required.</p>
+    <a href="/ats-scanner.html" style="display:block;background:linear-gradient(135deg,#1a1030,#221542);border:1px solid #3a2a5c;border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;text-decoration:none;transition:border-color 0.2s;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <div style="flex:1;min-width:240px;">
+          <p style="font-size:11px;font-weight:700;color:#C4B5FD;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">🆓 Free Tool — No Signup</p>
+          <p style="font-size:20px;font-weight:700;color:#fff;margin-bottom:4px;">ATS Resume Scanner</p>
+          <p style="font-size:13px;color:#999;line-height:1.5;">Paste your resume and a job description. Get an instant match score and the exact keywords you're missing.</p>
+        </div>
+        <span style="background:#7C3AFF;color:#fff;font-weight:700;font-size:14px;padding:11px 24px;border-radius:8px;white-space:nowrap;">Scan free →</span>
+      </div>
+    </a>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
       <a href="/ats-resume-guide.html" style="background:#111;border-radius:10px;padding:14px;border:0.5px solid #222;text-decoration:none;display:block;">
         <p style="font-size:12px;font-weight:700;color:var(--white);margin-bottom:4px;">ATS Resume Guide</p>
